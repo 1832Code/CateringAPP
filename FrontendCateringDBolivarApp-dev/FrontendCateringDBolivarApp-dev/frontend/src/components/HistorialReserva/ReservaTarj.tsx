@@ -2,51 +2,71 @@ import React, { useState } from "react";
 import "./ReservaTarj.css";
 
 type ReservaData = {
-  nombreCliente: string;
-  fecha: string;
-  hora: string;
-  servicio: string;
-  invitados: number;
-  ubicacion: string;
+  fechaEvento: string;
+  horaInicio: string;
+  cantHorasEvento: number;
+  tipoEvento: string;
+  direccion: string;
+  distrito: string;
+  telefonoCliente: string;
 };
 
 const ReservaTarj: React.FC = () => {
   const [reserva, setReserva] = useState<ReservaData | null>(null);
 
   const obtenerDetallesReserva = async () => {
-    //Ejemplo con datos no reales Falta poner mas datos 
-    const data: ReservaData = {
-      nombreCliente: "Rodri",
-      fecha: "2025-06-10",
-      hora: "15:30",
-      servicio: "gourmet",
-      invitados: 80,
-      ubicacion: "Av. El Polo 123, Los Olivos",
-    };
-    setReserva(data);
+    try {
+      const response = await fetch("http://localhost:8084/api/eventos");
+      if (!response.ok) {
+        throw new Error("No se pudieron obtener los datos");
+      }
+
+      const data = await response.json();
+
+      if (data.length > 0) {
+        const evento = data[0];
+
+        const reservaData: ReservaData = {
+          fechaEvento: evento.fechaEvento,
+          horaInicio: evento.horaInicio,
+          cantHorasEvento: evento.cantHorasEvento,
+          tipoEvento: evento.tipoEvento,
+          direccion: evento.direccion,
+          distrito: evento.distrito,
+          telefonoCliente: evento.telefonoCliente
+        };
+
+        setReserva(reservaData);
+      } else {
+        alert("No hay eventos disponibles");
+      }
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+      alert("Hubo un error al obtener los detalles de la reserva.");
+    }
   };
 
   return (
     <div className="reserva-contenedor">
       <div className="reserva-tarjeta">
         <div className="reserva-imagen">
-       //Fallo con la imagen que no se ve bien  
           <img src="/images.jpg" alt="Servicio de catering" />
         </div>
         <div className="reserva-info">
           <h2>Reserva de Catering</h2>
-          <p>Servicios de Catering para cualquier tipo de eventos en Lima Norte</p>
+          <p>Servicios profesionales para eventos inolvidables</p>
           <button onClick={obtenerDetallesReserva}>Ver detalles</button>
 
           {reserva && (
             <div className="reserva-detalles">
-              <h3>Detalles de la reserva</h3>
-              <p><strong>Cliente:</strong> {reserva.nombreCliente}</p>
-              <p><strong>Fecha:</strong> {reserva.fecha}</p>
-              <p><strong>Hora:</strong> {reserva.hora}</p>
-              <p><strong>Servicio:</strong> {reserva.servicio}</p>
-              <p><strong>Invitados:</strong> {reserva.invitados}</p>
-              <p><strong>Ubicación:</strong> {reserva.ubicacion}</p>
+              <h3>Detalles de la Reserva</h3>
+              <p><strong>Fecha del Evento:</strong> {reserva.fechaEvento}</p>
+              <p><strong>Hora de Inicio:</strong> {reserva.horaInicio}</p>
+              <p><strong>Horas Contratadas:</strong> {reserva.cantHorasEvento}</p>
+              <p><strong>Tipo de Evento:</strong> {reserva.tipoEvento}</p>
+              <p><strong>Dirección:</strong> {reserva.direccion}</p>
+              <p><strong>Distrito:</strong> {reserva.distrito}</p>
+              <p><strong>Teléfono:</strong> {reserva.telefonoCliente}</p>
             </div>
           )}
         </div>
