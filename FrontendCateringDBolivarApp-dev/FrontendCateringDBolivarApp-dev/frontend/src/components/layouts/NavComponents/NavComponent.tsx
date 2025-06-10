@@ -3,14 +3,9 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import styles from "./NavComponent.module.css";
 import logo from "../../../assets/images/Logo Blanco.png";
-
 import { LoginButtom } from "../LoginComponents/LoginButtom";
 import Link from "next/link";
-import { UserButton } from "../LoginComponents/UserButton";
 import { AreaForm } from "../LoginComponents/AreaForm";
-import UserDropdown from "@/components/features/UserDropdown";
-import NavBarComponent from "@/components/features/NavBarComponent";
-import { useRouter } from "next/router";
 import UserDropdownMobile from "@/components/features/UserDropDownMobile";
 import clsx from "clsx";
 import UserDropdownMenu from "@/components/features/UserDropDownMenu";

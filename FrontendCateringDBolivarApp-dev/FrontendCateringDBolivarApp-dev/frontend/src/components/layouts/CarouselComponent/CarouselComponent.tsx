@@ -1,7 +1,6 @@
 import React from "react";
 
 import styles from "./CarouselComponent.module.css";
-import NavComponent from "../NavComponents/NavComponent";
 
 interface CarouselComponentProps {
   image1: string;

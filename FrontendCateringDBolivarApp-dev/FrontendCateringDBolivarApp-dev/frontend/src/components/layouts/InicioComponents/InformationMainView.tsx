@@ -1,7 +1,6 @@
 import React from "react";
 
 import styles from "./InformationMainView.module.css";
-import { CarouselDemo } from "@/components/features/carousel-demo";
 import { TextGenerateEffectDemo } from "@/components/features/texto-demo";
 import ButtonReservar from "@/components/features/ButtonReservar";
 

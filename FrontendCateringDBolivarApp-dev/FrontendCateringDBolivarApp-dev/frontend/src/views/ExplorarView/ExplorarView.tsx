@@ -2,7 +2,6 @@ import { HeaderComponent } from "@/components/layouts/HeaderComponents/HeaderCom
 import styles from "./ExplorarView.module.css";
 import React, { useEffect, useState } from "react";
 import NavComponent from "@/components/layouts/NavComponents/NavComponent";
-import { CardItem } from "@/components/ui/3d-card";
 import CardItemHover from "@/components/features/CardItem";
 import { Item } from "@/components/Interfaces/Item";
 
