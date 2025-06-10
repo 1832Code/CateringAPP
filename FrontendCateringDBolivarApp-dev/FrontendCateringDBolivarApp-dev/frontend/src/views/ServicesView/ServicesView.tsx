@@ -4,10 +4,13 @@ import { CarouselDemo } from "@/components/features/carousel-demo";
 import styles from "./ServicesView.module.css";
 import { HeaderComponent } from "@/components/layouts/HeaderComponents/HeaderComponent";
 import { InfoMenu } from "@/components/Interfaces/InfoMenu";
+<<<<<<< HEAD
 import { Carousel } from "primereact/carousel";
 import CircularCarousel from "@/components/features/CircularCarousel";
 import { info } from "console";
 
+=======
+>>>>>>> origin/Andre
 export const ServicesView = () => {
   const [infoMenu, setInfoMenu] = useState<InfoMenu[]>([]);
   useEffect(() => {

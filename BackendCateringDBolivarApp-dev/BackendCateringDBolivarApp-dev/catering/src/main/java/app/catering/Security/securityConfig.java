@@ -47,6 +47,10 @@ public class securityConfig {
                                 "/api/pedidos/**",
                                 "/api/tipo-servicio/**",
                                 "/api/categorias/**",
+<<<<<<< HEAD
+=======
+                                "/api/datos-evento/**",
+>>>>>>> origin/Andre
                                 "/prueba"
                         // Permite acceso público a todos los endpoints de items
                         ).permitAll()

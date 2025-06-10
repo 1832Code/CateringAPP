@@ -1,7 +1,10 @@
 import React from "react";
 
 import styles from "./InformationMainView.module.css";
+<<<<<<< HEAD
 import { CarouselDemo } from "@/components/features/carousel-demo";
+=======
+>>>>>>> origin/Andre
 import { TextGenerateEffectDemo } from "@/components/features/texto-demo";
 import ButtonReservar from "@/components/features/ButtonReservar";
 

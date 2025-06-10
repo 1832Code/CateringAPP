@@ -1,7 +1,10 @@
 import React from "react";
 
 import styles from "./CarouselComponent.module.css";
+<<<<<<< HEAD
 import NavComponent from "../NavComponents/NavComponent";
+=======
+>>>>>>> origin/Andre
 
 interface CarouselComponentProps {
   image1: string;

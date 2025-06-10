@@ -18,7 +18,11 @@ public class DatosEvento {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_DatosEvento") // Exact match
+<<<<<<< HEAD
   private Long idDatosEvento;
+=======
+  private Long id;
+>>>>>>> origin/Andre
 
   @Column(name = "tipoEvento", nullable = false) // Mismo nombre
   @NotBlank(message = "El tipo de evento es obligatorio")

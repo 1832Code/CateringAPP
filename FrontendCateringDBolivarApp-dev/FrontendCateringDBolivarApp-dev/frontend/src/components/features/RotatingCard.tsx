@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import { url } from "inspector";
+=======
+>>>>>>> origin/Andre
 import React from "react";
 import styled from "styled-components";
 
