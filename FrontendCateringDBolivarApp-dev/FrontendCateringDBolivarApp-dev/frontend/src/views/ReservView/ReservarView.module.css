@@ -1,0 +1,74 @@
+.MainArea {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  z-index: auto;
+  overflow-x: hidden;
+}
+.Header {
+  display: flex;
+  height: 6vh;
+}
+.NavArea {
+  display: flex;
+  flex-direction: column;
+  height: 30vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
+    url(../../assets/images/ImageMainOriginal.jpg);
+  background-position: end;
+  background-size: contain;
+}
+
+.NavArea h1 {
+  display: flex;
+  padding-top: 4vh;
+  width: 100vw;
+  justify-content: center;
+  font-family: "Italiana", sans-serif;
+  font-size: 4vh;
+  color: white;
+}
+.ContainerForm {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 100vw;
+}
+
+.InteractionArea {
+  background-color: none;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  padding-top: 7vw;
+  padding-bottom: 4vw;
+}
+.Selected {
+  background-color: rgba(29, 28, 27, 0.658);
+  color: white;
+  transform: scale(1.1); /* Highlight the selected button */
+  transition: all 0.3s ease-in-out;
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9996;
+}
+
+@media (min-width: 600px) {
+  .NavArea h1 {
+    font-size: 6vh;
+  }
+}
+@media (min-width: 1024px) {
+  .NavArea {
+    height: 40vh;
+  }
+}

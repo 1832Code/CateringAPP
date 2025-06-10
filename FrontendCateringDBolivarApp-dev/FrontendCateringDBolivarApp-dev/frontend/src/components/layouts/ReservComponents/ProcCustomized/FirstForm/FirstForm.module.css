@@ -1,0 +1,134 @@
+.InteractionArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100vw;
+  height: auto;
+  padding: 3vh;
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+}
+.FormArea {
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: none;
+  border: 1px solid;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+.InputsArea {
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  gap: 0.9em;
+}
+.InputsArea h1 {
+  font-family: "Italiana", sans-serif;
+  font-size: 3vh;
+  font-weight: 600;
+  color: #161616;
+  text-align: center;
+}
+.GridForm {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.FormInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+.FormInputs label {
+  font-size: 2vh;
+}
+.FormInputs input {
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  background-color: none;
+  border-radius: 15px;
+  padding: 1vh;
+  transition: all 0.3s ease-in-out;
+}
+.FormInputs input:hover {
+  /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  color: black;
+  transform: scale(1.05);
+}
+.SelectDistrict {
+  display: flex;
+  font-size: 14px;
+  background-color: none;
+  color: #161616;
+  width: 100%;
+  height: 100%;
+  border: 1px solid black; /* para efecto glass */
+  border-radius: 15px;
+  padding: 1vh;
+  outline: none;
+  cursor: pointer;
+  appearance: none; /* Elimina el estilo predeterminado del navegador */
+  -webkit-appearance: none; /* Para navegadores basados en WebKit (Safari, Chrome) */
+  -moz-appearance: none;
+}
+
+.TextArea {
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  border-radius: 15px;
+  padding: 0.4em;
+}
+
+.ButtonArea {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 2vh;
+}
+
+@media (min-width: 200px) {
+  .FormArea {
+    width: 90vw;
+    padding: 2vh;
+    gap: 2vh;
+  }
+  .InputsArea {
+    gap: 3vh;
+  }
+  .GridForm {
+    gap: 2vh;
+  }
+}
+@media (min-width: 600px) {
+  .InputsArea {
+    width: 90%;
+  }
+  .FormInputs input {
+    padding: 1.5vh;
+    font-size: 2vh;
+  }
+  .SelectDistrict {
+    padding: 1.5vh;
+    font-size: 2vh;
+  }
+}
+@media (min-width: 1024px) {
+  .InputsArea {
+    width: 60%;
+  }
+  .InputsArea h1 {
+    font-size: 5vh;
+  }
+}

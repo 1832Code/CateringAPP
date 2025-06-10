@@ -1,0 +1,37 @@
+.MainArea {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  z-index: auto;
+  overflow-x: hidden;
+}
+.Header {
+  display: flex;
+  height: 6vh;
+}
+.NavArea {
+  display: flex;
+  flex-direction: column;
+  height: 30vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
+    url(../../assets/images/ImageMainOriginal.jpg);
+  background-position: end;
+  background-size: contain;
+}
+.NavArea h1 {
+  display: flex;
+  padding-top: 4vh;
+  width: 100vw;
+  justify-content: center;
+  font-family: "Italiana", sans-serif;
+  font-size: 4vh;
+  color: white;
+}
+.HistorialContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 20px;
+}

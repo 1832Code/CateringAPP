@@ -1,0 +1,61 @@
+.layout {
+  display: flex;
+  height: 6vh;
+  width: 100vw;
+}
+.Header {
+  display: flex;
+  background-color: #1b1b1b;
+  justify-content: space-between;
+  padding-inline: 5vh;
+  align-items: center;
+  height: 6vh;
+  width: 100vw;
+  z-index: 999;
+}
+.Header ul li {
+  color: white;
+  display: flex;
+  gap: 1.5vh;
+  font-size: 1.8vh;
+}
+.Header ul li a:not(.SpamEmail) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 1vh;
+}
+.SpamEmail {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5vh;
+}
+
+@media (min-width: 220px) {
+  .Header {
+    position: fixed;
+  }
+  .SpamEmail {
+    display: none;
+  }
+}
+@media (min-width: 600px) {
+  .Header {
+    padding-inline: 2vh;
+  }
+  .SpamEmail {
+    display: flex;
+  }
+}
+@media (min-width: 1024px) {
+  .Header {
+    padding-inline: 10vh;
+  }
+}
+@media (min-width: 1421px) {
+  .Header ul {
+    font-size: 2.3vh;
+  }
+}
