@@ -1,0 +1,112 @@
+.InteractionArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  backdrop-filter: blur(15px);
+  height: 68vh;
+  width: 50vw;
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  gap: 1em;
+}
+
+.ServiceInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 35%;
+  height: 92%;
+  background-color: none;
+  border: 1px solid;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  gap: 1em;
+}
+.AreaForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+}
+.AreaForm h1 {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  color: #161616;
+
+  text-align: center;
+}
+.FormArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  height: 92%;
+  background-color: none;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  gap: 0.8em;
+}
+.FormInputs {
+  display: flex;
+  gap: 0.6em;
+  flex-direction: column;
+}
+
+.FormInputs input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  background-color: none;
+  border-radius: 15px;
+  padding: 0.5em;
+  transition: all 0.3s ease-in-out;
+}
+.FormInputs input:hover {
+  /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  color: black;
+  transform: scale(1.05);
+}
+.SelectDistrict {
+  display: flex;
+  font-size: 14px;
+  background-color: none;
+  color: #161616;
+  width: 100%;
+  height: 100%;
+  border: 1px solid black; /* para efecto glass */
+  border-radius: 15px;
+  padding: 0.4em;
+  outline: none;
+  cursor: pointer;
+  appearance: none; /* Elimina el estilo predeterminado del navegador */
+  -webkit-appearance: none; /* Para navegadores basados en WebKit (Safari, Chrome) */
+  -moz-appearance: none;
+}
+
+.TextArea {
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  border-radius: 15px;
+  padding: 0.4em;
+}
+
+.ButtonArea {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}

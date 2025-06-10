@@ -1,0 +1,161 @@
+.ContainerArea {
+  width: 20em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+}
+.FormArea {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.ContainerArea h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Abel", sans-serif;
+  font-size: 2em;
+}
+.ContainerArea h5 {
+  font-family: "Abel", sans-serif;
+  font-size: 1em;
+}
+.DataArea {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.FirstArea {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+.FirstArea input {
+  width: 90%;
+  height: 2em;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 1em;
+  box-sizing: border-box;
+}
+.SecondArea {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+.SecondArea input {
+  width: 90%;
+  height: 2em;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 1em;
+  box-sizing: border-box;
+}
+.RegisterArea {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.SubRegisterArea {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+.UserField {
+  width: 90%;
+  height: 1em;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 1em;
+  box-sizing: border-box;
+}
+.PasswordField {
+  width: 90%;
+  height: 1em;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 1em;
+  box-sizing: border-box;
+}
+.CheckArea {
+  display: flex;
+  flex-direction: row;
+  height: 1em;
+}
+.CheckArea input {
+  margin-right: 0.7em;
+}
+.ButtonsArea {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  gap: 1em;
+  align-items: center;
+  padding: 2em;
+  height: 2em;
+  width: 100%;
+}
+.EmailField {
+  width: 18em;
+  height: 1em;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+/* Boton Iniciar Sesión*/
+.LoginButton {
+  font-family: "Abel", sans-serif;
+  width: 7em;
+  padding: 10px 20px; /* define el tamaño interno */
+  color: #ffffff;
+  background-color: #000000;
+  text-align: center;
+  line-height: 0;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  height: 2.5em;
+}
+
+/* Boton  Registrarse*/
+.RegisterButton {
+  width: 7em;
+  padding: 10px 20px;
+  color: #000000;
+  background-color: #ffffff;
+  font-family: "Abel", sans-serif;
+  text-align: center;
+  line-height: 0;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  height: 2.5em;
+}
+.RegisterButton:hover {
+  background-color: #f0f0f0; /* cambia un poquito el color al pasar el mouse */
+  border-color: black; /* o cambia el borde */
+  cursor: pointer; /* asegura que el cursor se vea como manito */
+}
+
+.ImageArea {
+  display: flex;
+  width: 20em;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}

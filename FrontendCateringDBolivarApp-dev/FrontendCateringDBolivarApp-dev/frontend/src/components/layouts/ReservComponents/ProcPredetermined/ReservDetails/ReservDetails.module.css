@@ -1,0 +1,61 @@
+.InteractionArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  backdrop-filter: blur(15px);
+  height: 68vh;
+  width: 55vw;
+}
+.ServiceInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 35%;
+  height: 92%;
+  background-color: none;
+  border: 1px solid;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  gap: 1em;
+}
+.ServiceInfo h2 {
+  font-family: "Abel", sans-serif;
+}
+.DetailsArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  height: 92%;
+  background-color: none;
+  border: 1px solid;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  gap: 1em;
+}
+.DetailsArea h1 {
+  font-family: "Italiana", sans-serif;
+  font-weight: 700;
+  font-size: 1.5em;
+}
+.DetailsArea p {
+  font-family: "Abel", sans-serif;
+}
+
+.ButtonArea {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 1em;
+}

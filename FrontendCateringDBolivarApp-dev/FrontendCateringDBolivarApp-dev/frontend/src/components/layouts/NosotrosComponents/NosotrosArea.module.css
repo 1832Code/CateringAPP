@@ -1,0 +1,110 @@
+/*Area Nosotros*/
+.MainArea {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1d1c1c;
+  padding: 2vh;
+  height: 85vh;
+  width: 100vw;
+}
+/*Area Columna Izquierda */
+.SubAreaLeft {
+  display: flex;
+  justify-content: center;
+}
+.Image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* o 'contain' dependiendo del caso */
+  border-radius: 12px;
+}
+.TextArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.TextArea h2 {
+  font-family: "Italiana", sans-serif;
+  font-weight: 100;
+  text-align: center;
+}
+.TextArea p {
+  font-family: "Italiana", sans-serif;
+  font-weight: 100;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+}
+
+@media (min-width: 220px) {
+  .MainArea {
+    flex-direction: column;
+    gap: 0;
+  }
+  .SubAreaLeft {
+    width: 40vh;
+    height: 40vh;
+    padding: 2vh;
+  }
+
+  .TextArea {
+    width: 90vw;
+    height: 35vh;
+  }
+  .TextArea h2 {
+    font-size: 7vh;
+  }
+  .TextArea p {
+    font-size: 2vh;
+    font-style: 500;
+  }
+}
+
+@media (min-width: 600px) {
+  .SubAreaLeft {
+    width: 85vw;
+    height: 50vh;
+  }
+}
+@media (min-width: 1024px) {
+  .MainArea {
+    padding: 7vh;
+    flex-direction: row;
+    gap: 5vh;
+  }
+  .Reverse {
+    flex-direction: row-reverse;
+  }
+  .SubAreaLeft {
+    padding: 5vh;
+    width: 45vw;
+    height: 70vh;
+  }
+  .TextArea {
+    width: 45vw;
+  }
+  .TextArea h2 {
+    font-size: 9vh;
+    width: 45vw;
+  }
+  .TextArea p {
+    font-size: 3.5vh;
+    font-weight: 100;
+  }
+}
+
+@media (min-width: 1421px) {
+  .SubAreaLeft {
+    padding: 3vh;
+  }
+  .TextArea h2 {
+    font-size: 10vh;
+  }
+  .TextArea p {
+    font-size: 3.5vh;
+  }
+}

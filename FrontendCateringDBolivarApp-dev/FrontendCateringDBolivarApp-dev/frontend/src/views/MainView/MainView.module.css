@@ -1,0 +1,50 @@
+.MainArea {
+  display: flex;
+  flex-direction: column;
+}
+.Header {
+  display: flex;
+  height: 6vh;
+  background-color: #1d1c1c;
+  color: white;
+}
+.CarouselMobile {
+  display: flex;
+}
+.CarouselDesktop {
+  display: none;
+}
+@media (min-width: 220px) {
+  .MainArea {
+    display: flex;
+    flex-direction: column;
+  }
+  .NavArea {
+    display: flex;
+  }
+  .BackgroundColumnArea {
+    display: none;
+  }
+
+  .ColumnImageArea {
+    display: none;
+  }
+  .ImageMain {
+    display: none;
+  }
+  .InformationArea {
+    display: flex;
+    width: 100vw;
+    height: 85vh;
+    justify-content: center;
+    align-items: center;
+  }
+}
+@media (min-width: 1024px) {
+  .CarouselMobile {
+    display: none;
+  }
+  .CarouselDesktop {
+    display: flex;
+  }
+}

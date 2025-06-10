@@ -1,0 +1,65 @@
+.InteractionArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(15px);
+  height: 68vh;
+  width: 55vw;
+}
+.LayoutArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 92%;
+  background-color: none;
+  border: 1px solid;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  gap: 1em;
+}
+.ConfirmationArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 60%;
+  gap: 1em;
+}
+.ConfirmationArea h5 {
+  font-size: 1em;
+  font-weight: 500;
+}
+.ConfirmationArea p {
+  font-size: 0.8em;
+}
+
+.ConfirmationText {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.ConfirmationText h1 {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.ImageCheck {
+  display: flex;
+  object-fit: cover;
+  width: 3em;
+  height: 3em;
+}
+
+.ServiceInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 1em;
+}
