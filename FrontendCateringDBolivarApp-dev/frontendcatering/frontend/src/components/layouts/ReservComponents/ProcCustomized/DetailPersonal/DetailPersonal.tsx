@@ -3,6 +3,7 @@ import ButtonPrevious from "@/components/features/ButtonPrevious";
 import { InfoMenu } from "@/components/Interfaces/InfoMenu";
 import { Pedido } from "@/components/Interfaces/Pedido";
 import React, { useState } from "react";
+import styles from "./DetailPersonal.module.css";
 
 interface DetailPersonalProps {
   personal: InfoMenu["personal"];
@@ -47,6 +48,11 @@ export const DetailPersonal: React.FC<DetailPersonalProps> = ({
   };
 
   const handleSubmit = () => {
+    if (formData.personalInfo.length === 0) {
+      // Si no hay ningún bloque, no actualizar y pasar el original
+      onNext(personal); // se envían los datos originales sin cambios
+      return;
+    }
     for (let i = 0; i <= formData.personalInfo.length; i++) {
       console.log(
         "Tipo de cantidad:",
@@ -58,29 +64,54 @@ export const DetailPersonal: React.FC<DetailPersonalProps> = ({
   };
 
   return (
-    <div>
-      <h2>Detalle de Personal</h2>
-      {formData.personalInfo.map((item, index) => (
-        <div key={index} style={{ marginBottom: "1rem" }}>
-          <input
-            type="text"
-            placeholder="Tipo de Personal"
-            value={item.tipoPersonal}
-            onChange={(e) =>
-              handleChange(index, "tipoPersonal", e.target.value)
-            }
-          />
-          <input
-            type="number"
-            placeholder="Cantidad"
-            value={item.cantidad}
-            onChange={(e) => handleChange(index, "cantidad", e.target.value)}
-          />
-          <button onClick={() => handleRemove(index)}>Eliminar</button>
-        </div>
-      ))}
-      <button onClick={handleAdd}>Agregar Personal</button>
-      <div style={{ marginTop: "1rem" }}>
+    <div className={styles.InteractionArea}>
+      <h3>Detalle de Personal</h3>
+      <div className={styles.TextArea}>
+        <p>
+          Por medio del presente formulario, el cliente puede solicitar el
+          personal necesario para cubrir sus requerimientos. A continuación,
+          complete los siguientes datos:
+        </p>
+        <p>
+          Tipo de personal requerido:<br></br>- Seleccione el cargo o perfil
+          solicitado (ej.: "Mozo", "Cocinero", etc.)
+        </p>
+        <p>
+          Cantidad de personas requeridas:<br></br>- Indique la cantidad de
+          personal solicitado
+        </p>
+      </div>
+      <div className={styles.ListArea}>
+        {formData.personalInfo.map((item, index) => (
+          <div
+            className={styles.FormBlock}
+            key={index}
+            style={{ marginBottom: "1rem" }}
+          >
+            <div className={styles.InputArea}>
+              <input
+                type="text"
+                placeholder="Tipo de Personal"
+                value={item.tipoPersonal}
+                onChange={(e) =>
+                  handleChange(index, "tipoPersonal", e.target.value)
+                }
+              />
+              <input
+                type="number"
+                placeholder="Cantidad"
+                value={item.cantidad}
+                onChange={(e) =>
+                  handleChange(index, "cantidad", e.target.value)
+                }
+              />
+            </div>
+            <button onClick={() => handleRemove(index)}>Eliminar</button>
+          </div>
+        ))}
+        <button onClick={handleAdd}>Agregar Personal</button>
+      </div>
+      <div className={styles.ButtonArea}>
         <ButtonPrevious onClick={onBack} texto="Anterior"></ButtonPrevious>
         <ButtonNext onClick={handleSubmit} texto="Siguiente"></ButtonNext>
       </div>

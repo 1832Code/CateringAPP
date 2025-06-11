@@ -44,14 +44,14 @@ const StyledWrapper = styled.div`
     align-items: center;
     gap: 4px;
     padding: 5px 30px;
-    border: 1px solid;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     border-color: transparent;
     font-size: 2vh;
     background-color: inherit;
     border-radius: 100px;
     font-weight: 600;
     color: #1e1e1e;
-    box-shadow: 0 0 0 1px #1e1e1e;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     overflow: hidden;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -89,6 +89,7 @@ const StyledWrapper = styled.div`
   .animated-button .text {
     position: relative;
     z-index: 1;
+    font-family: "Abel";
     transform: translateX(-12px);
     transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
   }
