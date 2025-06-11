@@ -39,7 +39,9 @@ public class PedidoMapper {
 
     public Pedido toEntity(PedidoDTO dto) {
         Pedido pedido = new Pedido();
-        pedido.setId(dto.getId());
+        if (dto.getInfoMenu() != null && dto.getInfoMenu().getId() != null && dto.getInfoMenu().getId() > 0) {
+            pedido.setInfoMenu(infoMenuMapper.toEntity(dto.getInfoMenu()));
+        }
 
         // Cliente e InfoMenu se asignan en el servicio según los IDs, no desde el DTO completo
         pedido.setDatosEvento(datosEventoMapper.toEntity(dto.getDatosEvento()));

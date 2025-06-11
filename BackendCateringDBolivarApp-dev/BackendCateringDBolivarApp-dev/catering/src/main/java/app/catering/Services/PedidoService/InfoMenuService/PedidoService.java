@@ -70,17 +70,18 @@ public class PedidoService {
             // Modo personalizado
             InfoMenu infoMenuNuevo = infoMenuMapper.toEntity(dto.getInfoMenu());
 
-            // Buscar si ya existe un InfoMenu similar (puedes mejorar el criterio de comparación)
+            // Buscar si ya existe un InfoMenu similar
             List<InfoMenu> menusExistentes = infoMenuRepository.findAll();
             InfoMenu existente = menusExistentes.stream()
-                    .filter(m -> m.equals(infoMenuNuevo)) // asegúrate de tener bien definido equals() en InfoMenu
+                    .filter(m -> m.equals(infoMenuNuevo))
                     .findFirst()
                     .orElse(null);
 
             if (existente != null) {
                 pedido.setInfoMenu(existente); // reutilizar
             } else {
-                pedido.setInfoMenu(infoMenuNuevo); // guardar nuevo
+                InfoMenu guardado = infoMenuRepository.save(infoMenuNuevo); // Guardar antes de asociar
+                pedido.setInfoMenu(guardado); // usar el nuevo ya persistido
             }
         } else {
             throw new RuntimeException("Debe especificar un infoMenuId o los datos de un nuevo infoMenu.");
@@ -97,7 +98,7 @@ public class PedidoService {
         Pedido existing = pedidoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
 
-        // Mapeo manual si deseas conservar entidades anidadas actualizadas.
+        // Mapeo manual
         existing.setCliente(pedidoMapper.toEntity(pedidoDTO).getCliente());
         existing.setDatosEvento(pedidoMapper.toEntity(pedidoDTO).getDatosEvento());
         existing.setInfoMenu(pedidoMapper.toEntity(pedidoDTO).getInfoMenu());

@@ -5,11 +5,12 @@ import ButtonPrevious from "@/components/features/ButtonPrevious";
 import ButtonNext from "@/components/features/ButtonNext";
 import { Item } from "@/components/Interfaces/Item";
 import { Categoria } from "@/components/Interfaces/Categoria";
+import { Pedido } from "@/components/Interfaces/Pedido";
 
 interface DetailServicioProps {
   onBack: () => void;
   onNext: (items: InfoMenu["servicio"]["items"]) => void;
-  tipoServicio: InfoMenu["servicio"]["tipoServicio"];
+  pedido: Pedido;
 }
 
 interface FormBlock {
@@ -18,7 +19,7 @@ interface FormBlock {
 }
 
 export const DetailServicio: React.FC<DetailServicioProps> = ({
-  tipoServicio,
+  pedido,
   onBack,
   onNext,
 }) => {
@@ -27,16 +28,18 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
   const [formBlocks, setFormBlocks] = useState<FormBlock[]>([
     { categoriaId: undefined, itemId: undefined },
   ]);
+
+  //Function that returns the list of items according to the category
   const categoriasFiltradas = categorias.filter((cat) => {
-    if (!tipoServicio) return false;
+    if (!pedido.infoMenu.servicio.tipoServicio) return false;
 
     const nombre = cat.nombre.toLowerCase();
 
-    if (tipoServicio.id === 1) {
+    if (pedido.infoMenu.servicio.tipoServicio.id === 1) {
       return nombre === "postres" || nombre === "bebidas alcohólicas";
     }
 
-    if (tipoServicio.id === 2) {
+    if (pedido.infoMenu.servicio.tipoServicio.id === 2) {
       return (
         nombre === "entradas" ||
         nombre === "platos principales" ||
@@ -45,15 +48,15 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
       );
     }
 
-    if (tipoServicio.id === 3) {
+    if (pedido.infoMenu.servicio.tipoServicio.id === 3) {
       return nombre !== "bebidas alcohólicas";
     }
 
     return true;
   });
-
+  // Rules according to the type of service
   const reglas = () => {
-    switch (tipoServicio.id) {
+    switch (pedido.infoMenu.servicio.tipoServicio.id) {
       case 1: // GOURMET
         return (
           <>
@@ -109,22 +112,22 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
   };
   // Function to check the form
   const validarSeleccion = () => {
-    if (tipoServicio.id === 1 && items.length > 5) {
+    if (pedido.infoMenu.servicio.tipoServicio.id === 1 && items.length > 5) {
       alert("Para Buffet máximo 5 ítems.");
       return false;
     }
-    if (tipoServicio.id === 2 && items.length < 3) {
+    if (pedido.infoMenu.servicio.tipoServicio.id === 2 && items.length < 3) {
       alert("Para Plato servido debes seleccionar al menos 3 platos.");
       return false;
     }
-    if (tipoServicio.id === 3 && items.length > 4) {
+    if (pedido.infoMenu.servicio.tipoServicio.id === 3 && items.length > 4) {
       alert("Máximo 4 ítems por este servicio");
       return false;
     }
 
     return true;
   };
-
+  //We bring items and categories from the database
   useEffect(() => {
     fetch("http://localhost:8084/api/categorias")
       .then((res) => res.json())
@@ -137,19 +140,21 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
       .catch((err) => console.error(err));
   }, []);
 
+  //Function that controls the state of the category in the form
   const handleCategoriaChange = (index: number, categoriaId: number) => {
     const updated = [...formBlocks];
     updated[index].categoriaId = categoriaId;
     updated[index].itemId = undefined;
     setFormBlocks(updated);
   };
-
+  //Function that controls the state of the item in the form
   const handleItemChange = (index: number, itemId: number) => {
     const updated = [...formBlocks];
     updated[index].itemId = itemId;
     setFormBlocks(updated);
   };
 
+  //Function to add new row
   const addFormBlock = () => {
     setFormBlocks([
       ...formBlocks,
@@ -157,11 +162,14 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
     ]);
   };
 
+  //Function to delete the row selected
   const removeFormBlock = (index: number) => {
     const updated = [...formBlocks];
     updated.splice(index, 1);
     setFormBlocks(updated);
   };
+
+  //Function to control the submit
   const handleSubmit = () => {
     // Validación de selects
     const camposIncompletos = formBlocks.some(
@@ -186,17 +194,23 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
       alert("Debes seleccionar al menos un ítem.");
       return;
     }
-
+    console.log(dataMapped);
     onNext(dataMapped);
   };
 
   useEffect(() => {
-    console.log("Tipo de servicio recibido:", tipoServicio);
-  }, [tipoServicio]);
+    console.log(
+      "Tipo de servicio recibido:",
+      pedido.infoMenu.servicio.tipoServicio
+    );
+  }, [pedido.infoMenu.servicio.tipoServicio]);
 
   return (
     <div className={styles.InteractionArea}>
-      <h3>Detalle del Servicio - Tipo: {tipoServicio.nombre}</h3>
+      <h3>
+        Detalle del Servicio - Tipo:{" "}
+        {pedido.infoMenu.servicio.tipoServicio.nombre}
+      </h3>
       <div className={styles.RulesCustomization}>
         <p>Estimado(a) cliente,</p>
         <p>

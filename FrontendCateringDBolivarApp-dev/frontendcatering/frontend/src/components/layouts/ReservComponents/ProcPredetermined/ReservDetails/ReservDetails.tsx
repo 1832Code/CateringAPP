@@ -15,6 +15,10 @@ export const ReservDetails: React.FC<ReservDetailsProps> = ({
   pedido,
   onSubmitFinal,
 }) => {
+  const handleSubmitFinal = () => {
+    console.log(pedido);
+    onSubmitFinal();
+  };
   return (
     <>
       <div className={styles.InteractionArea}>
@@ -42,11 +46,11 @@ export const ReservDetails: React.FC<ReservDetailsProps> = ({
             {pedido.datosEvento.direccion}
           </p>
           <p>
-            <strong></strong> {pedido.infoMenu.precio}
+            <strong>Precio: </strong> {pedido.infoMenu.precio} soles
           </p>
           <div className={styles.ButtonArea}>
             <ButtonPrevious texto="Anterior" onClick={onBack} />
-            <ButtonNext texto="Reservar" onClick={onSubmitFinal} />
+            <ButtonNext texto="Reservar" onClick={handleSubmitFinal} />
           </div>
         </div>
       </div>

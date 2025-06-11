@@ -8,6 +8,8 @@ import { TipoServicio } from "@/components/Interfaces/TipoServicio";
 import { DetailServicio } from "./DetailServicio/DetailServicio";
 import { DetailPersonal } from "./DetailPersonal/DetailPersonal";
 import { DetailExtra } from "./DetailExtra/DetailExtra";
+import { ReservDetailCustomized } from "./ReservDetailCustomized/ReservDetailCustomized";
+import { ReservConfirmationCustomized } from "./ReservConfirmationCustomized/ConfirmationCustomized";
 
 interface ReservCustomProps {
   items: InfoMenu[];
@@ -53,10 +55,52 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
       imageURL: "",
       activo: true,
       cantPersonas: 0,
-      tipoInfoMenu: "",
+      tipoInfoMenu: "Personalizado",
     },
     estado: "Nuevo",
   });
+  //Function to reset Pedido
+  const resetPedido = () => {
+    setPedido({
+      cliente: {
+        nombre: "",
+        email: "",
+        telefono: "",
+      },
+      datosEvento: {
+        tipoEvento: "",
+        direccion: "",
+        distrito: "",
+        horaInicio: "",
+        cantHoras: 0,
+        fechaEvento: "",
+      },
+      infoMenu: {
+        id: 0,
+        servicio: {
+          tipoServicio: {
+            id: 0,
+          },
+          items: [],
+        },
+        extra: {
+          extraInfo: [],
+        },
+        personal: {
+          personalInfo: [],
+        },
+        titulo: "",
+        descripcion: "",
+        precio: 0,
+        imageURL: "",
+        activo: true,
+        cantPersonas: 0,
+        tipoInfoMenu: "Personalizado",
+      },
+      estado: "Nuevo",
+    });
+  };
+
   const handleDatosEvento = (datosEvento: Pedido["datosEvento"]) => {
     setPedido((prev) => ({
       ...prev,
@@ -64,10 +108,7 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
     }));
     setStep(3);
   };
-  const handleInfoMenuSelected = (infoMenu: InfoMenu) => {
-    setPedido((prev) => ({ ...prev, infoMenu }));
-    setStep(2);
-  };
+
   const handleTipoServicio = (
     tipoServicio: InfoMenu["servicio"]["tipoServicio"]
   ) => {
@@ -117,7 +158,42 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
     setStep(6);
   };
 
-  const avanzar = () => setStep((p) => p + 1);
+  const handleSubmitFinal = async () => {
+    try {
+      const payload = {
+        clienteId: 1,
+        datosEvento: pedido.datosEvento,
+        infoMenu: pedido.infoMenu,
+        estado: pedido.estado,
+      };
+      // POST to send pedido
+      const response = await fetch("http://localhost:8084/api/pedidos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      console.log("Payload a enviar:", payload);
+      if (!response.ok) {
+        const errorText = await response.text(); // <-- aquí obtenemos la respuesta como texto
+        throw new Error(
+          `Error al enviar el pedido: ${response.status} - ${errorText}`
+        );
+      }
+
+      const data = await response.json();
+      console.log("Pedido creado con éxito:", data);
+
+      // Opcional: cambiar al paso final (confirmación)
+      setStep(7);
+      resetPedido();
+    } catch (error) {
+      console.error("Error en el submit final:", error);
+      alert("Ocurrió un error al procesar la reserva. Intenta nuevamente.");
+    }
+  };
+
   const retroceder = () => setStep((p) => p - 1);
 
   return (
@@ -137,13 +213,35 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
       )}
       {step === 3 && (
         <DetailServicio
-          tipoServicio={pedido.infoMenu.servicio.tipoServicio}
+          pedido={pedido}
           onBack={retroceder}
           onNext={handleDetailServicio}
         ></DetailServicio>
       )}
-      {step == 4 && <DetailPersonal></DetailPersonal>}
-      {step == 5 && <DetailExtra></DetailExtra>}
+      {step == 4 && (
+        <DetailPersonal
+          personal={pedido.infoMenu.personal}
+          onBack={retroceder}
+          onNext={handleDetailPersonal}
+        ></DetailPersonal>
+      )}
+      {step == 5 && (
+        <DetailExtra
+          extra={pedido.infoMenu.extra}
+          onBack={retroceder}
+          onNext={handleDetailExtra}
+        ></DetailExtra>
+      )}
+      {step == 6 && (
+        <ReservDetailCustomized
+          pedido={pedido}
+          onBack={retroceder}
+          onNext={handleSubmitFinal}
+        ></ReservDetailCustomized>
+      )}
+      {step == 7 && (
+        <ReservConfirmationCustomized></ReservConfirmationCustomized>
+      )}
     </>
   );
 };

@@ -51,6 +51,7 @@ export const FirstForm: React.FC<FirstFormProps> = ({
       return;
     }
     onNext(datosEvento);
+    console.log(datosEvento);
   };
 
   return (
