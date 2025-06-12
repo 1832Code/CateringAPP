@@ -1,0 +1,66 @@
+.InteractionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  gap: 3vh;
+  padding: 4vh;
+}
+.DetailsArea {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2vh;
+}
+
+.InfoArea {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+.InfoArea h1 {
+  font-size: 5vh;
+  font-weight: 600;
+  font-family: "Italiana";
+  text-align: center;
+}
+.InfoArea h5 {
+  font-family: "Abel";
+  font-size: 3.5vh;
+  font-weight: bold;
+}
+.InfoArea p {
+  padding-left: 2vh;
+  font-family: "Abel";
+}
+.ButtonArea {
+  display: flex;
+  justify-content: center;
+  gap: 3vh;
+}
+.ResultDetailArea {
+  font-family: "Abel";
+  padding-left: 2vh;
+}
+@media (min-width: 200px) {
+  .InfoArea p {
+    font-size: 2.5vh;
+  }
+  .ResultDetailArea {
+    font-size: 2.5vh;
+  }
+}
+@media (min-width: 1024px) {
+  .InteractionArea {
+    width: 50vw;
+  }
+  .DetailsArea {
+    width: 80%;
+  }
+}

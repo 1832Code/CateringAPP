@@ -1,0 +1,128 @@
+.InteractionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* translúcido */
+  backdrop-filter: blur(5px); /* más sutil que el fondo */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  gap: 3vh;
+  padding: 4vh;
+}
+.InteractionArea h3 {
+  font-family: "Italiana";
+  font-size: 5vh;
+  font-weight: 600;
+}
+.TextArea {
+  font-family: "Abel";
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding: 2vh;
+}
+.ListArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+.FormBlock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  width: 100%;
+  padding: 2vh;
+}
+.InputArea {
+  display: flex;
+  align-items: center;
+  gap: 2vh;
+}
+.FormBlock input {
+  padding: 1vh;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  font-family: "Abel";
+  font-size: 3vh;
+  border-radius: 10px;
+}
+
+.FormBlock button {
+  font-family: "Abel";
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 1vh 2vh;
+  border-radius: 10px;
+  font-size: 3vh;
+}
+.FormBlock button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.ListArea button {
+  font-family: "Abel";
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 1vh 2vh;
+  border-radius: 10px;
+  font-size: 3vh;
+}
+.ListArea button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.ButtonArea {
+  display: flex;
+  gap: 4vh;
+}
+
+@media (min-width: 200px) {
+  .InteractionArea {
+    width: 90vw;
+  }
+  .ListArea {
+    width: 85vw;
+    padding: 1vh;
+    gap: 2vh;
+  }
+  .TextArea p {
+    font-size: 2.3vh;
+  }
+  .ListArea button {
+    font-size: 2.3vh;
+    padding: 0.5vh 0.5vh;
+  }
+  .FormBlock {
+    padding: 1vh;
+  }
+  .FormBlock input {
+    padding: 0.5vh;
+    font-size: 2.5vh;
+    width: 40%;
+  }
+}
+@media (min-width: 600px) {
+  .ListArea {
+    width: 85vw;
+    padding: 2vh;
+  }
+}
+@media (min-width: 1024px) {
+  .ListArea {
+    width: 60vw;
+    height: 60vh;
+  }
+  .TextArea {
+    font-size: 3vh;
+  }
+}

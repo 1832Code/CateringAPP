@@ -9,7 +9,7 @@ public class InfoMenuMapper {
     public static InfoMenu toEntity(InfoMenuDTO dto) {
         InfoMenu entity = new InfoMenu();
 
-        if (dto.getId() != null) {
+        if (dto.getId() != null && dto.getId() > 0) {
             entity.setId(dto.getId());
         }
 

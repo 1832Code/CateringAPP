@@ -1,0 +1,61 @@
+.InteractionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  width: 100vw;
+}
+.LayoutArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: auto;
+}
+.CardsArea {
+  display: flex;
+  height: auto;
+  gap: 8vh;
+}
+.TextArea {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  padding: 3vh;
+}
+.TextArea h1 {
+  font-family: "Italiana", sans-serif;
+  font-weight: 700;
+  font-size: 4vh;
+}
+.TextArea p {
+  font-family: "Abel", serif;
+  font-size: 3vh;
+}
+
+@media (min-width: 200px) {
+  .CardsArea {
+    flex-direction: column;
+  }
+  .TextArea {
+    font-size: 3vh;
+  }
+}
+@media (min-width: 600px) {
+  .LayoutArea {
+    height: auto;
+  }
+}
+@media (min-width: 1024px) {
+  .CardsArea {
+    flex-direction: row;
+  }
+  .InteractionArea {
+    padding: 3vh;
+  }
+  .LayoutArea {
+    height: 60vh;
+  }
+}
