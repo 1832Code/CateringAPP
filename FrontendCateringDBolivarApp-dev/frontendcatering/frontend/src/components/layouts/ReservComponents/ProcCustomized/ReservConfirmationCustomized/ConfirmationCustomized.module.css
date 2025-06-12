@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(15px);
-  height: 68vh;
+  height: auto;
   width: 55vw;
 }
 .LayoutArea {
@@ -11,8 +11,9 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 90%;
-  height: 92%;
+  width: 100%;
+  height: auto;
+  padding: 2vh;
   background-color: none;
   border: 1px solid;
   border-radius: 20px;
@@ -36,7 +37,7 @@
   font-weight: 500;
 }
 .ConfirmationArea p {
-  font-size: 0.8em;
+  font-size: 2vh;
 }
 
 .ConfirmationText {
@@ -56,10 +57,46 @@
   height: 3em;
 }
 
-.ServiceInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  gap: 1em;
+@media (min-width: 200px) {
+  .InteractionArea {
+    width: 80vw;
+  }
+  .LayoutArea {
+    flex-direction: column;
+    font-family: "Abel";
+  }
+  .ConfirmationArea {
+    align-items: center;
+    width: 80%;
+  }
+  .ConfirmationText h1 {
+    font-size: 4vh;
+  }
+  .ConfirmationArea h5 {
+    font-size: 2.7vh;
+  }
+  .ConfirmationArea p {
+    font-size: 2.1vh;
+  }
+  .ImageCheck {
+    width: 8vh;
+    height: 8vh;
+  }
+}
+@media (min-width: 600px) {
+  .ConfirmationText h1 {
+    font-size: 5.5vh;
+  }
+  .ConfirmationArea h5 {
+    font-size: 3vh;
+  }
+  .ConfirmationArea p {
+    font-size: 2.3vh;
+  }
+  .ImageCheck {
+    width: 8vh;
+    height: 8vh;
+  }
+}
+@media (min-width: 1024px) {
 }

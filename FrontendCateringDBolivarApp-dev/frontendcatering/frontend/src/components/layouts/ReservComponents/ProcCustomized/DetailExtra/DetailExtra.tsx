@@ -48,6 +48,26 @@ export const DetailExtra: React.FC<DetailExtraProps> = ({
   };
 
   const handleSubmit = () => {
+    if (formData.extraInfo.length === 0) {
+      // Si no hay ningún bloque, no actualizar y pasar el original
+      onNext(extra); // se envían los datos originales sin cambios
+      return;
+    }
+    for (let i = 0; i < formData.extraInfo.length; i++) {
+      const item = formData.extraInfo[i];
+
+      //Validamos que los campos de tipoextra esten llenos
+      if (typeof item.tipoExtra !== "string" || item.tipoExtra.trim() === "") {
+        alert(`El campo "Tipo de Extra" en el bloque ${i + 1} está vacío.`);
+        return;
+      }
+      //Validamos que los campos de cantidad esten llenos y entre 1 y 9
+      if (!item.cantidad || item.cantidad < 20 || item.cantidad > 100) {
+        alert(`La "Cantidad" en el bloque ${i + 1} debe estar entre 20 y 100.`);
+        return;
+      }
+      console.log("Tipo de cantidad:", typeof formData.extraInfo[0].cantidad);
+    }
     console.log(formData);
     onNext(formData);
   };
@@ -62,13 +82,13 @@ export const DetailExtra: React.FC<DetailExtraProps> = ({
           datos:
         </p>
         <p>
-          Tipo de extra requerido:<br></br>- Seleccione el item extra a
-          solicitar (ej.: "Pisco Sour", "Mojito", "Machu Picchu", "Daikiri",
-          etc.)
+          Tipo de extra requerido:<br></br>
+          <b>Primer Bloque:</b> Seleccione el item extra a solicitar (ej.:
+          "Pisco Sour", "Mojito", "Machu Picchu", "Daikiri", etc.)
         </p>
         <p>
-          Cantidad de items extras requeridos:<br></br>- Indique la cantidad de
-          items extras.
+          Cantidad de items extras requeridos:<br></br>
+          <b>Segundo Bloque:</b> Indique la cantidad de items extras.
         </p>
       </div>
       <div className={styles.ListArea}>

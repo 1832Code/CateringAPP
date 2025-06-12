@@ -54,6 +54,7 @@
   border: 1px solid rgba(0, 0, 0, 0.5);
   font-family: "Abel";
   font-size: 3vh;
+  border-radius: 10px;
 }
 
 .FormBlock button {
@@ -89,10 +90,25 @@
   .InteractionArea {
     width: 90vw;
   }
+  .TextArea p {
+    font-size: 2.3vh;
+  }
   .ListArea {
     width: 85vw;
     padding: 1vh;
     gap: 2vh;
+  }
+  .ListArea button {
+    font-size: 2.3vh;
+    padding: 0.5vh 0.5vh;
+  }
+  .FormBlock {
+    padding: 1vh;
+  }
+  .FormBlock input {
+    padding: 0.5vh;
+    font-size: 2.5vh;
+    width: 40%;
   }
 }
 @media (min-width: 600px) {
@@ -106,7 +122,18 @@
     width: 60vw;
     height: 60vh;
   }
+  .ListArea button {
+    font-size: 3vh;
+    padding: 1vh 1vh;
+  }
+  .FormBlock input {
+    font-size: 3vh;
+    width: 80%;
+  }
   .TextArea {
+    font-size: 3vh;
+  }
+  .TextArea p {
     font-size: 3vh;
   }
 }

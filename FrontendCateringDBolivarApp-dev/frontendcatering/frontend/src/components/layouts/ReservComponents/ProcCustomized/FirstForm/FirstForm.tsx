@@ -50,6 +50,18 @@ export const FirstForm: React.FC<FirstFormProps> = ({
       console.log("Faltan campos: ", datosEvento);
       return;
     }
+    // Validación de fecha del evento
+    const today = new Date();
+    const eventDate = new Date(fechaEvento);
+
+    // El mínimo permitido es dentro de exactamente 7 días
+    const minDate = new Date();
+    minDate.setDate(today.getDate() + 6);
+
+    if (eventDate < minDate) {
+      alert("La fecha del evento debe ser al menos dentro de 7 días.");
+      return;
+    }
     onNext(datosEvento);
     console.log(datosEvento);
   };

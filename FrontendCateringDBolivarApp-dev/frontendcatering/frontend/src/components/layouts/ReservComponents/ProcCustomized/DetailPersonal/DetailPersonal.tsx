@@ -54,6 +54,18 @@ export const DetailPersonal: React.FC<DetailPersonalProps> = ({
       return;
     }
     for (let i = 0; i <= formData.personalInfo.length; i++) {
+      const item = formData.personalInfo[i];
+
+      //Validamos que los campos de tipoPersonal esten llenos
+      if (!item.tipoPersonal.trim()) {
+        alert(`El campo "Tipo de Personal" en el bloque ${i + 1} está vacío.`);
+        return;
+      }
+      //Validamos que los campos de cantidad esten llenos y entre 1 y 9
+      if (!item.cantidad || item.cantidad < 1 || item.cantidad > 9) {
+        alert(`La "Cantidad" en el bloque ${i + 1} debe estar entre 1 y 9.`);
+        return;
+      }
       console.log(
         "Tipo de cantidad:",
         typeof formData.personalInfo[0].cantidad
@@ -73,12 +85,13 @@ export const DetailPersonal: React.FC<DetailPersonalProps> = ({
           complete los siguientes datos:
         </p>
         <p>
-          Tipo de personal requerido:<br></br>- Seleccione el cargo o perfil
-          solicitado (ej.: "Mozo", "Cocinero", etc.)
+          Tipo de personal requerido:<br></br>
+          <b>Primer Bloque:</b> Seleccione el cargo o perfil solicitado (ej.:
+          "Mozo", "Cocinero", etc.)
         </p>
         <p>
-          Cantidad de personas requeridas:<br></br>- Indique la cantidad de
-          personal solicitado
+          Cantidad de personas requeridas:<br></br>
+          <b>Segundo Bloque:</b> Indique la cantidad de personal solicitado
         </p>
       </div>
       <div className={styles.ListArea}>

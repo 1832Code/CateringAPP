@@ -29,7 +29,7 @@ const RotatingCard: React.FC<RotatingCardProps> = ({
             }}
           >
             <p className="title">{texto}</p>
-            <p>{intro}</p>
+            <p className="description">{intro}</p>
           </div>
           <div className="flip-card-back">
             <p>{parrafo}</p>
@@ -95,6 +95,17 @@ const StyledWrapper = styled.div`
     color: black;
     transform: rotateY(180deg);
   }
+  @media (min-width: 200px) {
+    .flip-card-back {
+      font-size: 2.7vh;
+    }
+    .title {
+      font-size: 3.8vh;
+    }
+    .description {
+      font-size: 2.3vh;
+    }
+  }
 
   @media (min-width: 600px) {
     .flip-card {
@@ -106,6 +117,15 @@ const StyledWrapper = styled.div`
     .flip-card {
       width: 50vh;
       height: 50vh;
+    }
+    .flip-card-back {
+      font-size: 3.5vh;
+    }
+    .title {
+      font-size: 4.5vh;
+    }
+    .description {
+      font-size: 3vh;
     }
   }
 `;

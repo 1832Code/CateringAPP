@@ -39,6 +39,9 @@
   .CardsArea {
     flex-direction: column;
   }
+  .TextArea {
+    font-size: 3vh;
+  }
 }
 @media (min-width: 600px) {
   .LayoutArea {
@@ -54,7 +57,5 @@
   }
   .LayoutArea {
     height: 60vh;
-  }
-  .TextArea {
   }
 }
