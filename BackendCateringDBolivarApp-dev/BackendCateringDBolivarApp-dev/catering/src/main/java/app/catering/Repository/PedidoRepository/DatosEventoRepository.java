@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import app.catering.Users.Pedido.DatosEvento;
 
-public interface DatosEventoRepository extends JpaRepository<DatosEvento, Integer> {
+public interface DatosEventoRepository extends JpaRepository<DatosEvento, Long> {
 
     Optional<DatosEvento> findById(Long id);
 

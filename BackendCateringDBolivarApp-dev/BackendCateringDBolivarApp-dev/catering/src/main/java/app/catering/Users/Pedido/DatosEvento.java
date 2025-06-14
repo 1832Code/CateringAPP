@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "Datos_Evento") // Exactamente como en la BD
+@Table(name = "datos_evento") // Exactamente como en la BD
 @Getter
 @Setter
 public class DatosEvento {
@@ -46,13 +46,5 @@ public class DatosEvento {
   @JsonBackReference
   private Pedido pedido;
 
-  public Long getId() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getId'");
-  }
 
-  public void setId(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setId'");
-  }
 }
