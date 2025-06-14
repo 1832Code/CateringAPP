@@ -8,11 +8,18 @@ import app.catering.Repository.ClienteRepository;
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.InfoMenuRepository;
 import app.catering.Repository.PedidoRepository.PedidoRepository;
 import app.catering.Users.Cliente;
+import app.catering.Users.Pedido.DatosEvento;
 import app.catering.Users.Pedido.InfoMenu.InfoMenu;
 import app.catering.Users.Pedido.Pedido;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +30,8 @@ public class PedidoService {
     private final InfoMenuRepository infoMenuRepository;
     private final DatosEventoMapper datosEventoMapper;
     private final InfoMenuMapper infoMenuMapper;
+    @Autowired
+    private Validator validator;
 
 
     public PedidoService(PedidoRepository pedidoRepository,
@@ -50,6 +59,16 @@ public class PedidoService {
     }
 
     public PedidoDTO create(PedidoDTO dto) {
+        // Validaciones básicas
+        if (dto == null) throw new IllegalArgumentException("PedidoDTO no puede ser nulo.");
+        if (dto.getClienteId() == null) throw new IllegalArgumentException("Cliente ID es obligatorio.");
+        if (dto.getDatosEvento() == null) throw new IllegalArgumentException("Datos del evento son obligatorios.");
+        if (dto.getInfoMenuId() == null && dto.getInfoMenu() == null)
+            throw new IllegalArgumentException("Debe especificar infoMenuId o infoMenu personalizado.");
+        if (dto.getEstado() == null) throw new IllegalArgumentException("Estado del pedido es obligatorio.");
+
+
+
         Pedido pedido = new Pedido();
 
         // Cliente existente
@@ -57,9 +76,20 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
         pedido.setCliente(cliente);
 
-        // Datos del evento
-        pedido.setDatosEvento(datosEventoMapper.toEntity(dto.getDatosEvento()));
+        // Convierte y VALIDA DatosEvento antes de setear
+        DatosEvento datosEvento = datosEventoMapper.toEntity(dto.getDatosEvento());
 
+        // Retorna los errores de las validaciones
+        Set<ConstraintViolation<DatosEvento>> violations = validator.validate(datosEvento);
+
+        if (!violations.isEmpty()) {
+            String errorMsg = violations.stream()
+                    .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                    .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("Errores en DatosEvento: " + errorMsg);
+        }
+
+        pedido.setDatosEvento(datosEvento);
         // InfoMenu
         if (dto.getInfoMenuId() != null) {
             // Modo predeterminado

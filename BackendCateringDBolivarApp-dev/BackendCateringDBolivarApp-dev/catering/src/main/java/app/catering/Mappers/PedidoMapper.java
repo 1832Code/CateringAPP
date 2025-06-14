@@ -29,7 +29,7 @@ public class PedidoMapper {
         // Solo se pasa el ID del infoMenu (si es un predeterminado)
         dto.setInfoMenuId(pedido.getInfoMenu() != null ? pedido.getInfoMenu().getId() : null);
 
-        // También puedes mapear el objeto completo si quieres soportar ambas vistas
+        // Mapea  el objeto completo si se desea soportar ambas vistas
         dto.setInfoMenu(pedido.getInfoMenu() != null ? infoMenuMapper.toDTO(pedido.getInfoMenu()) : null);
 
         dto.setDatosEvento(datosEventoMapper.toDTO(pedido.getDatosEvento()));

@@ -4,6 +4,9 @@ import ButtonNext from "@/components/features/ButtonNext";
 import ButtonPrevious from "@/components/features/ButtonPrevious";
 import { Pedido } from "@/components/Interfaces/Pedido";
 import { DatosEvento } from "@/components/Interfaces/DatosEvento";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // importa el estilo base
+import { format } from "date-fns"; // para formatear a yyyy-MM-dd
 
 interface FirstFormProps {
   onBack: () => void;
@@ -74,40 +77,73 @@ export const FirstForm: React.FC<FirstFormProps> = ({
           <div className={styles.GridForm}>
             <div className={styles.FormInputs}>
               <label htmlFor="tipoEvento">Tipo de Evento</label>
-              <input
+              <select
+                className={styles.SelectForm}
                 id="tipoEvento"
-                placeholder="--Selecciona--"
                 value={datosEvento.tipoEvento}
                 onChange={handleChange}
-              />
+              >
+                <option value="" disabled>
+                  --Tipo de Evento--
+                </option>
+                <option value="corporativo-empresarial">
+                  Corporativo | Empresarial
+                </option>
+                <option value="social-particular">Social | Particular</option>
+                <option value="publico-institucional">
+                  Público | Institucional
+                </option>
+              </select>
             </div>
 
             <div className={styles.FormInputs}>
               <label htmlFor="cantHoras">Cantidad de Horas</label>
-              <input
+              <select
+                className={styles.SelectForm}
                 id="cantHoras"
-                type="number"
-                placeholder="Ej: 4"
                 value={datosEvento.cantHoras}
                 onChange={handleChange}
-                min={1}
-              />
+              >
+                <option value="" disabled>
+                  --Cantidad de Horas--
+                </option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
             </div>
 
             <div className={styles.FormInputs}>
               <label htmlFor="fechaEvento">Fecha del Evento</label>
-              <input
+              <DatePicker
+                selected={
+                  datosEvento.fechaEvento
+                    ? new Date(datosEvento.fechaEvento)
+                    : null
+                }
+                onChange={(date: Date | null) => {
+                  const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
+                  setDatosEvento((prev) => ({
+                    ...prev,
+                    fechaEvento: formattedDate,
+                  }));
+                }}
+                dateFormat="yyyy-MM-dd"
+                className={styles.customInput}
+                calendarClassName={styles.customCalendar}
+                minDate={new Date()}
+                placeholderText="Selecciona la fecha"
                 id="fechaEvento"
-                type="date"
-                value={datosEvento.fechaEvento}
-                onChange={handleChange}
               />
             </div>
 
             <div className={styles.FormInputs}>
               <label htmlFor="distrito">Distrito</label>
               <select
-                className={styles.SelectDistrict}
+                className={styles.SelectForm}
                 id="distrito"
                 value={datosEvento.distrito}
                 onChange={handleChange}

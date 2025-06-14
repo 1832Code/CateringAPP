@@ -26,7 +26,7 @@ public class DetailServicio {
     @Column(name = "id_detailServicio")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_tipoServicio")
     @JsonManagedReference
     private TipoServicio tipoServicio;

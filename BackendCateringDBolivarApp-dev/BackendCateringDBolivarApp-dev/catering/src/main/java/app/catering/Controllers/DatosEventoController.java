@@ -1,11 +1,14 @@
 package app.catering.Controllers;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import app.catering.DTO.DatosEventoDTO;
 import app.catering.Mappers.DatosEventoMapper;
 import app.catering.Services.PedidoService.InfoMenuService.DatosEventoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +28,24 @@ public class DatosEventoController {
 
     // Crear un nuevo evento
     @PostMapping
-    public ResponseEntity<DatosEventoDTO> create(@RequestBody DatosEventoDTO dto) {
-        DatosEvento entity = datosEventoMapper.toEntity(dto);
-        DatosEvento saved = datosEventoService.save(entity);
-        return ResponseEntity.ok(datosEventoMapper.toDTO(saved));
+    public ResponseEntity<?> create(@RequestBody @Valid DatosEventoDTO dto) {
+        try {
+            LocalDate fechaEvento = LocalDate.parse(dto.getFechaEvento()); // Asegúrate del formato
+            LocalDate hoy = LocalDate.now();
+            LocalDate fechaMinima = hoy.plusDays(6);
+
+            if (fechaEvento.isBefore(fechaMinima)) {
+                return ResponseEntity.badRequest()
+                        .body("La fecha del evento debe ser al menos dentro de 7 días.");
+            }
+
+            DatosEvento entity = datosEventoMapper.toEntity(dto);
+            DatosEvento saved = datosEventoService.save(entity);
+            return ResponseEntity.ok(datosEventoMapper.toDTO(saved));
+
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body("Formato de fecha inválido. Debe ser YYYY-MM-DD.");
+        }
     }
 
     // Listar todos los eventos

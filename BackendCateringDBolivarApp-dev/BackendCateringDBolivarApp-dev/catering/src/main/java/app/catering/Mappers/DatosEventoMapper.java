@@ -4,6 +4,9 @@ import app.catering.DTO.DatosEventoDTO;
 import app.catering.Users.Pedido.DatosEvento;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Component
 public class DatosEventoMapper {
 
@@ -13,8 +16,8 @@ public class DatosEventoMapper {
         DatosEventoDTO dto = new DatosEventoDTO();
         dto.setTipoEvento(datosEvento.getTipoEvento());
         dto.setDistrito(datosEvento.getDistrito());
-        dto.setHoraInicio(datosEvento.getHoraInicio());
-        dto.setFechaEvento(datosEvento.getFechaEvento());
+        dto.setHoraInicio(String.valueOf(datosEvento.getHoraInicio()));
+        dto.setFechaEvento(String.valueOf(datosEvento.getFechaEvento()));
         dto.setCantHoras(datosEvento.getCantHorasEvento());
         return dto;
     }
@@ -26,8 +29,8 @@ public class DatosEventoMapper {
         entity.setTipoEvento(dto.getTipoEvento());
         entity.setDistrito(dto.getDistrito());
         entity.setDireccion(dto.getDireccion());
-        entity.setHoraInicio(dto.getHoraInicio());
-        entity.setFechaEvento(dto.getFechaEvento());
+        entity.setHoraInicio(LocalTime.parse(dto.getHoraInicio()));
+        entity.setFechaEvento(LocalDate.parse(dto.getFechaEvento()));
         entity.setCantHorasEvento(dto.getCantHoras());
         return entity;
     }

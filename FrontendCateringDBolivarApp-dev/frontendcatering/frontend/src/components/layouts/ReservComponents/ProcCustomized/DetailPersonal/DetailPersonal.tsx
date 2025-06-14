@@ -53,7 +53,7 @@ export const DetailPersonal: React.FC<DetailPersonalProps> = ({
       onNext(personal); // se envían los datos originales sin cambios
       return;
     }
-    for (let i = 0; i <= formData.personalInfo.length; i++) {
+    for (let i = 0; i < formData.personalInfo.length; i++) {
       const item = formData.personalInfo[i];
 
       //Validamos que los campos de tipoPersonal esten llenos
@@ -62,8 +62,8 @@ export const DetailPersonal: React.FC<DetailPersonalProps> = ({
         return;
       }
       //Validamos que los campos de cantidad esten llenos y entre 1 y 9
-      if (!item.cantidad || item.cantidad < 1 || item.cantidad > 9) {
-        alert(`La "Cantidad" en el bloque ${i + 1} debe estar entre 1 y 9.`);
+      if (!item.cantidad) {
+        alert(`La "Cantidad" en el bloque ${i + 1} está vacio`);
         return;
       }
       console.log(
@@ -73,6 +73,28 @@ export const DetailPersonal: React.FC<DetailPersonalProps> = ({
     }
     console.log(formData);
     onNext(formData);
+  };
+
+  // Lista completa de tipos de personal
+  const tiposDisponibles = ["Mozo", "Cocinero"];
+
+  // Función que retorna las opciones que aún no han sido seleccionadas en otros bloques
+  const getTipoPersonalOptions = (index: number) => {
+    const seleccionados = formData.personalInfo
+      .map((item, i) => (i !== index ? item.tipoPersonal : null))
+      .filter(Boolean); // quita nulos y vacíos
+
+    return tiposDisponibles.filter(
+      (tipo) =>
+        !seleccionados.includes(tipo) ||
+        tipo === formData.personalInfo[index].tipoPersonal
+    );
+  };
+
+  //Función que retorna las opciones de cantidad de cada personal
+  const getCantidadOptions = (tipo: string) => {
+    const max = tipo === "Cocinero" ? 3 : tipo === "Mozo" ? 7 : 0;
+    return Array.from({ length: max }, (_, i) => i + 1);
   };
 
   return (
@@ -102,27 +124,46 @@ export const DetailPersonal: React.FC<DetailPersonalProps> = ({
             style={{ marginBottom: "1rem" }}
           >
             <div className={styles.InputArea}>
-              <input
-                type="text"
-                placeholder="Tipo de Personal"
+              {/* Select de Tipo de Personal */}
+              <select
                 value={item.tipoPersonal}
                 onChange={(e) =>
                   handleChange(index, "tipoPersonal", e.target.value)
                 }
-              />
-              <input
-                type="number"
-                placeholder="Cantidad"
-                value={item.cantidad}
+              >
+                <option value="">Tipo de Personal</option>
+                {getTipoPersonalOptions(index).map((tipo) => (
+                  <option key={tipo} value={tipo}>
+                    {tipo}
+                  </option>
+                ))}
+              </select>
+
+              {/* Select de Cantidad */}
+              <select
+                value={item.cantidad || ""}
                 onChange={(e) =>
                   handleChange(index, "cantidad", e.target.value)
                 }
-              />
+                disabled={!item.tipoPersonal}
+              >
+                <option value="">Cantidad</option>
+                {getCantidadOptions(item.tipoPersonal).map((num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
             </div>
             <button onClick={() => handleRemove(index)}>Eliminar</button>
           </div>
         ))}
-        <button onClick={handleAdd}>Agregar Personal</button>
+        <button
+          onClick={handleAdd}
+          disabled={formData.personalInfo.length >= tiposDisponibles.length}
+        >
+          Agregar Personal
+        </button>
       </div>
       <div className={styles.ButtonArea}>
         <ButtonPrevious onClick={onBack} texto="Anterior"></ButtonPrevious>

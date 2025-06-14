@@ -32,7 +32,7 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
       direccion: "",
       distrito: "",
       horaInicio: "",
-      cantHoras: 0,
+      cantHoras: "",
       fechaEvento: "",
     },
     infoMenu: {
@@ -93,7 +93,7 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
         direccion: "",
         distrito: "",
         horaInicio: "",
-        cantHoras: 0,
+        cantHoras: "",
         fechaEvento: "",
       },
       infoMenu: {
@@ -125,7 +125,10 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
     try {
       const payload = {
         clienteId: 1,
-        datosEvento: pedido.datosEvento,
+        datosEvento: {
+          ...pedido.datosEvento,
+          cantHoras: Number(pedido.datosEvento.cantHoras),
+        },
         infoMenuId: pedido.infoMenu.id,
         estado: pedido.estado,
       };

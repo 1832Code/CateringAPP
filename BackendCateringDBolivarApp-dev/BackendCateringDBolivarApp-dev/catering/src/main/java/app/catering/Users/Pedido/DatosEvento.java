@@ -1,5 +1,6 @@
 package app.catering.Users.Pedido;
 
+import app.catering.Validation.MinDaysFromNow;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -36,6 +37,7 @@ public class DatosEvento {
   private LocalTime horaInicio;
 
   @Column(name = "fechaEvento", nullable = false)
+  @MinDaysFromNow(days = 7, message = "La fecha del evento debe tener al menos 7 días de anticipación")
   private LocalDate fechaEvento;
 
   @Min(value = 1, message = "Debe ser al menos 1 hora")

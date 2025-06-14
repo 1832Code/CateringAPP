@@ -3,6 +3,7 @@ package app.catering.Controllers.PedidoController.InfoMenuController;
 import app.catering.DTO.PedidoDTO;
 import app.catering.Services.PedidoService.InfoMenuService.PedidoService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<PedidoDTO> createPedido(@RequestBody PedidoDTO pedidoDTO) {
+    public ResponseEntity<PedidoDTO> createPedido(@Valid @RequestBody PedidoDTO pedidoDTO) {
         PedidoDTO created = pedidoService.create(pedidoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
