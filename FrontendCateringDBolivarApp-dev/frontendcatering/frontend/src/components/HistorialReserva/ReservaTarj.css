@@ -1,160 +1,111 @@
-/* Contenedor general */
-.reserva-contenedor {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(to right, #f0f4ff, #fef9ff);
-  padding: 2rem;
-}
-
-/* Tarjeta principal con animación */
 .reserva-tarjeta {
-  background: white;
-  border-radius: 1.5rem;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  max-width: 480px;
-  width: 100%;
-  animation: fadeInUp 0.8s ease-out;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #1f1f1f;
+  border-radius: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  transition: transform 0.4s ease;
 }
 
 .reserva-tarjeta:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+  transform: scale(1.015);
 }
 
-/* Imagen */
 .reserva-imagen img {
   width: 100%;
-  height: auto;
-  border-bottom: 1px solid #eee;
-}
-
-/* Información */
-.reserva-info {
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.reserva-info h2 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.reserva-info p {
-  color: #666;
-  margin-bottom: 1rem;
-}
-
-/* Botón */
-.reserva-info button {
-  padding: 0.7rem 1.5rem;
-  border: none;
-  background-color: #4e73df;
-  color: white;
-  font-weight: bold;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.reserva-info button:hover {
-  background-color: #2e59d9;
-}
-
-/* Detalles de reserva */
-.reserva-detalles {
-  margin-top: 1.5rem;
-  text-align: left;
-}
-
-.reserva-item {
-  background: #f9f9f9;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 0.5rem;
-  animation: fadeIn 0.6s ease;
-}
-
-.reserva-item p {
-  margin: 0.2rem 0;
-  font-size: 0.95rem;
-}
-
-/* ANIMACIONES CSS */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-/* Animación fade para modal */
-@keyframes fadeInModal {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Tarjetas de historial */
-.tarjetas-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 2rem;
-  justify-content: center;
-}
-
-.reserva-mini {
-  background: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  width: 250px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  text-align: center;
-  animation: fadeIn 0.5s ease;
-}
-.reserva-mini {
-  background: linear-gradient(145deg, #ffffff, #f2f2f2);
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  font-family: 'Poppins', sans-serif;
+  max-width: 380px;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease;
 }
 
-.reserva-mini:hover {
+.reserva-imagen img:hover {
   transform: scale(1.03);
 }
 
-.ver-detalles {
-  margin-top: 0.5rem;
-  display: inline-block;
-  color: #4e73df;
+.reserva-info {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.reserva-info h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.reserva-info p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #cccccc;
+  line-height: 1.6;
+}
+
+.reserva-info button {
+  padding: 0.8rem 1.6rem;
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 1rem;
+  font-size: 1rem;
   font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reserva-info button:hover {
+  background-color: #ffffff;
+  color: #1f1f1f;
+  transform: scale(1.05);
+}
+
+
+
+.tarjetas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.reserva-mini {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.reserva-mini:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.reserva-mini h3 {
+  margin-top: 0;
+  color: #1f1f1f;
+}
+
+.reserva-mini p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.ver-detalles {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #1f1f1f;
+  font-weight: bold;
+  transition: text-decoration 0.2s;
+}
+
+.ver-detalles:hover {
+  text-decoration: underline;
 }
 
 
@@ -164,35 +115,84 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease forwards;
   z-index: 1000;
 }
 
-/* Modal ventana */
 .modal {
   background: white;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
-  width: 90%;
   max-width: 500px;
-  animation: fadeInModal 0.4s ease;
-  position: relative;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.4s ease forwards;
+}
+
+.modal h3 {
+  margin-top: 0;
+  color: #1f1f1f;
+}
+
+.modal p {
+  margin: 0.5rem 0;
+  color: #333;
 }
 
 .modal button {
-  margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  background-color: #4e73df;
+  margin-top: 1.5rem;
+  background-color: #1f1f1f;
   color: white;
-  border-radius: 0.5rem;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.75rem;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .modal button:hover {
-  background-color: #2e59d9;
+  background-color: #1f1f1f;
+  transform: scale(1.05);
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .reserva-tarjeta {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .reserva-imagen img {
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  .reserva-info {
+    padding: 1.5rem;
+  }
 }

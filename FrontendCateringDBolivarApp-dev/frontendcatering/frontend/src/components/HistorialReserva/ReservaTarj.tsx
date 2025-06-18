@@ -59,7 +59,7 @@ const ReservaTarj: React.FC = () => {
         </div>
       </div>
 
-      {/* Tarjetas individuales con botón de ver detalles */}
+      
       <div className="tarjetas-grid">
         {reservas.map((reserva, index) => (
           <div className="reserva-mini" key={index} onClick={() => abrirModal(reserva)}>
@@ -71,7 +71,7 @@ const ReservaTarj: React.FC = () => {
         ))}
       </div>
 
-      {/* Modal flotante */}
+     
       {modalVisible && selectedReserva && (
         <div className="modal-overlay" onClick={cerrarModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
