@@ -5,7 +5,7 @@ import app.catering.DTO.ItemDTO;
 import app.catering.Mappers.ItemMapper;
 import app.catering.Repository.ItemPackageRepository.CategoriaRepository;
 import app.catering.Repository.ItemPackageRepository.ItemRepository;
-import app.catering.Users.ItemsPackages.Item;
+import app.catering.Entity.ItemsPackages.Item;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

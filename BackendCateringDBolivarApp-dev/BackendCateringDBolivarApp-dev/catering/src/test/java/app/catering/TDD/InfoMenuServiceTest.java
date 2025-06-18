@@ -12,11 +12,9 @@ import app.catering.Repository.PedidoRepository.InfoMenuRepository.DetailServici
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.InfoMenuRepository;
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.TipoServicioRepository;
 import app.catering.Services.PedidoService.InfoMenuService.InfoMenuService;
-import app.catering.Users.ItemsPackages.Item;
-import app.catering.Users.Pedido.DetailExtra.DetailExtraInfo;
-import app.catering.Users.Pedido.DetailPersonal.DetailPersonalInfo;
-import app.catering.Users.Pedido.InfoMenu.InfoMenu;
-import app.catering.Users.Pedido.InfoMenu.TipoServicio;
+import app.catering.Entity.ItemsPackages.Item;
+import app.catering.Entity.Pedido.InfoMenu.InfoMenu;
+import app.catering.Entity.Pedido.InfoMenu.TipoServicio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

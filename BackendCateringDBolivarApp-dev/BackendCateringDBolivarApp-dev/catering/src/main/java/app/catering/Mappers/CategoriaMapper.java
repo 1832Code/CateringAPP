@@ -1,7 +1,7 @@
 package app.catering.Mappers;
 
 import app.catering.DTO.CategoriaDTO;
-import app.catering.Users.ItemsPackages.Categoria;
+import app.catering.Entity.ItemsPackages.Categoria;
 import org.springframework.stereotype.Component;
 
 @Component

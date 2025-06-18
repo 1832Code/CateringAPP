@@ -1,4 +1,4 @@
-package app.catering.Users.ItemsPackages;
+package app.catering.Entity.ItemsPackages;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

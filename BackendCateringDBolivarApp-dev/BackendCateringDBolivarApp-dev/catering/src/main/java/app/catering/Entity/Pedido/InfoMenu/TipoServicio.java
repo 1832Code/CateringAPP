@@ -1,9 +1,6 @@
-package app.catering.Users.Pedido.InfoMenu;
+package app.catering.Entity.Pedido.InfoMenu;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

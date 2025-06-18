@@ -1,4 +1,4 @@
-package app.catering.DTO;
+package app.catering.Auth;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthResponse {
     private String token;
-    private String nombreUsuario;
+    private String email;
     private String nombres;
     private String apellidos;
 }

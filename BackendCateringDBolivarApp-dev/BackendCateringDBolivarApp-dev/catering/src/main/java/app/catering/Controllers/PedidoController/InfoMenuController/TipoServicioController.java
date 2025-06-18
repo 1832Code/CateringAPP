@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import app.catering.Services.PedidoService.InfoMenuService.TipoServicioService;
-import app.catering.Users.Pedido.InfoMenu.TipoServicio;
+import app.catering.Entity.Pedido.InfoMenu.TipoServicio;
 
 import java.util.List;
 import java.util.Optional;

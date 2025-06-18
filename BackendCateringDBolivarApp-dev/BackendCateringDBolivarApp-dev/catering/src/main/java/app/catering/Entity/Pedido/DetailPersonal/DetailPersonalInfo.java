@@ -1,6 +1,5 @@
-package app.catering.Users.Pedido.DetailPersonal;
+package app.catering.Entity.Pedido.DetailPersonal;
 
-import app.catering.Users.Pedido.InfoMenu.InfoMenu;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,8 +1,8 @@
-package app.catering.Users.Pedido.InfoMenu;
+package app.catering.Entity.Pedido.InfoMenu;
 
-import app.catering.Users.Pedido.DetailExtra.DetailExtra;
-import app.catering.Users.Pedido.DetailPersonal.DetailPersonal;
-import app.catering.Users.Pedido.Pedido;
+import app.catering.Entity.Pedido.DetailExtra.DetailExtra;
+import app.catering.Entity.Pedido.DetailPersonal.DetailPersonal;
+import app.catering.Entity.Pedido.Pedido;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

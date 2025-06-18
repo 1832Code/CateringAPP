@@ -1,4 +1,4 @@
-package app.catering.Users.Pedido;
+package app.catering.Entity.Pedido;
 
 import app.catering.Validation.MinDaysFromNow;
 import com.fasterxml.jackson.annotation.JsonBackReference;

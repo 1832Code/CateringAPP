@@ -1,11 +1,10 @@
-package app.catering.Users.Pedido.DetailExtra;
+package app.catering.Entity.Pedido.DetailExtra;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import app.catering.Users.Pedido.InfoMenu.InfoMenu;
+import app.catering.Entity.Pedido.InfoMenu.InfoMenu;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;

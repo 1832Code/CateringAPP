@@ -1,7 +1,7 @@
 package app.catering.Services.PedidoService.InfoMenuService;
 
 import app.catering.Repository.PedidoRepository.DatosEventoRepository;
-import app.catering.Users.Pedido.DatosEvento;
+import app.catering.Entity.Pedido.DatosEvento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,8 +2,8 @@ package app.catering.Mappers;
 
 import app.catering.DTO.DetailServicioDTO;
 import app.catering.DTO.DetailServicioInfoDTO;
-import app.catering.Users.Pedido.InfoMenu.DetailServicio;
-import app.catering.Users.Pedido.InfoMenu.DetailServicioInfo;
+import app.catering.Entity.Pedido.InfoMenu.DetailServicio;
+import app.catering.Entity.Pedido.InfoMenu.DetailServicioInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

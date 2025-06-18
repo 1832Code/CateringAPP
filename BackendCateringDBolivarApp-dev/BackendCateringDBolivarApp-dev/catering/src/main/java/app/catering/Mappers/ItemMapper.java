@@ -2,8 +2,8 @@ package app.catering.Mappers;
 
 import app.catering.DTO.CategoriaDTO;
 import app.catering.DTO.ItemDTO;
-import app.catering.Users.ItemsPackages.Categoria;
-import app.catering.Users.ItemsPackages.Item;
+import app.catering.Entity.ItemsPackages.Categoria;
+import app.catering.Entity.ItemsPackages.Item;
 
 public class ItemMapper {
     public static Item toEntity(ItemDTO dto) {

@@ -1,4 +1,4 @@
-package app.catering.Security;
+package app.catering.JWT;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtService jwtService;
@@ -35,22 +35,22 @@ public class JwtFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
-        String username = null;
+        String email = null;
         String jwt = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
-                username = jwtService.extractUsername(jwt);
+                email = jwtService.extractEmail(jwt);
             } catch (Exception e) {
-                logger.error("Error al extraer el nombre de usuario del token", e);
+                logger.error("Error al extraer el email del token JWT", e);
             }
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            if (jwtService.validateToken(jwt, username)) {
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (jwtService.validateToken(jwt, email)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        username, null, new ArrayList<>());
+                        email, null, new ArrayList<>()); // Puedes reemplazar authorities si los manejas
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }

@@ -1,10 +1,13 @@
-package app.catering.Security;
+package app.catering.config;
 
 import java.util.Arrays;
 
+import app.catering.JWT.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +22,8 @@ import app.catering.oauth2.OAuth2LoginFailureHandler;
 import app.catering.oauth2.OAuth2LoginSuccessHandler;
 
 @Configuration
+@RequiredArgsConstructor
+@EnableWebSecurity
 public class securityConfig {
 
     @Autowired
@@ -27,12 +32,8 @@ public class securityConfig {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler = new OAuth2LoginSuccessHandler();
 
     @Autowired
-    private JwtFilter jwtFilter;
+    private JwtAuthenticationFilter jwtFilter;
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,7 +41,7 @@ public class securityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/registro",
+                                "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/infomenu/**",
                                 "/api/items/**",

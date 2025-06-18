@@ -1,5 +1,4 @@
-package app.catering.Users.ItemsPackages;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package app.catering.Entity.ItemsPackages;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;

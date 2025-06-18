@@ -1,9 +1,9 @@
-package app.catering.DTO;
+package app.catering.Auth;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
-public class RegistroRequest {
+public class RegisterRequest {
     @NotBlank(message = "El DNI es obligatorio")
     private String dni;
     
@@ -15,9 +15,6 @@ public class RegistroRequest {
     
     @NotBlank(message = "Teléfono es obligatorio")
     private String telefono;
-    
-    @NotBlank(message = "Nombre de usuario es obligatorio")
-    private String nombreUsuario;
     
     @NotBlank(message = "Contraseña es obligatoria")
     private String password;

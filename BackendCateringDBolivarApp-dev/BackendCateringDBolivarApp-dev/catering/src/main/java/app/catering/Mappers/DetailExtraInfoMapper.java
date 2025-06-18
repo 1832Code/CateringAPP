@@ -1,7 +1,7 @@
 package app.catering.Mappers;
 
 import app.catering.DTO.DetailExtraInfoDTO;
-import app.catering.Users.Pedido.DetailExtra.DetailExtraInfo;
+import app.catering.Entity.Pedido.DetailExtra.DetailExtraInfo;
 
 public class DetailExtraInfoMapper {
     public static DetailExtraInfo toEntity(DetailExtraInfoDTO dto) {

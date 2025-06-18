@@ -1,6 +1,6 @@
 package app.catering.Repository.PedidoRepository.InfoMenuRepository;
 
-import app.catering.Users.Pedido.InfoMenu.TipoServicio;
+import app.catering.Entity.Pedido.InfoMenu.TipoServicio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

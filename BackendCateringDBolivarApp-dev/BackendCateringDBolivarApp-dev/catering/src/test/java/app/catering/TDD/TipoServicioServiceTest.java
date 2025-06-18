@@ -2,7 +2,7 @@ package app.catering.TDD;
 
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.TipoServicioRepository;
 import app.catering.Services.PedidoService.InfoMenuService.TipoServicioService;
-import app.catering.Users.Pedido.InfoMenu.TipoServicio;
+import app.catering.Entity.Pedido.InfoMenu.TipoServicio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -3,7 +3,6 @@ package app.catering.Controllers.PedidoController.InfoMenuController;
 
 import app.catering.DTO.CategoriaDTO;
 import app.catering.Services.PedidoService.InfoMenuService.CategoriaService;
-import app.catering.Users.ItemsPackages.Categoria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

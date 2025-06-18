@@ -1,7 +1,7 @@
 package app.catering.Mappers;
 
 import app.catering.DTO.DetailServicioInfoDTO;
-import app.catering.Users.Pedido.InfoMenu.DetailServicioInfo;
+import app.catering.Entity.Pedido.InfoMenu.DetailServicioInfo;
 
 public class DetailServicioInfoMapper {
     public static DetailServicioInfo toEntity(DetailServicioInfoDTO dto) {

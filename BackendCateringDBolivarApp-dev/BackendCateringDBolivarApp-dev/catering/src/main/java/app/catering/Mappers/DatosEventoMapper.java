@@ -1,7 +1,7 @@
 package app.catering.Mappers;
 
 import app.catering.DTO.DatosEventoDTO;
-import app.catering.Users.Pedido.DatosEvento;
+import app.catering.Entity.Pedido.DatosEvento;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

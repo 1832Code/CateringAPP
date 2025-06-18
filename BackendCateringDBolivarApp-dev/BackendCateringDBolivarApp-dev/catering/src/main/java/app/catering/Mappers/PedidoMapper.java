@@ -1,7 +1,7 @@
 package app.catering.Mappers;
 
 import app.catering.DTO.PedidoDTO;
-import app.catering.Users.Pedido.Pedido;
+import app.catering.Entity.Pedido.Pedido;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,7 +1,7 @@
 package app.catering.Mappers;
 
 import app.catering.DTO.DetailPersonalInfoDTO;
-import app.catering.Users.Pedido.DetailPersonal.DetailPersonalInfo;
+import app.catering.Entity.Pedido.DetailPersonal.DetailPersonalInfo;
 
 public class DetailPersonalInfoMapper {
     public static DetailPersonalInfo toEntity(DetailPersonalInfoDTO dto) {

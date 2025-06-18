@@ -1,7 +1,6 @@
-package app.catering.Users.Pedido.InfoMenu;
+package app.catering.Entity.Pedido.InfoMenu;
 
-import app.catering.Users.ItemsPackages.Categoria;
-import app.catering.Users.ItemsPackages.Item;
+import app.catering.Entity.ItemsPackages.Item;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
