@@ -6,13 +6,23 @@ import ReservarImg from "@/assets/images/ReservaWhite.png";
 import HistorialImg from "@/assets/images/HistorialReservaWhite.png";
 import UserEditImg from "@/assets/images/UserEditWhite.png";
 import imgPerfil from "@/assets/images/PerfilWhite.png";
+import { Usuario } from "../Interfaces/Usuario";
 
-export const UserDropdownMenu = () => {
+interface UserDropdownMenuProps {
+  user: Usuario;
+}
+export const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({ user }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  //Cerrar Sesión
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.reload();
+  };
 
   const goTo = (path: string) => {
     setIsOpen(false);
@@ -96,6 +106,12 @@ export const UserDropdownMenu = () => {
                 <button onClick={() => goTo("/gestionarusuario")}>
                   <img src={UserEditImg.src} className="icon" alt="Usuario" />
                   <span>Gestionar Usuario</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={logout}>
+                  <img src={UserEditImg.src} className="icon" alt="Usuario" />
+                  <span>Cerrar Sesión</span>
                 </button>
               </li>
             </ul>

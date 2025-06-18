@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./LoginForm.module.css";
 import img from "../../../assets/images/login image.png";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
@@ -8,6 +8,37 @@ type LoginFormProps = {
 };
 
 export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
+  const [email, setEmail] = useState("");
+  const [contraseña, setContraseña] = useState("");
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch("http://localhost:8084/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: contraseña,
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          email: data.email,
+          nombres: data.nombres,
+          apellidos: data.apellidos,
+        })
+      );
+      window.location.reload(); // o actualizas el estado global/context
+    } else {
+      alert(data.error);
+    }
+  };
   return (
     <>
       <div className={styles.ImageArea}>
@@ -19,12 +50,16 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
           <input
             className={styles.UserField}
             type="text"
-            placeholder="Usuario"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             className={styles.PasswordField}
             type="password"
             placeholder="Contraseña"
+            value={contraseña}
+            onChange={(e) => setContraseña(e.target.value)}
           />
           <div className={styles.ButtonsArea}>
             <div className={styles.LoginButtonArea}>
@@ -32,6 +67,7 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
                 className={styles.LoginButton}
                 type="submit"
                 value="Iniciar Sesión"
+                onClick={handleLogin}
               />
             </div>
             <div className={styles.Divider}>

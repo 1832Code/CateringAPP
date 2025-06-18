@@ -4,11 +4,16 @@ import app.catering.Entity.User.Role;
 import app.catering.Repository.UsuarioRepository;
 import app.catering.JWT.JwtService;
 import app.catering.Entity.User.Usuario;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     @Autowired
@@ -20,25 +25,20 @@ public class AuthService {
     @Autowired
     private JwtService jwtService;
 
-    public AuthResponse login(LoginRequest loginRequest) {
-        // Buscar el usuario por email
-        Usuario usuario = usuarioRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    @Autowired
+    private final AuthenticationManager authenticationManager;
 
-        // Verificar la contraseña
-        if (!passwordEncoder.matches(loginRequest.getPassword(), usuario.getPassword())) {
-            throw new RuntimeException("Contraseña incorrecta");
-        }
+    public AuthResponse login(LoginRequest loginRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
+        UserDetails user = usuarioRepository.findByEmail(loginRequest.getEmail()).orElseThrow();
 
         // Generar token JWT con el email
-        String token = jwtService.getToken(usuario);
+        String token = jwtService.getToken(user);
 
         // Crear y devolver la respuesta
         return AuthResponse.builder()
                 .token(token)
-                .email(usuario.getEmail())
-                .nombres(usuario.getNombres())
-                .apellidos(usuario.getApellidos())
+                .email(user.getUsername())
                 .build();
     }
 

@@ -45,8 +45,6 @@ public class securityConfig {
                                 "/api/auth/login",
                                 "/api/infomenu/**",
                                 "/api/items/**",
-                                "/api/eventos/**",
-                                "/api/pedidos/**",
                                 "/api/tipo-servicio/**",
                                 "/api/categorias/**",
                                 "/api/datos-evento/**",

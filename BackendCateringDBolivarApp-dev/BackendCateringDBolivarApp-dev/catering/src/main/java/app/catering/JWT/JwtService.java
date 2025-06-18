@@ -4,6 +4,7 @@ package app.catering.JWT;
 import app.catering.Entity.User.Usuario;
 import app.catering.Security.JwtConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,21 @@ public class JwtService {
     @Autowired
     private Key signingKey;
 
-    public String extractEmail(String token) {
+    public String extractEmailFromToken(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String email = extractEmailFromToken(token);
+        return (email.equals(userDetails.getUsername())&& !isTokenExpired(token));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -46,9 +56,7 @@ public class JwtService {
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
+
 
     public String getToken(UserDetails user) {
         Map<String, Object> claims = new HashMap<>();
@@ -74,8 +82,5 @@ public class JwtService {
                 .compact();
     }
 
-    public Boolean validateToken(String token, String email) {
-        final String extractedEmail = extractEmail(token);
-        return (extractedEmail.equals(email) && !isTokenExpired(token));
-    }
+
 }

@@ -9,6 +9,7 @@ import { AreaForm } from "../LoginComponents/AreaForm";
 import UserDropdownMobile from "@/components/features/UserDropDownMobile";
 import clsx from "clsx";
 import UserDropdownMenu from "@/components/features/UserDropDownMenu";
+import { Usuario } from "@/components/Interfaces/Usuario";
 
 interface NavComponentProps {
   isCardExpanded: boolean;
@@ -51,6 +52,17 @@ export const NavComponent = () => {
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  //Detectar si el usuario esta logeado
+  const [user, setUser] = useState<null | Usuario>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
   }, []);
 
   return (
@@ -98,8 +110,11 @@ export const NavComponent = () => {
             </nav>
 
             <div className={styles.LoginArea}>
-              {/*<LoginButtom onClick={() => setShowLogin(true)} />*/}
-              <UserDropdownMenu></UserDropdownMenu>
+              {user ? (
+                <UserDropdownMenu user={user} />
+              ) : (
+                <LoginButtom onClick={() => setShowLogin(true)} />
+              )}
             </div>
           </div>
         </div>
