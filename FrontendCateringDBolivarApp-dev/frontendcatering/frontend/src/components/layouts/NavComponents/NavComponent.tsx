@@ -10,16 +10,13 @@ import UserDropdownMobile from "@/components/features/UserDropDownMobile";
 import clsx from "clsx";
 import UserDropdownMenu from "@/components/features/UserDropDownMenu";
 import { Usuario } from "@/components/Interfaces/Usuario";
+import { useAuth } from "@/context/AuthContext";
 
-interface NavComponentProps {
-  isCardExpanded: boolean;
-  onCardToggle: () => void;
-}
 export const NavComponent = () => {
+  const { email, showLogin, setShowLogin } = useAuth();
   {
     /*State to control the show login form */
   }
-  const [showLogin, setShowLogin] = useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -52,17 +49,6 @@ export const NavComponent = () => {
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  //Detectar si el usuario esta logeado
-  const [user, setUser] = useState<null | Usuario>(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-    }
   }, []);
 
   return (
@@ -110,15 +96,15 @@ export const NavComponent = () => {
             </nav>
 
             <div className={styles.LoginArea}>
-              {user ? (
-                <UserDropdownMenu user={user} />
+              {email ? (
+                <UserDropdownMenu />
               ) : (
                 <LoginButtom onClick={() => setShowLogin(true)} />
               )}
             </div>
+            {showLogin && <AreaForm onClose={() => setShowLogin(false)} />}
           </div>
         </div>
-        {showLogin && <AreaForm onClose={() => setShowLogin(false)} />}
       </div>
     </>
   );

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Abel, Inter, Italiana, Tienne } from "next/font/google";
 import RouteLoadingProvider from "@/context/RouteLoadingProvider";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const abel = Abel({
   subsets: ["latin"],
@@ -53,7 +54,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <RouteLoadingProvider>{children}</RouteLoadingProvider>
+        <AuthProvider>
+          <RouteLoadingProvider>{children}</RouteLoadingProvider>
+        </AuthProvider>
       </body>
     </html>
   );

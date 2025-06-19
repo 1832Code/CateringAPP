@@ -1,13 +1,9 @@
 package app.catering.DTO;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UsuarioDTO {
+public class UsuarioResponseDTO {
     private Long id;
     private String dni;
     private String nombres;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import InformationMainView from "../../components/layouts/InicioComponents/InformationMainView";
 import styles from "./MainView.module.css";
 import image1 from "@/assets/images/ImageMobileCarousel1.png";
@@ -16,7 +16,19 @@ import imagedesktop5 from "@/assets/images/nosotros imagen 4.jpg";
 import { HeaderComponent } from "@/components/layouts/HeaderComponents/HeaderComponent";
 import NavComponent from "@/components/layouts/NavComponents/NavComponent";
 import { CarouselComponent } from "@/components/layouts/CarouselComponent/CarouselComponent";
+import { Usuario } from "@/components/Interfaces/Usuario";
+import { AreaForm } from "@/components/layouts/LoginComponents/AreaForm";
 export const MainView = () => {
+  const [user, setUser] = useState<Usuario | null>(null);
+  const [showLogin, setShowLogin] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
   return (
     //3 Area for the MainView
     <div className={styles.MainArea}>
@@ -24,8 +36,10 @@ export const MainView = () => {
         <HeaderComponent></HeaderComponent>
       </div>
       <div className={styles.CarouselArea}>
-        <div className={styles.CarouselMobile}>
+        <div className={styles.NavArea}>
           <NavComponent></NavComponent>
+        </div>
+        <div className={styles.CarouselMobile}>
           <CarouselComponent
             image1={image1.src}
             image2={image2.src}
@@ -35,7 +49,6 @@ export const MainView = () => {
           ></CarouselComponent>
         </div>
         <div className={styles.CarouselDesktop}>
-          <NavComponent></NavComponent>
           <CarouselComponent
             image1={imagedesktop1.src}
             image2={imagedesktop2.src}
@@ -45,7 +58,11 @@ export const MainView = () => {
           ></CarouselComponent>
         </div>
       </div>
-      <InformationMainView></InformationMainView>
+      <InformationMainView
+        user={user}
+        onLogin={() => setShowLogin(true)}
+      ></InformationMainView>
+      {showLogin && <AreaForm onClose={() => setShowLogin(false)} />}
     </div>
   );
 };

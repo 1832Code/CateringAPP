@@ -8,6 +8,10 @@
   background-color: #1d1c1c;
   color: white;
 }
+.NavArea {
+  position: fixed;
+  z-index: 1;
+}
 .CarouselMobile {
   display: flex;
 }

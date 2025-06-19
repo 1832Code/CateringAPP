@@ -37,7 +37,7 @@ public class securityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -49,21 +49,33 @@ public class securityConfig {
                                 "/api/categorias/**",
                                 "/api/datos-evento/**",
                                 "/prueba"
-                        // Permite acceso público a todos los endpoints de items
                         ).permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/pedidos").authenticated()
+                        .requestMatchers("/api/usuarios/me").authenticated()
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(oAuth2LoginSuccessHandler)
-                        .failureHandler(oAuth2LoginFailureHandler))
-                // Configuración CORS adicional
+                        .failureHandler(oAuth2LoginFailureHandler)
+                )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
                 .formLogin(form -> form.disable())
-                .httpBasic(basic -> basic.disable());
+                .httpBasic(basic -> basic.disable())
 
-        return http.build();
+                // aquí se habilita logout
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            String referer = request.getHeader("Referer");
+                            response.setStatus(200);
+                            response.sendRedirect(referer != null ? referer : "/"); // Si no hay Referer, redirige a raíz
+                        })
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                )
+                .build();
     }
 
     // Configuración CORS global

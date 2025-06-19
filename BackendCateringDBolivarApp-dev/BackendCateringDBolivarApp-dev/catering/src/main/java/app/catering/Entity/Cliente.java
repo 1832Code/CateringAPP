@@ -33,7 +33,5 @@ public class Cliente {
     @Column(name="telefono")
     private String telefono;
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Pedido> pedidos;
+
 }

@@ -1,5 +1,6 @@
 package app.catering.Entity.Pedido.InfoMenu;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,11 +26,15 @@ public class DetailServicio {
 
     @ManyToOne
     @JoinColumn(name = "id_tipoServicio")
-    @JsonManagedReference
     private TipoServicio tipoServicio;
 
     @OneToMany(mappedBy = "detailServicio", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<DetailServicioInfo> items;
+
+    @ManyToOne
+    @JoinColumn(name = "info_menu_id")
+    @JsonBackReference
+    private InfoMenu infoMenu;
 }

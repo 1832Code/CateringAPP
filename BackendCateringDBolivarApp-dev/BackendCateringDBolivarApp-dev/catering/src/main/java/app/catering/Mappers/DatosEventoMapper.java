@@ -18,6 +18,7 @@ public class DatosEventoMapper {
         dto.setDistrito(datosEvento.getDistrito());
         dto.setHoraInicio(String.valueOf(datosEvento.getHoraInicio()));
         dto.setFechaEvento(String.valueOf(datosEvento.getFechaEvento()));
+        dto.setDireccion(datosEvento.getDireccion());
         dto.setCantHoras(datosEvento.getCantHorasEvento());
         return dto;
     }

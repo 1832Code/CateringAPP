@@ -8,55 +8,59 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [nombres, setNombres] = useState<string | null>(null);
-  const [apellidos, setApellidos] = useState<string | null>(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const login = async (data: LoginData) => {
-    const res = await fetch("http://localhost:8084/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    setIsAuthenticating(true);
+    try {
+      const res = await fetch("http://localhost:8084/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    if (!res.ok) throw new Error("Error al iniciar sesión");
+      if (!res.ok) throw new Error("Error al iniciar sesión");
 
-    const result = await res.json();
-    setToken(result.token);
-    setEmail(result.email);
-    setNombres(result.nombres);
-    setApellidos(result.apellidos);
+      const result = await res.json();
+      setToken(result.token);
+      setEmail(result.email);
 
-    localStorage.setItem("token", result.token);
-    localStorage.setItem("email", result.email);
-    localStorage.setItem("nombres", result.nombres);
-    localStorage.setItem("apellidos", result.apellidos);
+      localStorage.setItem("token", result.token);
+      localStorage.setItem("email", result.email);
+    } finally {
+      setIsAuthenticating(false);
+    }
   };
 
   const logout = () => {
     setToken(null);
     setEmail(null);
-    setNombres(null);
-    setApellidos(null);
     localStorage.clear();
   };
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
     const savedEmail = localStorage.getItem("email");
-    const savedNombres = localStorage.getItem("nombres");
-    const savedApellidos = localStorage.getItem("apellidos");
 
     if (savedToken) {
       setToken(savedToken);
       setEmail(savedEmail);
-      setNombres(savedNombres);
-      setApellidos(savedApellidos);
     }
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ token, email, nombres, apellidos, login, logout }}
+      value={{
+        token,
+        email,
+        login,
+        logout,
+        showLogin,
+        setShowLogin,
+        isAuthenticating,
+        setIsAuthenticating,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -1,16 +1,16 @@
 package app.catering.Services.PedidoService.InfoMenuService;
 
 import app.catering.DTO.PedidoDTO;
+import app.catering.Entity.User.Usuario;
 import app.catering.Mappers.DatosEventoMapper;
 import app.catering.Mappers.InfoMenuMapper;
 import app.catering.Mappers.PedidoMapper;
-import app.catering.Repository.ClienteRepository;
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.InfoMenuRepository;
 import app.catering.Repository.PedidoRepository.PedidoRepository;
-import app.catering.Entity.Cliente;
 import app.catering.Entity.Pedido.DatosEvento;
 import app.catering.Entity.Pedido.InfoMenu.InfoMenu;
 import app.catering.Entity.Pedido.Pedido;
+import app.catering.Repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
-    private final ClienteRepository clienteRepository;
+    private final UsuarioRepository usuarioRepository;
     private final InfoMenuRepository infoMenuRepository;
     private final DatosEventoMapper datosEventoMapper;
     private final InfoMenuMapper infoMenuMapper;
@@ -35,10 +35,10 @@ public class PedidoService {
 
     public PedidoService(PedidoRepository pedidoRepository,
                          PedidoMapper pedidoMapper,
-                         ClienteRepository clienteRepository, InfoMenuRepository infoMenuRepository, DatosEventoMapper datosEventoMapper, InfoMenuMapper infoMenuMapper) {
+                         UsuarioRepository usuarioRepository, InfoMenuRepository infoMenuRepository, DatosEventoMapper datosEventoMapper, InfoMenuMapper infoMenuMapper) {
         this.pedidoRepository = pedidoRepository;
         this.pedidoMapper = pedidoMapper;
-        this.clienteRepository = clienteRepository;
+        this.usuarioRepository = usuarioRepository;
         this.infoMenuRepository = infoMenuRepository;
         this.datosEventoMapper = datosEventoMapper;
         this.infoMenuMapper = infoMenuMapper;
@@ -56,11 +56,17 @@ public class PedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
         return pedidoMapper.toDTO(pedido);
     }
+    public List<PedidoDTO> getPedidosByEmail(String email) {
+        List<Pedido> pedidos = pedidoRepository.findAllByUsuarioEmail(email);
+        return pedidos.stream()
+                .map(pedidoMapper::toDTO)
+                .toList();
+    }
 
     public PedidoDTO create(PedidoDTO dto) {
         // Validaciones básicas
         if (dto == null) throw new IllegalArgumentException("PedidoDTO no puede ser nulo.");
-        if (dto.getClienteId() == null) throw new IllegalArgumentException("Cliente ID es obligatorio.");
+        if (dto.getUsuarioId() == null) throw new IllegalArgumentException("Usuario ID es obligatorio.");
         if (dto.getDatosEvento() == null) throw new IllegalArgumentException("Datos del evento son obligatorios.");
         if (dto.getInfoMenuId() == null && dto.getInfoMenu() == null)
             throw new IllegalArgumentException("Debe especificar infoMenuId o infoMenu personalizado.");
@@ -70,10 +76,10 @@ public class PedidoService {
 
         Pedido pedido = new Pedido();
 
-        // Cliente existente
-        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+        // Usuario existente
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-        pedido.setCliente(cliente);
+        pedido.setUsuario(usuario);
 
         // Convierte y VALIDA DatosEvento antes de setear
         DatosEvento datosEvento = datosEventoMapper.toEntity(dto.getDatosEvento());
@@ -128,7 +134,7 @@ public class PedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
 
         // Mapeo manual
-        existing.setCliente(pedidoMapper.toEntity(pedidoDTO).getCliente());
+        existing.setUsuario(pedidoMapper.toEntity(pedidoDTO).getUsuario());
         existing.setDatosEvento(pedidoMapper.toEntity(pedidoDTO).getDatosEvento());
         existing.setInfoMenu(pedidoMapper.toEntity(pedidoDTO).getInfoMenu());
         existing.setEstado(pedidoDTO.getEstado());

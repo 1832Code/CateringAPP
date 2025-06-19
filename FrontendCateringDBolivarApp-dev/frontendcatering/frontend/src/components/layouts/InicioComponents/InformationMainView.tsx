@@ -1,10 +1,15 @@
-import React from "react";
-
+"use client";
+import React, { useState } from "react";
 import styles from "./InformationMainView.module.css";
 import { TextGenerateEffectDemo } from "@/components/features/texto-demo";
 import ButtonReservar from "@/components/features/ButtonReservar";
+import { Usuario } from "@/components/Interfaces/Usuario";
+interface Props {
+  user: Usuario | null;
+  onLogin: () => void;
+}
 
-export const InformationMainView = () => {
+export const InformationMainView: React.FC<Props> = ({ user, onLogin }) => {
   return (
     <div className={styles.MainArea}>
       <div className={styles.InformationArea}>

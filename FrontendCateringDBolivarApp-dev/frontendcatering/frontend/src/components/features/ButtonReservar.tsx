@@ -1,19 +1,43 @@
+"use client";
 import React from "react";
 import styled from "styled-components";
+import { Usuario } from "../Interfaces/Usuario";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 const ButtonReservar = () => {
+  const { email, setShowLogin } = useAuth();
+
+  const handleClick = () => {
+    setShowLogin(true);
+  };
   return (
     <StyledWrapper>
-      <button data-alt="Reservar">
-        <i>R</i>
-        <i>e</i>
-        <i>s</i>
-        <i>e</i>
-        <i>r</i>
-        <i>v</i>
-        <i>a</i>
-        <i>r</i>
-      </button>
+      {email ? (
+        <Link href="/reservar" passHref>
+          <button data-alt="Reservar">
+            <i>R</i>
+            <i>e</i>
+            <i>s</i>
+            <i>e</i>
+            <i>r</i>
+            <i>v</i>
+            <i>a</i>
+            <i>r</i>
+          </button>
+        </Link>
+      ) : (
+        <button data-alt="Reservar" onClick={handleClick}>
+          <i>R</i>
+          <i>e</i>
+          <i>s</i>
+          <i>e</i>
+          <i>r</i>
+          <i>v</i>
+          <i>a</i>
+          <i>r</i>
+        </button>
+      )}
     </StyledWrapper>
   );
 };
@@ -34,6 +58,7 @@ const StyledWrapper = styled.div`
     border-radius: 12px;
     overflow: hidden;
     transition: 31ms cubic-bezier(0.5, 0.7, 0.4, 1);
+    cursor: pointer;
   }
 
   button:before {

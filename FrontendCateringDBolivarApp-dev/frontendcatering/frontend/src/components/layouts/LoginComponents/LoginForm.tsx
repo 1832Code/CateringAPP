@@ -2,41 +2,33 @@ import React, { useState } from "react";
 import styles from "./LoginForm.module.css";
 import img from "../../../assets/images/login image.png";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 type LoginFormProps = {
   onRegisterClick: () => void;
 };
 
 export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const { login, setShowLogin } = useAuth();
+
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:8084/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: contraseña,
-      }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: data.email,
-          nombres: data.nombres,
-          apellidos: data.apellidos,
-        })
-      );
-      window.location.reload(); // o actualizas el estado global/context
-    } else {
-      alert(data.error);
+    try {
+      console.log("Iniciando autenticación...");
+      await login({ email, password: contraseña });
+      setShowLogin(false);
+      router.refresh(); // Refresca la página
+    } catch (error: any) {
+      alert(error.message || "Error al iniciar sesión");
+    } finally {
     }
   };
   return (

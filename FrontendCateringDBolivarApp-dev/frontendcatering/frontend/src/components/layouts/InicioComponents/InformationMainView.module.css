@@ -7,7 +7,7 @@
   position: absolute;
   top: 15vh;
 
-  z-index: 30;
+  z-index: 0;
 }
 
 .InformationArea {

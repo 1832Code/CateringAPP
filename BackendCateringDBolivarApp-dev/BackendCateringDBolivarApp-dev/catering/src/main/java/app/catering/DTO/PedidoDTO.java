@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PedidoDTO {
     private Long id;
-    private Long clienteId;
+    private Long usuarioId;
 
     // Para pedidos con menú predeterminado
     private Long infoMenuId;

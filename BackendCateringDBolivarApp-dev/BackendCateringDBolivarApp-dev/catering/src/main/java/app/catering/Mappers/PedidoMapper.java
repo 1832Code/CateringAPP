@@ -2,29 +2,26 @@ package app.catering.Mappers;
 
 import app.catering.DTO.PedidoDTO;
 import app.catering.Entity.Pedido.Pedido;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class PedidoMapper {
-
+    @Autowired
     private final ClienteMapper clienteMapper;
     private final DatosEventoMapper datosEventoMapper;
     private final InfoMenuMapper infoMenuMapper;
 
-    public PedidoMapper(ClienteMapper clienteMapper,
-                        DatosEventoMapper datosEventoMapper,
-                        InfoMenuMapper infoMenuMapper) {
-        this.clienteMapper = clienteMapper;
-        this.datosEventoMapper = datosEventoMapper;
-        this.infoMenuMapper = infoMenuMapper;
-    }
 
     public PedidoDTO toDTO(Pedido pedido) {
         PedidoDTO dto = new PedidoDTO();
         dto.setId(pedido.getId());
 
         // Solo se pasa el ID del cliente, no el objeto completo
-        dto.setClienteId(pedido.getCliente() != null ? pedido.getCliente().getId() : null);
+        dto.setUsuarioId(pedido.getUsuario() != null ? pedido.getUsuario().getId() : null);
 
         // Solo se pasa el ID del infoMenu (si es un predeterminado)
         dto.setInfoMenuId(pedido.getInfoMenu() != null ? pedido.getInfoMenu().getId() : null);

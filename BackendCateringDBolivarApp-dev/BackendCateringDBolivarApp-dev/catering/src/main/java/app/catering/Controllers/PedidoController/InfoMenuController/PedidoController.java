@@ -1,11 +1,16 @@
 package app.catering.Controllers.PedidoController.InfoMenuController;
 
 import app.catering.DTO.PedidoDTO;
+import app.catering.Entity.Pedido.Pedido;
+import app.catering.Mappers.PedidoMapper;
 import app.catering.Services.PedidoService.InfoMenuService.PedidoService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +19,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pedidos")
 public class PedidoController {
+    @Autowired
     private final PedidoService pedidoService;
+    @Autowired
+    private final PedidoMapper pedidoMapper;
 
-    public PedidoController(PedidoService pedidoService) {
+    public PedidoController(PedidoService pedidoService, PedidoMapper pedidoMapper) {
         this.pedidoService = pedidoService;
+        this.pedidoMapper = pedidoMapper;
     }
 
     @GetMapping
@@ -33,6 +42,14 @@ public class PedidoController {
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/mis-pedidos")
+    public ResponseEntity<List<PedidoDTO>> obtenerPedidosPorEmail(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        List<PedidoDTO> pedidos = pedidoService.getPedidosByEmail(email);
+        return ResponseEntity.ok(pedidos);
     }
 
     @PostMapping

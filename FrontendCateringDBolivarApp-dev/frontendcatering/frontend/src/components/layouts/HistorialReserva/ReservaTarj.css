@@ -1,0 +1,196 @@
+.reserva-contenedor {
+  padding: 2em;
+}
+.reserva-tarjeta {
+  background-color: #1f1f1f;
+  border-radius: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  transition: transform 0.4s ease;
+}
+
+.reserva-tarjeta:hover {
+  transform: scale(1.015);
+}
+
+.reserva-imagen img {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.reserva-imagen img:hover {
+  transform: scale(1.03);
+}
+
+.reserva-info {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.reserva-info h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.reserva-info p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #cccccc;
+  line-height: 1.6;
+}
+
+.reserva-info button {
+  padding: 0.8rem 1.6rem;
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reserva-info button:hover {
+  background-color: #ffffff;
+  color: #1f1f1f;
+  transform: scale(1.05);
+}
+
+.tarjetas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.reserva-mini {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.reserva-mini:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.reserva-mini h3 {
+  margin-top: 0;
+  color: #1f1f1f;
+}
+
+.reserva-mini p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.ver-detalles {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #1f1f1f;
+  font-weight: bold;
+  transition: text-decoration 0.2s;
+}
+
+.ver-detalles:hover {
+  text-decoration: underline;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease forwards;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.4s ease forwards;
+}
+
+.modal h3 {
+  margin-top: 0;
+  color: #1f1f1f;
+}
+
+.modal p {
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+.modal button {
+  margin-top: 1.5rem;
+  background-color: #1f1f1f;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal button:hover {
+  background-color: #1f1f1f;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .reserva-tarjeta {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .reserva-imagen img {
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  .reserva-info {
+    padding: 1.5rem;
+  }
+}

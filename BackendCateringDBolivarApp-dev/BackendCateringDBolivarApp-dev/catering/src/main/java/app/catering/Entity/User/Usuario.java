@@ -1,4 +1,8 @@
 package app.catering.Entity.User;
+import app.catering.Entity.Pedido.Pedido;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 
@@ -14,6 +18,7 @@ import java.util.List;
 @Entity
 @Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -51,7 +56,8 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
-
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pedido> pedidos;
 
     private boolean confirmed;
 

@@ -11,17 +11,24 @@ import { Usuario } from "../Interfaces/Usuario";
 interface UserDropdownMenuProps {
   user: Usuario;
 }
-export const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({ user }) => {
+export const UserDropdownMenu = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   //Cerrar Sesión
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.reload();
+  const handleLogout = () => {
+    try {
+      // Elimina el token JWT
+      localStorage.removeItem("token");
+
+      // Redirige al home
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+      alert("Error al cerrar sesión");
+    }
   };
 
   const goTo = (path: string) => {
@@ -109,7 +116,7 @@ export const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({ user }) => {
                 </button>
               </li>
               <li>
-                <button onClick={logout}>
+                <button onClick={handleLogout}>
                   <img src={UserEditImg.src} className="icon" alt="Usuario" />
                   <span>Cerrar Sesión</span>
                 </button>

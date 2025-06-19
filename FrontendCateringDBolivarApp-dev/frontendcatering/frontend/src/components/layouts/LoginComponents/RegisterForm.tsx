@@ -2,12 +2,16 @@ import React from "react";
 import styles from "./RegisterForm.module.css";
 import { useState } from "react";
 import img from "@/assets/images/RegisterFormImage.jpg";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 type RegisterFormProps = {
   onCancelarClick: () => void;
 };
 export const RegisterForm = ({ onCancelarClick }: RegisterFormProps) => {
   const [checked, setChecked] = useState(false);
+  const { setIsAuthenticating, login } = useAuth();
+  const router = useRouter();
 
   const [dni, setDni] = useState("");
   const [nombres, setNombres] = useState("");
@@ -16,42 +20,60 @@ export const RegisterForm = ({ onCancelarClick }: RegisterFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Validar solo si el correo es ingresado manualmente
+  const isEmailValid = (email: string, isManual: boolean = true): boolean => {
+    if (!isManual) return true;
+    const regexManual = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regexManual.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    //Verifica que este marcado el check
     if (!checked) {
       alert("Debes aceptar los términos y condiciones.");
       return;
     }
-
-    const res = await fetch("http://localhost:8084/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        dni,
-        nombres,
-        apellidos,
-        telefono,
-        email,
-        password,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      // Guardar token y redirigir o recargar
-      localStorage.setItem("token", data.token);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ email, nombres, apellidos })
+    // Validación de email escrita por el usuario
+    const isManual = true; // Si en el futuro se usa OAuth, entonces se colocará false
+    if (!isEmailValid(email, isManual)) {
+      alert(
+        "Por favor, ingresa un correo electrónico válido (sin ñ ni caracteres especiales)."
       );
-      alert("Registro exitoso");
-      window.location.reload();
-    } else {
-      alert(data.error || "Error al registrar");
+      return;
+    }
+
+    try {
+      setIsAuthenticating(true); // Mostrar loader
+
+      const res = await fetch("http://localhost:8084/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          dni,
+          nombres,
+          apellidos,
+          telefono,
+          email,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        await login({ email, password }); // usar contexto para iniciar sesión tras registro
+        alert("Registro exitoso");
+        router.refresh();
+      } else {
+        alert(data.error || "Error al registrar");
+      }
+    } catch (err) {
+      alert("Error inesperado al registrar");
+    } finally {
+      setIsAuthenticating(false); // Ocultar loader
     }
   };
 

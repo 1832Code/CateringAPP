@@ -1,6 +1,6 @@
 import React from "react";
 import NavComponent from "../../components/layouts/NavComponents/NavComponent";
-import ReservaTarje from "../../components/HistorialReserva/ReservaTarj";
+import ReservaTarje from "../../components/layouts/HistorialReserva/ReservaTarj";
 import styles from "./Historial.module.css";
 import { HeaderComponent } from "@/components/layouts/HeaderComponents/HeaderComponent";
 export const HistorialView = () => {

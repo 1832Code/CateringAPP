@@ -3,12 +3,17 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, use } from "react";
 import Loader from "@/components/layouts/Loader/Loader";
 import styles from "./routerloadingprovider.module.css";
+import { useAuth } from "./AuthContext";
 
 const RouteLoadingProvider = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
+  const { isAuthenticating } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
+  useEffect(() => {
+    console.log("Loader activado - pathname o autenticación");
+  }, [pathname, isAuthenticating]);
 
   useEffect(() => {
     // Mostrar loader en el cambio de ruta
@@ -24,11 +29,11 @@ const RouteLoadingProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [pathname]); // cuando cambia la ruta
-
+  }, [pathname, isAuthenticating]); // cuando cambia la ruta
+  console.log("Render loader", { loading, isAuthenticating });
   return (
     <>
-      {loading && (
+      {(loading || isAuthenticating) && (
         <div
           className={`${styles.loaderWrapper} ${fadeOut ? styles.fadeOut : ""}`}
         >
