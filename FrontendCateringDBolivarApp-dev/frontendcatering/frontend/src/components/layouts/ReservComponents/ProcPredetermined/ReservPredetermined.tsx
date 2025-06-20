@@ -130,7 +130,7 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
         estado: pedido.estado,
       };
       // POST to send pedido
-      const response = await fetch("http://localhost:8084/api/pedidos", {
+      const response = await fetch("http://localhost:8080/api/pedidos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

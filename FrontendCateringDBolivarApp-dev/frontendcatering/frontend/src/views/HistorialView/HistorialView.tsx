@@ -5,7 +5,7 @@ import styles from "./Historial.module.css";
 import { HeaderComponent } from "@/components/layouts/HeaderComponents/HeaderComponent";
 export const HistorialView = () => {
   return (
-    <>
+    <>  
       <div className={styles.MainArea}>
         <div className={styles.Header}>
           <HeaderComponent></HeaderComponent>

@@ -4,17 +4,14 @@ import { CarouselDemo } from "@/components/features/carousel-demo";
 import styles from "./ServicesView.module.css";
 import { HeaderComponent } from "@/components/layouts/HeaderComponents/HeaderComponent";
 import { InfoMenu } from "@/components/Interfaces/InfoMenu";
-<<<<<<< HEAD
 import { Carousel } from "primereact/carousel";
 import CircularCarousel from "@/components/features/CircularCarousel";
 import { info } from "console";
 
-=======
->>>>>>> origin/Andre
 export const ServicesView = () => {
   const [infoMenu, setInfoMenu] = useState<InfoMenu[]>([]);
   useEffect(() => {
-    fetch("http://localhost:8084/api/infomenu")
+    fetch("http://localhost:8080/api/infomenu")
       .then((res) => res.json())
       .then((data: InfoMenu[]) => {
         console.log("Contenido real de la respuesta:", data); //  Verify that it is an array

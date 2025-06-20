@@ -1,0 +1,148 @@
+package main.gourmet.Services.PedidoService.InfoMenuService;
+
+
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import main.gourmet.DTO.PedidoDTO;
+import main.gourmet.Entity.User;
+import main.gourmet.Entity.Pedido.DatosEvento;
+import main.gourmet.Entity.Pedido.Pedido;
+import main.gourmet.Entity.Pedido.InfoMenu.InfoMenu;
+import main.gourmet.Mappers.DatosEventoMapper;
+import main.gourmet.Mappers.InfoMenuMapper;
+import main.gourmet.Mappers.PedidoMapper;
+import main.gourmet.Repository.UserRepository;
+import main.gourmet.Repository.PedidoRepository.PedidoRepository;
+import main.gourmet.Repository.PedidoRepository.InfoMenuRepository.InfoMenuRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Service
+public class PedidoService {
+    private final PedidoRepository pedidoRepository;
+    private final PedidoMapper pedidoMapper;
+    private final UserRepository clienteRepository;
+    private final InfoMenuRepository infoMenuRepository;
+    private final DatosEventoMapper datosEventoMapper;
+    private final InfoMenuMapper infoMenuMapper;
+    
+    @Autowired
+    private Validator validator;
+
+
+    public PedidoService(PedidoRepository pedidoRepository,
+                         PedidoMapper pedidoMapper,
+                         UserRepository clienteRepository, InfoMenuRepository infoMenuRepository, DatosEventoMapper datosEventoMapper, InfoMenuMapper infoMenuMapper) {
+        this.pedidoRepository = pedidoRepository;
+        this.pedidoMapper = pedidoMapper;
+        this.clienteRepository = clienteRepository;
+        this.infoMenuRepository = infoMenuRepository;
+        this.datosEventoMapper = datosEventoMapper;
+        this.infoMenuMapper = infoMenuMapper;
+    }
+
+    public List<PedidoDTO> findAll() {
+        return pedidoRepository.findAll()
+                .stream()
+                .map(pedidoMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public PedidoDTO findById(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
+        return pedidoMapper.toDTO(pedido);
+    }
+
+    public PedidoDTO create(PedidoDTO dto) {
+        // Validaciones básicas
+        if (dto == null) throw new IllegalArgumentException("PedidoDTO no puede ser nulo.");
+        if (dto.getClienteId() == null) throw new IllegalArgumentException("Cliente ID es obligatorio.");
+        if (dto.getDatosEvento() == null) throw new IllegalArgumentException("Datos del evento son obligatorios.");
+        if (dto.getInfoMenuId() == null && dto.getInfoMenu() == null)
+            throw new IllegalArgumentException("Debe especificar infoMenuId o infoMenu personalizado.");
+        if (dto.getEstado() == null) throw new IllegalArgumentException("Estado del pedido es obligatorio.");
+
+
+
+        Pedido pedido = new Pedido();
+
+        // Cliente existente
+        User cliente = clienteRepository.findById(dto.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        pedido.setCliente(cliente);
+
+        // Convierte y VALIDA DatosEvento antes de setear
+        DatosEvento datosEvento = datosEventoMapper.toEntity(dto.getDatosEvento());
+
+        // Retorna los errores de las validaciones
+        Set<ConstraintViolation<DatosEvento>> violations = validator.validate(datosEvento);
+
+        if (!violations.isEmpty()) {
+            String errorMsg = violations.stream()
+                    .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                    .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("Errores en DatosEvento: " + errorMsg);
+        }
+
+        pedido.setDatosEvento(datosEvento);
+        // InfoMenu
+        if (dto.getInfoMenuId() != null) {
+            // Modo predeterminado
+            InfoMenu infoMenu = infoMenuRepository.findById(dto.getInfoMenuId())
+                    .orElseThrow(() -> new RuntimeException("InfoMenu no encontrado"));
+            pedido.setInfoMenu(infoMenu);
+        } else if (dto.getInfoMenu() != null) {
+            // Modo personalizado
+            InfoMenu infoMenuNuevo = infoMenuMapper.toEntity(dto.getInfoMenu());
+
+            // Buscar si ya existe un InfoMenu similar
+            List<InfoMenu> menusExistentes = infoMenuRepository.findAll();
+            InfoMenu existente = menusExistentes.stream()
+                    .filter(m -> m.equals(infoMenuNuevo))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existente != null) {
+                pedido.setInfoMenu(existente); // reutilizar
+            } else {
+                InfoMenu guardado = infoMenuRepository.save(infoMenuNuevo); // Guardar antes de asociar
+                pedido.setInfoMenu(guardado); // usar el nuevo ya persistido
+            }
+        } else {
+            throw new RuntimeException("Debe especificar un infoMenuId o los datos de un nuevo infoMenu.");
+        }
+
+        // Estado
+        pedido.setEstado(dto.getEstado());
+
+        Pedido saved = pedidoRepository.save(pedido);
+        return pedidoMapper.toDTO(saved);
+    }
+
+    public PedidoDTO update(Long id, PedidoDTO pedidoDTO) {
+        Pedido existing = pedidoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
+
+        // Mapeo manual
+        existing.setCliente(pedidoMapper.toEntity(pedidoDTO).getCliente());
+        existing.setDatosEvento(pedidoMapper.toEntity(pedidoDTO).getDatosEvento());
+        existing.setInfoMenu(pedidoMapper.toEntity(pedidoDTO).getInfoMenu());
+        existing.setEstado(pedidoDTO.getEstado());
+
+        Pedido updated = pedidoRepository.save(existing);
+        return pedidoMapper.toDTO(updated);
+    }
+
+    public void delete(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
+        pedidoRepository.delete(pedido);
+    }
+}

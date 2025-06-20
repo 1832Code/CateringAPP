@@ -19,7 +19,7 @@ export const SelectionService: React.FC<SelectionServiceProps> = ({
     <div className={styles.InteractionArea}>
       <div className={styles.TextAreaSelection}>
         <p>
-          Reserva hoy mismo tu paquete de menú personalizado y sorprende a tus
+          Reserva hoy mismo tu paquete de menú predeterminado y sorprende a tus
           invitados con sabores únicos, atención de calidad y una experiencia
           inolvidable.
         </p>

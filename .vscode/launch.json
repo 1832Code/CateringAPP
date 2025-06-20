@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "GourmetApplication",
+      "request": "launch",
+      "mainClass": "main.gourmet.GourmetApplication",
+      "projectName": ""
+    },
+    {
+      "type": "java",
+      "name": "CateringApplication",
+      "request": "launch",
+      "mainClass": "main.catering.CateringApplication",
+      "projectName": ""
+    },
+    {
+      "type": "java",
+      "name": "GourmetApplication",
+      "request": "launch",
+      "mainClass": "catering.gourmet.GourmetApplication",
+      "projectName": ""
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-CateringApplication<catering>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "app.catering.CateringApplication",
+      "projectName": "catering",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

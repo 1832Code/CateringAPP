@@ -1,0 +1,55 @@
+/* src/components/features/UserDropdownMenu.module.css */
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 10px); /* Ajusta según la altura de tu NavComponent */
+  right: 0; /* Alinea a la derecha del UserButton */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+  padding: 10px 0;
+}
+
+.userInfo {
+  padding: 10px 15px;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.dropdownMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdownMenu li a,
+.dropdownMenu li button {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.dropdownMenu li a:hover,
+.dropdownMenu li button:hover {
+  background-color: #f0f0f0;
+}
+
+.logoutButton button {
+  color: #e53e3e; /* Un color de advertencia para el logout */
+  font-weight: bold;
+  border-top: 1px solid #eee;
+  margin-top: 5px;
+  padding-top: 10px;
+}

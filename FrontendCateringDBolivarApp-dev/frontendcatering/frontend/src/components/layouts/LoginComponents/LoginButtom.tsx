@@ -8,7 +8,7 @@ export const LoginButtom = ({ onClick }: { onClick: () => void }) => {
       <input
         className={styles.LoginButtom}
         type="button"
-        value="Log In"
+        value="Iniciar Sesión"
         onClick={onClick}
       ></input>
     </>

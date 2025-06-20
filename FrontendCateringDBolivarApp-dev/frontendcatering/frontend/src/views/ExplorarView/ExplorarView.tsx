@@ -1,11 +1,9 @@
+"use client";
 import { HeaderComponent } from "@/components/layouts/HeaderComponents/HeaderComponent";
 import styles from "./ExplorarView.module.css";
 import React, { useEffect, useState } from "react";
 import NavComponent from "@/components/layouts/NavComponents/NavComponent";
-<<<<<<< HEAD
 import { CardItem } from "@/components/ui/3d-card";
-=======
->>>>>>> origin/Andre
 import CardItemHover from "@/components/features/CardItem";
 import { Item } from "@/components/Interfaces/Item";
 
@@ -13,7 +11,7 @@ export const ExplorarView = () => {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8084/api/items")
+    fetch("http://localhost:8080/api/items")
       .then((res) => res.json())
       .then((data: Item[]) => {
         setItems(data);

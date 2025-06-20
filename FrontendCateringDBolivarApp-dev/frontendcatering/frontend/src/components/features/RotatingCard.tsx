@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 import { url } from "inspector";
-=======
->>>>>>> origin/Andre
 import React from "react";
 import styled from "styled-components";
 
@@ -23,7 +20,7 @@ const RotatingCard: React.FC<RotatingCardProps> = ({
       <div className="flip-card">
         <div className="flip-card-inner">
           <div
-            className="flip-card-front"
+            className="flip-card-front bg-gray-950"
             style={{
               backgroundImage: `url(${imageBackground})`,
               backgroundSize: "cover",

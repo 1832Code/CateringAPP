@@ -54,7 +54,6 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
 
     return true;
   });
-  // Rules according to the type of service
   const reglas = () => {
     switch (pedido.infoMenu.servicio.tipoServicio.id) {
       case 1: // GOURMET
@@ -127,27 +126,24 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
 
     return true;
   };
-  //We bring items and categories from the database
   useEffect(() => {
-    fetch("http://localhost:8084/api/categorias")
+    fetch("http://localhost:8080/api/categorias")
       .then((res) => res.json())
       .then(setCategorias)
       .catch((err) => console.error(err));
 
-    fetch("http://localhost:8084/api/items")
+    fetch("http://localhost:8080/api/items")
       .then((res) => res.json())
       .then(setItems)
       .catch((err) => console.error(err));
   }, []);
 
-  //Function that controls the state of the category in the form
   const handleCategoriaChange = (index: number, categoriaId: number) => {
     const updated = [...formBlocks];
     updated[index].categoriaId = categoriaId;
     updated[index].itemId = undefined;
     setFormBlocks(updated);
   };
-  //Function that controls the state of the item in the form
   const handleItemChange = (index: number, itemId: number) => {
     const updated = [...formBlocks];
     updated[index].itemId = itemId;

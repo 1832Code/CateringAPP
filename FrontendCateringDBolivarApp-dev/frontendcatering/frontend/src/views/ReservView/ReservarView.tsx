@@ -11,16 +11,14 @@ import RouteLoadingProvider from "@/context/RouteLoadingProvider";
 import { InfoMenu } from "@/components/Interfaces/InfoMenu";
 
 export const ReservarView = () => {
-  //State to control the selection of Left or Right button
   const [selectedOption, setSelectedOption] = useState<
     "predeterminado" | "personalizado" | null
   >(null);
 
-  //State to control if the component is being shown or not
   const [isMounted, setIsMounted] = useState(false);
   const [items, setItems] = useState<InfoMenu[]>([]);
   useEffect(() => {
-    fetch("http://localhost:8084/api/infomenu")
+    fetch("http://localhost:8080/api/infomenu")
       .then((res) => res.json())
       .then((data: InfoMenu[]) => {
         console.log("Contenido real de la respuesta:", data); //  Verify that it is an array
@@ -41,7 +39,6 @@ export const ReservarView = () => {
         </div>
         <div className={styles.ContainerForm}>
           <div className={styles.InteractionArea}>
-            {/*According to the selected button, load a form*/}
             {!isMounted && (
               <SelectOptionForm
                 onSelectOption={(option) => {

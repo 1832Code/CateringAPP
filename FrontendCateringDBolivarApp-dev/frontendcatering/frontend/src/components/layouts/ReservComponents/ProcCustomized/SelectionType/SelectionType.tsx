@@ -19,7 +19,7 @@ export const SelectionTypeService: React.FC<SelectionTypeServiceProps> = ({
 }) => {
   const [typeService, setTypeService] = useState<TipoServicio[]>([]);
   useEffect(() => {
-    fetch("http://localhost:8084/api/tipo-servicio")
+    fetch("http://localhost:8080/api/tipo-servicio")
       .then((res) => res.json())
       .then((data: TipoServicio[]) => {
         setTypeService(data);
