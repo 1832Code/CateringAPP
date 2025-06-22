@@ -148,4 +148,15 @@ public class PedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
         pedidoRepository.delete(pedido);
     }
+
+
+
+
+    public List<PedidoDTO> getPedidosPagadosByEmail(String email) {
+        List<Pedido> pedidos = pedidoRepository.findAllByUsuarioEmailAndEstado(email, "pagada");
+        return pedidos.stream()
+                .map(pedidoMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 }

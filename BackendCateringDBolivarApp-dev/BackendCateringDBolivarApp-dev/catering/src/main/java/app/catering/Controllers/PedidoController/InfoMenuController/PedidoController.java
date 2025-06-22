@@ -78,4 +78,14 @@ public class PedidoController {
         }
     }
 
+
+
+    @GetMapping("/mis-pedidos/pagados")
+    public ResponseEntity<List<PedidoDTO>> obtenerPedidosPagadosPorEmail(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        List<PedidoDTO> pedidos = pedidoService.getPedidosPagadosByEmail(email);
+        return ResponseEntity.ok(pedidos);
+    }
+
 }

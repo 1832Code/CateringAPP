@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findAllByUsuarioEmail(String email);
+    List<Pedido> findAllByUsuarioEmailAndEstado(String email, String estado);
+
 }
