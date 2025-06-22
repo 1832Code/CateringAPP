@@ -37,7 +37,7 @@ const ReservaTarj: React.FC = () => {
     setSelectedReserva(null);
   };
 
-  // Filtro dinámico según pestaña activa
+  // Filtro 
   const reservasFiltradas = reservas.filter((reserva) => {
     if (tabActiva === "pagadas") return reserva.estado === "pagada";
     else return reserva.estado !== "pagada";
@@ -45,7 +45,7 @@ const ReservaTarj: React.FC = () => {
 
   return (
     <div className="reserva-contenedor">
-      {/* Pestañas decorativas */}
+      
       <div className="tabs-centro">
         <span
           className={`tab ${tabActiva === "reservas" ? "activa" : ""}`}
@@ -61,7 +61,7 @@ const ReservaTarj: React.FC = () => {
         </span>
       </div>
 
-      {/* Tarjeta informativa */}
+      
       <div className="reserva-tarjeta">
         <div className="reserva-imagen">
           <img src="/images.jpg" alt="Servicio de catering" />
@@ -73,7 +73,7 @@ const ReservaTarj: React.FC = () => {
         </div>
       </div>
 
-      {/* Tarjetas de reservas filtradas */}
+      
       <div className="tarjetas-grid">
         {reservasFiltradas.map((reserva, index) => (
           <div
@@ -93,7 +93,7 @@ const ReservaTarj: React.FC = () => {
         ))}
       </div>
 
-      {/* Modal de detalles */}
+      
       {modalVisible && selectedReserva && (
         <div className="modal-overlay" onClick={cerrarModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
