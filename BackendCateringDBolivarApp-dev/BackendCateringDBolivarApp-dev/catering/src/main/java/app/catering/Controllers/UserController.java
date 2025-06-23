@@ -5,6 +5,7 @@ import java.util.Map;
 
 import app.catering.DTO.UsuarioDTO;
 import app.catering.DTO.UsuarioResponseDTO;
+import app.catering.DTO.UsuarioUpdateAdminDTO;
 import app.catering.DTO.UsuarioUpdateDTO;
 import app.catering.Entity.User.Usuario;
 import app.catering.Mappers.UsuarioMapper;
@@ -72,16 +73,17 @@ public class UserController {
     }
 
     //  ADMIN: Actualizar usuario por ID
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UsuarioResponseDTO> actualizarUsuarioPorId(
             @PathVariable Long id,
-            @RequestBody Usuario usuarioActualizado
+            @Valid @RequestBody UsuarioUpdateAdminDTO dto
     ) {
-        return ResponseEntity.ok(usuarioService.actualizarUsuario(id, usuarioActualizado));
+        UsuarioResponseDTO actualizado = usuarioService.actualizarUsuarioPorId(id, dto);
+        return ResponseEntity.ok(actualizado);
     }
 
-    // ✅ ADMIN: Eliminar usuario por ID
+    //  ADMIN: Eliminar usuario por ID
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {

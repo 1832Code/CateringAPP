@@ -7,7 +7,7 @@ import { InfoMenu } from "@/components/Interfaces/InfoMenu";
 export const ServicesView = () => {
   const [infoMenu, setInfoMenu] = useState<InfoMenu[]>([]);
   useEffect(() => {
-    fetch("http://localhost:8084/api/infomenu")
+    fetch("http://localhost:8084/api/infomenu/predeterminados")
       .then((res) => res.json())
       .then((data: InfoMenu[]) => {
         console.log("Contenido real de la respuesta:", data); //  Verify that it is an array

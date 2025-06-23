@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,14 +44,20 @@ public class securityConfig {
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
-                                "/api/infomenu/**",
+                                "/api/infomenu/predeterminados",
                                 "/api/items/**",
                                 "/api/tipo-servicio/**",
                                 "/api/categorias/**",
                                 "/api/datos-evento/**",
                                 "/prueba"
                         ).permitAll()
-                        .requestMatchers("/api/pedidos").authenticated()
+                        .requestMatchers("/api/infomenu/predeterminados").anonymous()
+                        // Protegidos
+                        .requestMatchers(HttpMethod.GET, "/api/infomenu/**").permitAll() // si quieres ver otros menus sin loguearse
+                        .requestMatchers(HttpMethod.POST, "/api/infomenu/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/infomenu/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/infomenu/**").hasRole("ADMIN")
+                        .requestMatchers("/api/pedidos/**").authenticated()
                         .requestMatchers("/api/usuarios/me").authenticated()
                         .anyRequest().authenticated()
                 )

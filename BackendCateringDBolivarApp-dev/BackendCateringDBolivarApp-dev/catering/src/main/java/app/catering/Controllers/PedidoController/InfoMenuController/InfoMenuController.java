@@ -4,6 +4,7 @@ import app.catering.DTO.InfoMenuDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public class InfoMenuController {
     private final InfoMenuService infoMenuService;
 
     // Crear un nuevo InfoMenu
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<InfoMenuDTO> createInfoMenu(@RequestBody InfoMenuDTO dto) {
         InfoMenu created = infoMenuService.createInfoMenu(dto);
@@ -47,13 +49,14 @@ public class InfoMenuController {
         return infoMenu.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-    // Obtener todos los InfoMenu tipo "Predeterminado" (opcional)
+    // Obtener todos los InfoMenu tipo "Predeterminado"
     @GetMapping("/predeterminados")
     public ResponseEntity<?> getPredeterminedMenus() {
         return ResponseEntity.ok(infoMenuService.getAllInfoMenusDefault());
     }
 
     // Actualizar un InfoMenu por ID
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<InfoMenu> updateInfoMenu(@PathVariable Long id, @RequestBody InfoMenuDTO dto) {
         Optional<InfoMenu> updated = infoMenuService.updateInfoMenu(id, dto);
@@ -62,6 +65,7 @@ public class InfoMenuController {
     }
 
     // Eliminar un InfoMenu por ID
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteInfoMenu(@PathVariable Long id) {
         boolean deleted = infoMenuService.deleteInfoMenu(id);

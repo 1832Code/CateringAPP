@@ -4,6 +4,7 @@ import app.catering.DTO.ItemDTO;
 import app.catering.Services.PedidoService.InfoMenuService.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,18 +27,19 @@ public class ItemController {
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ItemDTO> createItem(@RequestBody ItemDTO itemDTO) {
         ItemDTO newItem = itemService.createItem(itemDTO);
         return ResponseEntity.ok(newItem);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
         ItemDTO updatedItem = itemService.updateItem(id, itemDTO);
         return updatedItem != null ? ResponseEntity.ok(updatedItem) : ResponseEntity.notFound().build();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         boolean deleted = itemService.deleteItem(id);

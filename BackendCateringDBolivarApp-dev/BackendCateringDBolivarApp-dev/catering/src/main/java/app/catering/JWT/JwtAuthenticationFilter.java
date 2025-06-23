@@ -37,8 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
         return path.startsWith("/api/auth/")
-                || path.startsWith("/api/items/")
-                || path.startsWith("/api/infomenu/");
+                || path.startsWith("/api/items/");
     }
 
     @Override
@@ -57,6 +56,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(email!=null && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            // Validación extra: rol solo si cumple condiciones
+            String rolDesdeBD = userDetails.getAuthorities().stream()
+                    .findFirst()
+                    .map(Object::toString)
+                    .orElse("USER");
+
+            if (!esAdminValido(email, rolDesdeBD)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Intento de privilegio no autorizado detectado.");
+                return;
+            }
+
+
             if(jwtService.validateToken(token,userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 
@@ -74,5 +85,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return authHeader.substring(7);
         }
         return null;
+    }
+
+    private boolean esAdminValido(String email, String rolDesdeBD) {
+        // Valida que el rol sea ADMIN solo si el email pertenece a un dominio específico o está en lista segura
+        if ("ADMIN".equalsIgnoreCase(rolDesdeBD)) {
+            return email.endsWith("@miempresa.com") || email.equals("admin@miempresa.com");
+        }
+        return true;
     }
 }

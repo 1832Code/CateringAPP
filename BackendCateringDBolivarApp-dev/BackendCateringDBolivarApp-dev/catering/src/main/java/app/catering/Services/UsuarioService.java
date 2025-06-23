@@ -1,6 +1,7 @@
 package app.catering.Services;
 
 import app.catering.DTO.UsuarioResponseDTO;
+import app.catering.DTO.UsuarioUpdateAdminDTO;
 import app.catering.DTO.UsuarioUpdateDTO;
 import app.catering.Mappers.UsuarioMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -51,7 +52,7 @@ public class UsuarioService {
     }
 
     //  Actualizar usuario
-    public Usuario actualizarUsuario(Long id, Usuario datosActualizados) {
+    public UsuarioResponseDTO actualizarUsuario(Long id, Usuario datosActualizados) {
         Usuario usuarioExistente = obtenerPorId(id);
 
         usuarioExistente.setDni(datosActualizados.getDni());
@@ -60,14 +61,15 @@ public class UsuarioService {
         usuarioExistente.setTelefono(datosActualizados.getTelefono());
         usuarioExistente.setEmail(datosActualizados.getEmail());
 
-        // Opcionalmente actualizar contraseña si se proporciona
         if (datosActualizados.getPassword() != null && !datosActualizados.getPassword().isEmpty()) {
             usuarioExistente.setPassword(passwordEncoder.encode(datosActualizados.getPassword()));
         }
 
         usuarioExistente.setRole(datosActualizados.getRole());
 
-        return usuarioRepository.save(usuarioExistente);
+        Usuario actualizado = usuarioRepository.save(usuarioExistente);
+
+        return UsuarioMapper.toResponseDTO(actualizado);
     }
 
     public Usuario actualizarUsuarioPorEmail(String email, Usuario nuevosDatos) {
@@ -90,6 +92,14 @@ public class UsuarioService {
         UsuarioMapper.actualizarDesdeDTO(usuario, dto);
         Usuario actualizado = usuarioRepository.save(usuario);
 
+        return UsuarioMapper.toResponseDTO(actualizado);
+    }
+
+
+    public UsuarioResponseDTO actualizarUsuarioPorId(Long id, UsuarioUpdateAdminDTO dto) {
+        Usuario usuario = obtenerPorId(id);
+        UsuarioMapper.actualizarDesdeAdminDTO(usuario, dto, passwordEncoder);
+        Usuario actualizado = usuarioRepository.save(usuario);
         return UsuarioMapper.toResponseDTO(actualizado);
     }
 

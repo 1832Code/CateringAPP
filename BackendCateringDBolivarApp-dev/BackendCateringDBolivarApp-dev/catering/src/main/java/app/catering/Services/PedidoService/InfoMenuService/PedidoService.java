@@ -56,6 +56,16 @@ public class PedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
         return pedidoMapper.toDTO(pedido);
     }
+    public List<PedidoDTO> getPedidosByUsuarioId(Long id) {
+        List<Pedido> pedidos = pedidoRepository.findAllByUsuarioId(id);
+        if (pedidos.isEmpty()) {
+            throw new RuntimeException("No se encontraron pedidos para el usuario con ID: " + id);
+        }
+        return pedidos.stream()
+                .map(pedidoMapper::toDTO)
+                .toList();
+    }
+
     public List<PedidoDTO> getPedidosByEmail(String email) {
         List<Pedido> pedidos = pedidoRepository.findAllByUsuarioEmail(email);
         return pedidos.stream()
@@ -133,10 +143,23 @@ public class PedidoService {
         Pedido existing = pedidoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
 
-        // Mapeo manual
-        existing.setUsuario(pedidoMapper.toEntity(pedidoDTO).getUsuario());
+        // Buscar usuario por ID
+        if (pedidoDTO.getUsuarioId() != null) {
+            Usuario usuario = usuarioRepository.findById(pedidoDTO.getUsuarioId())
+                    .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con ID: " + pedidoDTO.getUsuarioId()));
+            existing.setUsuario(usuario);
+        }
+
+        // Buscar infoMenu por ID
+        if (pedidoDTO.getInfoMenuId() != null) {
+            InfoMenu infoMenu = infoMenuRepository.findById(pedidoDTO.getInfoMenuId())
+                    .orElseThrow(() -> new EntityNotFoundException("InfoMenu no encontrado con ID: " + pedidoDTO.getInfoMenuId()));
+            existing.setInfoMenu(infoMenu);
+        }
+
+        // Actualizar datos del evento
         existing.setDatosEvento(pedidoMapper.toEntity(pedidoDTO).getDatosEvento());
-        existing.setInfoMenu(pedidoMapper.toEntity(pedidoDTO).getInfoMenu());
+
         existing.setEstado(pedidoDTO.getEstado());
 
         Pedido updated = pedidoRepository.save(existing);
