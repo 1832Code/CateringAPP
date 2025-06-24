@@ -59,6 +59,8 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pedido> pedidos;
 
+    private String verificationCode;
+
     private boolean confirmed;
 
     public boolean isConfirmed() {
