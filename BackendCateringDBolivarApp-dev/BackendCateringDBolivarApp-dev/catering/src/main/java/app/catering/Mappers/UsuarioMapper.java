@@ -4,8 +4,13 @@ import app.catering.DTO.UsuarioDTO;
 import app.catering.DTO.UsuarioResponseDTO;
 import app.catering.DTO.UsuarioUpdateAdminDTO;
 import app.catering.DTO.UsuarioUpdateDTO;
+import app.catering.Entity.User.Role;
 import app.catering.Entity.User.Usuario;
+import app.catering.Repository.RoleRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Collections;
+import java.util.Set;
 
 public class UsuarioMapper {
     public static UsuarioDTO toDTO(Usuario usuario) {
@@ -38,7 +43,12 @@ public class UsuarioMapper {
         return dto;
     }
 
-    public static void actualizarDesdeAdminDTO(Usuario usuario, UsuarioUpdateAdminDTO dto, BCryptPasswordEncoder encoder) {
+    public static void actualizarDesdeAdminDTO(
+            Usuario usuario,
+            UsuarioUpdateAdminDTO dto,
+            BCryptPasswordEncoder encoder,
+            RoleRepository roleRepository
+    ) {
         usuario.setDni(dto.getDni());
         usuario.setNombres(dto.getNombres());
         usuario.setApellidos(dto.getApellidos());
@@ -49,6 +59,10 @@ public class UsuarioMapper {
             usuario.setPassword(encoder.encode(dto.getPassword()));
         }
 
-        usuario.setRole(dto.getRole());
+        if (dto.getRole() != null) {
+            Role roleEntity = roleRepository.findByName(dto.getRole())
+                    .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado: " + dto.getRole()));
+            usuario.setRoles(Set.of(roleEntity));
+        }
     }
 }

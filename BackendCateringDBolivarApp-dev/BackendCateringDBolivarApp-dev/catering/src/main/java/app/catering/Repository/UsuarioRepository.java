@@ -1,5 +1,6 @@
 package app.catering.Repository;
 
+import app.catering.Entity.User.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -16,7 +17,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Retorna true si existe, false si no existe
 
     boolean existsByEmail(String email);
-    Optional<Usuario> findByEmail(String email);
+
+    @Query("SELECT u FROM Usuario u JOIN FETCH u.roles WHERE u.email = :email")
+    Optional<Usuario> findByEmailWithRoles(@Param("email") String email);
+
+    long countByRolesContaining(Role role);
 
     // Nuevo metodo para usar el procedimiento almacenado
     @Transactional

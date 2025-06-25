@@ -25,5 +25,6 @@ public class UsuarioUpdateAdminDTO {
 
     private String password; // opcional
 
-    private Role role;
+    // El rol se recibe como texto y se transforma luego a una entidad Role
+    private Role.RoleName role;
 }

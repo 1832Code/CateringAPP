@@ -4,6 +4,7 @@ import app.catering.DTO.UsuarioResponseDTO;
 import app.catering.DTO.UsuarioUpdateAdminDTO;
 import app.catering.DTO.UsuarioUpdateDTO;
 import app.catering.Mappers.UsuarioMapper;
+import app.catering.Repository.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     // Obtener todos los usuarios
@@ -27,83 +29,74 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    //  Buscar usuario por ID
+    // Obtener usuario por ID
     public Usuario obtenerPorId(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
     }
 
-    //  Buscar usuario por Email
+    // Obtener usuario por email
     public Usuario obtenerPorEmail(String email) {
-        return usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado"));
+        return usuarioRepository.findByEmailWithRoles(email)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
     }
 
-    //  Crear nuevo usuario (por admin o proceso interno)
+    // Crear nuevo usuario (admin o backend)
     public Usuario crearUsuario(Usuario usuario) {
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
-            throw new RuntimeException("El email ya está registrado");
+            throw new DataIntegrityViolationException("El email ya está registrado");
         }
 
-        // Encriptar contraseña
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        return usuarioRepository.save(usuario);
+    }
+
+    // Actualización completa por ID (admin)
+    public UsuarioResponseDTO actualizarUsuario(Long id, Usuario nuevosDatos) {
+        Usuario usuario = obtenerPorId(id);
+
+        usuario.setDni(nuevosDatos.getDni());
+        usuario.setNombres(nuevosDatos.getNombres());
+        usuario.setApellidos(nuevosDatos.getApellidos());
+        usuario.setTelefono(nuevosDatos.getTelefono());
+        usuario.setEmail(nuevosDatos.getEmail());
+
+        if (nuevosDatos.getPassword() != null && !nuevosDatos.getPassword().isEmpty()) {
+            usuario.setPassword(passwordEncoder.encode(nuevosDatos.getPassword()));
+        }
+
+        usuario.setRoles(nuevosDatos.getRoles());
+
+        return UsuarioMapper.toResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    // Actualizar perfil por email (cliente)
+    public UsuarioResponseDTO actualizarPerfil(String email, UsuarioUpdateDTO dto) {
+        Usuario usuario = obtenerPorEmail(email);
+        UsuarioMapper.actualizarDesdeDTO(usuario, dto);
+        return UsuarioMapper.toResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    // Actualizar usuario desde el admin (por ID)
+    public UsuarioResponseDTO actualizarUsuarioPorId(Long id, UsuarioUpdateAdminDTO dto) {
+        Usuario usuario = obtenerPorId(id);
+        UsuarioMapper.actualizarDesdeAdminDTO(usuario, dto, passwordEncoder, roleRepository);
+        return UsuarioMapper.toResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    // Actualización básica por email
+    public Usuario actualizarUsuarioPorEmail(String email, Usuario nuevosDatos) {
+        Usuario usuario = obtenerPorEmail(email);
+
+        usuario.setNombres(nuevosDatos.getNombres());
+        usuario.setApellidos(nuevosDatos.getApellidos());
+        usuario.setTelefono(nuevosDatos.getTelefono());
+        usuario.setDni(nuevosDatos.getDni());
 
         return usuarioRepository.save(usuario);
     }
 
-    //  Actualizar usuario
-    public UsuarioResponseDTO actualizarUsuario(Long id, Usuario datosActualizados) {
-        Usuario usuarioExistente = obtenerPorId(id);
-
-        usuarioExistente.setDni(datosActualizados.getDni());
-        usuarioExistente.setNombres(datosActualizados.getNombres());
-        usuarioExistente.setApellidos(datosActualizados.getApellidos());
-        usuarioExistente.setTelefono(datosActualizados.getTelefono());
-        usuarioExistente.setEmail(datosActualizados.getEmail());
-
-        if (datosActualizados.getPassword() != null && !datosActualizados.getPassword().isEmpty()) {
-            usuarioExistente.setPassword(passwordEncoder.encode(datosActualizados.getPassword()));
-        }
-
-        usuarioExistente.setRole(datosActualizados.getRole());
-
-        Usuario actualizado = usuarioRepository.save(usuarioExistente);
-
-        return UsuarioMapper.toResponseDTO(actualizado);
-    }
-
-    public Usuario actualizarUsuarioPorEmail(String email, Usuario nuevosDatos) {
-        Usuario usuarioExistente = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        // Actualizamos solo los campos permitidos
-        usuarioExistente.setNombres(nuevosDatos.getNombres());
-        usuarioExistente.setApellidos(nuevosDatos.getApellidos());
-        usuarioExistente.setTelefono(nuevosDatos.getTelefono());
-        usuarioExistente.setDni(nuevosDatos.getDni());
-
-        return usuarioRepository.save(usuarioExistente);
-    }
-
-    public UsuarioResponseDTO actualizarPerfil(String email, UsuarioUpdateDTO dto) {
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        UsuarioMapper.actualizarDesdeDTO(usuario, dto);
-        Usuario actualizado = usuarioRepository.save(usuario);
-
-        return UsuarioMapper.toResponseDTO(actualizado);
-    }
-
-
-    public UsuarioResponseDTO actualizarUsuarioPorId(Long id, UsuarioUpdateAdminDTO dto) {
-        Usuario usuario = obtenerPorId(id);
-        UsuarioMapper.actualizarDesdeAdminDTO(usuario, dto, passwordEncoder);
-        Usuario actualizado = usuarioRepository.save(usuario);
-        return UsuarioMapper.toResponseDTO(actualizado);
-    }
-
-    //  Eliminar usuario
+    // Eliminar usuario por ID
     public void eliminarUsuario(Long id) {
         Usuario usuario = obtenerPorId(id);
         usuarioRepository.delete(usuario);

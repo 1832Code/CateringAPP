@@ -20,7 +20,7 @@ public class ApplicationConfig {
     // Servicio que carga al usuario desde la base de datos por email
     @Bean
     public UserDetailsService userDetailsService() {
-        return email -> usuarioRepository.findByEmail(email)
+        return email -> usuarioRepository.findByEmailWithRoles(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email));
     }
 

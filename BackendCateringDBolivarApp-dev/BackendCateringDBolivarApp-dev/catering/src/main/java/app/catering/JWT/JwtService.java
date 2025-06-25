@@ -1,8 +1,11 @@
 package app.catering.JWT;
 
 
+import app.catering.Entity.User.Role;
 import app.catering.Entity.User.Usuario;
 import app.catering.Security.JwtConfig;
+import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,70 +16,97 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
-    @Autowired
-    private JwtConfig jwtConfig;
-    
-    @Autowired
-    private Key signingKey;
+    private final JwtConfig jwtConfig;
+    private final Key signingKey;
 
+    /**
+     * Extrae el correo (subject) desde el token JWT.
+     */
     public String extractEmailFromToken(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
+    /**
+     * Extrae la fecha de expiración del token.
+     */
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Boolean isTokenExpired(String token) {
+    /**
+     * Extrae cualquier claim usando una función resolvente.
+     */
+    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
+        final Claims claims = extractAllClaims(token);
+        return resolver.apply(claims);
+    }
+
+    /**
+     * Valida si el token es válido para el usuario especificado.
+     */
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String email = extractEmailFromToken(token);
+        return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    /**
+     * Verifica si el token ha expirado.
+     */
+    private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String email = extractEmailFromToken(token);
-        return (email.equals(userDetails.getUsername())&& !isTokenExpired(token));
-    }
-
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
+    /**
+     * Extrae todos los claims del token.
+     */
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(signingKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(signingKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("Token expirado", e);
+        } catch (JwtException e) {
+            throw new RuntimeException("Token inválido", e);
+        }
     }
 
-
-
-    public String getToken(UserDetails user) {
+    /**
+     * Genera un JWT para un usuario autenticado.
+     */
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
 
-        if (user instanceof Usuario usuario) {
+        if (userDetails instanceof Usuario usuario) {
             claims.put("id", usuario.getId());
             claims.put("email", usuario.getEmail());
             claims.put("nombres", usuario.getNombres());
             claims.put("apellidos", usuario.getApellidos());
-            claims.put("role", usuario.getRole().name());
+
+            // Ahora permite múltiples roles
+            claims.put("roles", usuario.getRoles().stream()
+                    .map(Role::getName)
+                    .toList());
         }
 
-        return getToken(claims, user); // username = email en tu caso
+        return buildToken(claims, userDetails.getUsername());
     }
 
-    private String getToken(Map<String, Object> claims, UserDetails user) {
+    /**
+     * Crea el token JWT con los claims y el subject (username/email).
+     */
+    private String buildToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getUsername()) // = Email
-                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setSubject(subject)
+                .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpirationTime()))
                 .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();

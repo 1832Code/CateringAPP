@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface InfoMenuRepository extends JpaRepository<InfoMenu, Long> {
     List<InfoMenu> findByTipoInfoMenu(String tipoInfoMenu);
+    long countByTipoInfoMenu(String tipoInfoMenu);
 }
