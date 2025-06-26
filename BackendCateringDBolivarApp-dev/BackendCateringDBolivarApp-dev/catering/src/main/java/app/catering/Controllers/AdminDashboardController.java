@@ -5,6 +5,7 @@ import app.catering.Auth.AuthResponse;
 import app.catering.Auth.AuthService;
 import app.catering.Auth.RegisterRequest;
 import app.catering.Entity.User.Role;
+import app.catering.Entity.User.RoleName;
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.InfoMenuRepository;
 import app.catering.Repository.PedidoRepository.PedidoRepository;
 import app.catering.Repository.RoleRepository;
@@ -50,7 +51,7 @@ public class AdminDashboardController {
     public ResponseEntity<Map<String, Long>> getUserCounts() {
         long totalUsers = userRepository.count();
 
-        Optional<Role> adminRoleOptional = roleRepository.findByName(Role.RoleName.ROLE_ADMIN);
+        Optional<Role> adminRoleOptional = roleRepository.findByName(RoleName.ROLE_ADMIN);
 
         long totalAdmins = 0;
         if (adminRoleOptional.isPresent()) {

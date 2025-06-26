@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -85,15 +86,18 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
 
         if (userDetails instanceof Usuario usuario) {
+            List<String> roles = usuario.getRoles()
+                    .stream()
+                    .map(role -> role.getName().name())
+                    .toList(); // Copia segura
+
             claims.put("id", usuario.getId());
             claims.put("email", usuario.getEmail());
             claims.put("nombres", usuario.getNombres());
             claims.put("apellidos", usuario.getApellidos());
+            claims.put("roles", roles); // Usamos la copia
 
-            // Ahora permite múltiples roles
-            claims.put("roles", usuario.getRoles().stream()
-                    .map(Role::getName)
-                    .toList());
+            System.out.println("Roles cargados para usuario: " + roles);
         }
 
         return buildToken(claims, userDetails.getUsername());

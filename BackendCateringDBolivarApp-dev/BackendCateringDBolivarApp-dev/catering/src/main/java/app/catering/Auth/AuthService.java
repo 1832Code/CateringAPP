@@ -1,6 +1,7 @@
 package app.catering.Auth;
 
 import app.catering.Entity.User.Role;
+import app.catering.Entity.User.RoleName;
 import app.catering.Repository.RoleRepository;
 import app.catering.Repository.UsuarioRepository;
 import app.catering.JWT.JwtService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -35,54 +37,75 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest loginRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+        try {
+            // Autenticación del usuario
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
 
-        Usuario user = usuarioRepository.findByEmailWithRoles(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            // Buscar usuario con roles
+            Usuario user = usuarioRepository.findByEmailWithRoles(loginRequest.getEmail())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        String token = jwtService.generateToken(user);
+            List<String> roles = user.getRoles()
+                    .stream()
+                    .map(role -> role.getName().name())
+                    .toList(); // copia segura
 
-        return AuthResponse.builder()
-                .token(token)
-                .email(user.getEmail())
-                .id(user.getId())
-                .roles(user.getRoles().stream().map(r -> r.getName().name()).toList())
-                .build();
+            System.out.println("Roles cargados para usuario: " + roles);
+
+            // Generar token
+            String token = jwtService.generateToken(user);
+
+            // Retornar respuesta
+            return AuthResponse.builder()
+                    .token(token)
+                    .email(user.getEmail())
+                    .id(user.getId())
+                    .roles(roles)
+                    .build();
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Opcional: para debugging
+            throw new RuntimeException("Error en el inicio de sesión: " + e.getMessage());
+        }
     }
 
     public AuthResponse register(RegisterRequest request) {
-        if (usuarioRepository.findByEmailWithRoles(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Ya existe un usuario con este email.");
+        try {
+            if (usuarioRepository.findByEmailWithRoles(request.getEmail()).isPresent()) {
+                throw new RuntimeException("Ya existe un usuario con este email.");
+            }
+
+            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Rol USER no encontrado"));
+
+            Usuario nuevoUsuario = Usuario.builder()
+                    .dni(request.getDni())
+                    .nombres(request.getNombres())
+                    .apellidos(request.getApellidos())
+                    .telefono(request.getTelefono())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .roles(Set.of(userRole))
+                    .confirmed(false)
+                    .build();
+
+            usuarioRepository.save(nuevoUsuario);
+
+            return AuthResponse.builder()
+                    .token(jwtService.generateToken(nuevoUsuario))
+                    .email(nuevoUsuario.getEmail())
+                    .id(nuevoUsuario.getId())
+                    .roles(nuevoUsuario.getRoles().stream().map(r -> r.getName().name()).toList())
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace(); // 👈 Mostrará en consola el error real
+            throw new RuntimeException("Error en el registro: " + e.getMessage());
         }
-
-        // Obtener rol por defecto (USER)
-        Role userRole = roleRepository.findByName(Role.RoleName.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Rol USER no encontrado"));
-
-        Usuario nuevoUsuario = Usuario.builder()
-                .dni(request.getDni())
-                .nombres(request.getNombres())
-                .apellidos(request.getApellidos())
-                .telefono(request.getTelefono())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .roles(Set.of(userRole)) // ahora usa Set<Role>
-                .confirmed(false)
-                .build();
-
-        usuarioRepository.save(nuevoUsuario);
-
-        return AuthResponse.builder()
-                .token(jwtService.generateToken(nuevoUsuario))
-                .email(nuevoUsuario.getEmail())
-                .id(nuevoUsuario.getId())
-                .roles(nuevoUsuario.getRoles().stream().map(r -> r.getName().name()).toList())
-                .build();
     }
 
     public AuthResponse crearAdmin(RegisterRequest request) {
@@ -90,8 +113,7 @@ public class AuthService {
             throw new RuntimeException("Ya existe un usuario con este email.");
         }
 
-        // Obtener rol ADMIN
-        Role adminRole = roleRepository.findByName(Role.RoleName.ROLE_ADMIN)
+        Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
                 .orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
 
         Usuario nuevoAdmin = Usuario.builder()
@@ -101,8 +123,8 @@ public class AuthService {
                 .telefono(request.getTelefono())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(Set.of(adminRole)) // Asigna directamente el rol ADMIN
-                .confirmed(true) // Se asume que un admin creado por otro ya está confirmado
+                .roles(Set.of(adminRole))
+                .confirmed(true)
                 .build();
 
         usuarioRepository.save(nuevoAdmin);
@@ -114,5 +136,4 @@ public class AuthService {
                 .roles(nuevoAdmin.getRoles().stream().map(r -> r.getName().name()).toList())
                 .build();
     }
-
 }

@@ -1,6 +1,7 @@
 package app.catering.DTO;
 
 import app.catering.Entity.User.Role;
+import app.catering.Entity.User.RoleName;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -26,5 +27,5 @@ public class UsuarioUpdateAdminDTO {
     private String password; // opcional
 
     // El rol se recibe como texto y se transforma luego a una entidad Role
-    private Role.RoleName role;
+    private RoleName role;
 }
