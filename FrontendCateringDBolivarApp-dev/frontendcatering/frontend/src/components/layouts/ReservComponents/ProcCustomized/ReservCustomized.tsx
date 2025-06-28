@@ -166,9 +166,8 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
     const fetchUsuario = async () => {
       try {
         const res = await fetch("http://localhost:8084/api/usuarios/me", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          method: "GET",
+          credentials: "include",
         });
 
         if (!res.ok) throw new Error("No se pudo obtener el usuario");
@@ -209,8 +208,8 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       console.log("Payload a enviar:", payload);

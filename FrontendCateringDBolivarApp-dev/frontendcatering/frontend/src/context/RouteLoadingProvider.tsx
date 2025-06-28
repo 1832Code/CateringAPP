@@ -13,6 +13,7 @@ const RouteLoadingProvider = ({ children }: { children: React.ReactNode }) => {
   const [fadeOut, setFadeOut] = useState(false);
   useEffect(() => {
     console.log("Loader activado - pathname o autenticación");
+    console.log("Render loader", { loading, isAuthenticating });
   }, [pathname, isAuthenticating]);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const RouteLoadingProvider = ({ children }: { children: React.ReactNode }) => {
       clearTimeout(timer);
     };
   }, [pathname, isAuthenticating]); // cuando cambia la ruta
-  console.log("Render loader", { loading, isAuthenticating });
+
   return (
     <>
       {(loading || isAuthenticating) && (

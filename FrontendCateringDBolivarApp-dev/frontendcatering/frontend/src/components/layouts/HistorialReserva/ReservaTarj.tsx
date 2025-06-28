@@ -6,16 +6,19 @@ const ReservaTarj: React.FC = () => {
   const [reservas, setReservas] = useState<Pedido[]>([]);
   const [selectedReserva, setSelectedReserva] = useState<Pedido | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [tabActiva, setTabActiva] = useState<"reservas" | "pagadas">("reservas");
+  const [tabActiva, setTabActiva] = useState<"reservas" | "pagadas">(
+    "reservas"
+  );
 
   const obtenerDetallesReserva = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8084/api/pedidos/mis-pedidos", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "http://localhost:8084/api/pedidos/mis-pedidos",
+        {
+          credentials: "include",
+        }
+      );
 
       if (!response.ok) throw new Error("Error al obtener pedidos");
 
@@ -37,7 +40,7 @@ const ReservaTarj: React.FC = () => {
     setSelectedReserva(null);
   };
 
-  // Filtro 
+  // Filtro
   const reservasFiltradas = reservas.filter((reserva) => {
     if (tabActiva === "pagadas") return reserva.estado === "pagada";
     else return reserva.estado !== "pagada";
@@ -45,7 +48,6 @@ const ReservaTarj: React.FC = () => {
 
   return (
     <div className="reserva-contenedor">
-      
       <div className="tabs-centro">
         <span
           className={`tab ${tabActiva === "reservas" ? "activa" : ""}`}
@@ -61,7 +63,6 @@ const ReservaTarj: React.FC = () => {
         </span>
       </div>
 
-      
       <div className="reserva-tarjeta">
         <div className="reserva-imagen">
           <img src="/images.jpg" alt="Servicio de catering" />
@@ -73,7 +74,6 @@ const ReservaTarj: React.FC = () => {
         </div>
       </div>
 
-      
       <div className="tarjetas-grid">
         {reservasFiltradas.map((reserva, index) => (
           <div
@@ -93,17 +93,33 @@ const ReservaTarj: React.FC = () => {
         ))}
       </div>
 
-      
       {modalVisible && selectedReserva && (
         <div className="modal-overlay" onClick={cerrarModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3>Detalles de la Reserva</h3>
-            <p><strong>Fecha del Evento:</strong> {selectedReserva.datosEvento.fechaEvento}</p>
-            <p><strong>Hora de Inicio:</strong> {selectedReserva.datosEvento.horaInicio}</p>
-            <p><strong>Horas Contratadas:</strong> {selectedReserva.datosEvento.cantHoras}</p>
-            <p><strong>Tipo de Evento:</strong> {selectedReserva.datosEvento.tipoEvento}</p>
-            <p><strong>Dirección:</strong> {selectedReserva.datosEvento.direccion}</p>
-            <p><strong>Distrito:</strong> {selectedReserva.datosEvento.distrito}</p>
+            <p>
+              <strong>Fecha del Evento:</strong>{" "}
+              {selectedReserva.datosEvento.fechaEvento}
+            </p>
+            <p>
+              <strong>Hora de Inicio:</strong>{" "}
+              {selectedReserva.datosEvento.horaInicio}
+            </p>
+            <p>
+              <strong>Horas Contratadas:</strong>{" "}
+              {selectedReserva.datosEvento.cantHoras}
+            </p>
+            <p>
+              <strong>Tipo de Evento:</strong>{" "}
+              {selectedReserva.datosEvento.tipoEvento}
+            </p>
+            <p>
+              <strong>Dirección:</strong>{" "}
+              {selectedReserva.datosEvento.direccion}
+            </p>
+            <p>
+              <strong>Distrito:</strong> {selectedReserva.datosEvento.distrito}
+            </p>
             <button onClick={cerrarModal}>Cerrar</button>
           </div>
         </div>

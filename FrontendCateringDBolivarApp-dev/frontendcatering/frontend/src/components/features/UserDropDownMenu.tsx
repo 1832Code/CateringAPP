@@ -7,6 +7,7 @@ import HistorialImg from "@/assets/images/HistorialReservaWhite.png";
 import UserEditImg from "@/assets/images/UserEditWhite.png";
 import imgPerfil from "@/assets/images/PerfilWhite.png";
 import { Usuario } from "../Interfaces/Usuario";
+import { useAuth } from "@/context/AuthContext";
 
 interface UserDropdownMenuProps {
   user: Usuario;
@@ -17,14 +18,12 @@ export const UserDropdownMenu = () => {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { logout } = useAuth();
   //Cerrar Sesión
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      // Elimina el token JWT
-      localStorage.removeItem("token");
-
-      // Redirige al home
-      window.location.href = "/";
+      await logout();
+      router.push("/");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
       alert("Error al cerrar sesión");

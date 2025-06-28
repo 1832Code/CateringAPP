@@ -130,14 +130,14 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
     const fetchUsuario = async () => {
       try {
         const res = await fetch("http://localhost:8084/api/usuarios/me", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          method: "GET",
+          credentials: "include",
         });
 
         if (!res.ok) throw new Error("No se pudo obtener el usuario");
 
         const data = await res.json();
+        console.log(data);
 
         // Actualiza el estado `pedido.usuario` con los datos reales
         setPedido((prev) => ({
@@ -173,8 +173,8 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
 

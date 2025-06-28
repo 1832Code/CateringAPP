@@ -13,7 +13,7 @@ import { Usuario } from "@/components/Interfaces/Usuario";
 import { useAuth } from "@/context/AuthContext";
 
 export const NavComponent = () => {
-  const { email, showLogin, setShowLogin } = useAuth();
+  const { loadingAuth, token, email, showLogin, setShowLogin } = useAuth();
   {
     /*State to control the show login form */
   }
@@ -96,7 +96,7 @@ export const NavComponent = () => {
             </nav>
 
             <div className={styles.LoginArea}>
-              {email ? (
+              {loadingAuth ? null : token ? (
                 <UserDropdownMenu />
               ) : (
                 <LoginButtom onClick={() => setShowLogin(true)} />

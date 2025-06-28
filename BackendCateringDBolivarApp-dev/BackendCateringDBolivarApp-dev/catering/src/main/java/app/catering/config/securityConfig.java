@@ -4,11 +4,13 @@ import java.util.Arrays;
 
 import app.catering.JWT.JwtAuthenticationFilter;
 import app.catering.Services.CustomUserDetailService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -48,6 +50,7 @@ public class securityConfig {
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
+                                "api/auth/logout",
                                 "/api/infomenu/predeterminados",
                                 "/api/items/**",
                                 "/api/tipo-servicio/**",
@@ -74,18 +77,6 @@ public class securityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-
-                // aquí se habilita logout
-                .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout")
-                        .logoutSuccessHandler((request, response, authentication) -> {
-                            String referer = request.getHeader("Referer");
-                            response.setStatus(200);
-                            response.sendRedirect(referer != null ? referer : "/"); // Si no hay Referer, redirige a raíz
-                        })
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                )
                 .build();
     }
 

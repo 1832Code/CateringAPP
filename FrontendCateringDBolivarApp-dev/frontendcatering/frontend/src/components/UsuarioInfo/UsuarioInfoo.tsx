@@ -23,9 +23,8 @@ const UsuarioInfoo: React.FC<UsuarioInfoP> = (props) => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch("http://localhost:8084/api/usuarios/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          method: "GET",
+          credentials: "include",
         });
 
         if (!response.ok) throw new Error("Error al obtener usuario");
@@ -55,8 +54,8 @@ const UsuarioInfoo: React.FC<UsuarioInfoP> = (props) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify(usuario),
       });
 
