@@ -11,6 +11,7 @@ import clsx from "clsx";
 import UserDropdownMenu from "@/components/features/UserDropDownMenu";
 import { Usuario } from "@/components/Interfaces/Usuario";
 import { useAuth } from "@/context/AuthContext";
+import { useSearchParams } from "next/navigation";
 
 export const NavComponent = () => {
   const { loadingAuth, token, email, showLogin, setShowLogin } = useAuth();
@@ -21,6 +22,16 @@ export const NavComponent = () => {
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
+
+  // To open the login form (middleware)
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const shouldShowLogin = searchParams.get("showLogin") === "true";
+    if (shouldShowLogin) {
+      setShowLogin(true);
+    }
+  }, [searchParams]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -84,7 +95,7 @@ export const NavComponent = () => {
                   <Link href="/">Inicio</Link>
                 </li>
                 <li className={styles.NavItem}>
-                  <Link href="/servicios">Servicios</Link>{" "}
+                  <Link href="/servicios">Menús</Link>{" "}
                 </li>
                 <li className={styles.NavItem}>
                   <Link href="/explorar">Explorar</Link>{" "}
