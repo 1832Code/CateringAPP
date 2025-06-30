@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-CateringApplication<catering>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "app.catering.CateringApplication",
+      "projectName": "catering",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

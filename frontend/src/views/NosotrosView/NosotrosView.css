@@ -1,0 +1,49 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.header {
+  display: flex;
+  height: 6vh;
+}
+.container-area {
+  display: flex;
+  flex-direction: column;
+  background-color: #1d1c1c;
+}
+.area-information {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.area-nav-layout {
+  display: none;
+}
+/*-----------------------------------------------------*/
+
+/*Area Párrafo */
+
+.area-mision-vision {
+  display: flex;
+  flex-direction: column;
+}
+.area-mision {
+  display: flex;
+}
+
+@media (max-width: 650px) {
+  .area-nav-layout {
+    display: flex;
+    height: 5.5em;
+  }
+}
+@media (min-width: 631px) and (max-width: 991px) {
+  .area-nav-layout {
+    display: flex;
+    height: 5.5em;
+  }
+}

@@ -1,0 +1,83 @@
+.usuario-tarjeta {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 50px;
+  background-color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 60px; 
+  border-bottom: 1px solid #e0e0e0;
+  padding: 30px 0;
+}
+
+.col {
+  flex: 1;
+  min-width: 280px;
+}
+
+.etiqueta {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.dato {
+  font-size: 20px;
+  font-weight: 500;
+  color: #222;
+  background-color: #f9f9f9;
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-top: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+@media screen and (max-width: 768px) {
+  .fila {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .col {
+    width: 100%;
+  }
+}
+
+.botones button {
+  background-color: #4a90e2;  
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+.botones button:hover {
+  background-color: #000305;  
+}
+
+
+.botones button.cancelar {
+  background-color: #e25c4a; 
+  box-shadow: 0 4px 8px rgba(226, 92, 74, 0.3);
+}
+
+.botones button.cancelar:hover {
+  background-color: #b74133; 
+}

@@ -1,0 +1,47 @@
+.InteractionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  width: 80vw;
+  padding: 4vh;
+
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.2); /* translúcido */
+  backdrop-filter: blur(15px); /* más sutil que el fondo */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* para efecto glass */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  gap: 4vh;
+}
+.InteractionArea h1 {
+  font-family: "Italiana";
+  font-size: 4vh;
+  font-weight: 600;
+}
+.CardsArea {
+  display: flex;
+
+  gap: 4vh;
+}
+
+.ButtonArea {
+  display: flex;
+  gap: 2vw;
+}
+
+@media (min-width: 200px) {
+  .CardsArea {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 1024px) {
+  .InteractionArea {
+    width: auto;
+    margin: 10vh;
+  }
+  .CardsArea {
+    flex-direction: row;
+  }
+}
