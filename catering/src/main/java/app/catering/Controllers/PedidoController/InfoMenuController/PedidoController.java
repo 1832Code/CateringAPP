@@ -2,6 +2,7 @@ package app.catering.Controllers.PedidoController.InfoMenuController;
 
 import app.catering.DTO.PedidoDTO;
 import app.catering.Mappers.PedidoMapper;
+import app.catering.Services.PedidoService.PedidoReportService;
 import app.catering.Services.PedidoService.InfoMenuService.PedidoService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -15,21 +16,56 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3001", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/pedidos")
 public class PedidoController {
-    @Autowired
-    private final PedidoService pedidoService;
-    @Autowired
-    private final PedidoMapper pedidoMapper;
 
-    public PedidoController(PedidoService pedidoService, PedidoMapper pedidoMapper) {
+    private final PedidoService pedidoService;
+    private final PedidoMapper pedidoMapper;
+    private final PedidoReportService pedidoReportService; // Autowired via constructor now
+
+    // Corrected constructor for better dependency injection
+    public PedidoController(
+            PedidoService pedidoService,
+            PedidoMapper pedidoMapper,
+            PedidoReportService pedidoReportService // Add this to constructor
+    ) {
         this.pedidoService = pedidoService;
         this.pedidoMapper = pedidoMapper;
+        this.pedidoReportService = pedidoReportService; // Assign it
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}/reporte")
+    public ResponseEntity<byte[]> descargarReportePedido(
+            @PathVariable Long id,
+            @RequestParam(value = "tipoDocumento", required = false, defaultValue = "FACTURA") String tipoDocumento // <--
+                                                                                                                    // ADD
+                                                                                                                    // THIS
+    ) {
+        try {
+            PedidoDTO pedido = pedidoService.findById(id);
+            // Now pass both the PedidoDTO and the tipoDocumento
+            byte[] pdfBytes = pedidoReportService.generarReportePedido(pedido, tipoDocumento); // <-- CORRECTED CALL
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition",
+                            "attachment; filename=pedido_" + id + "_" + tipoDocumento.toLowerCase() + ".pdf")
+                    .header("Content-Type", "application/pdf")
+                    .body(pdfBytes);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            // Log the exception details for debugging
+            ex.printStackTrace(); // REMOVE IN PRODUCTION, USE A PROPER LOGGER
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Return empty body or a
+                                                                                       // specific error message
+        }
+    }
+    //
+    //
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public List<PedidoDTO> getAllPedidos() {
         return pedidoService.findAll();
@@ -53,9 +89,9 @@ public class PedidoController {
         return ResponseEntity.ok(pedidos);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<List<PedidoDTO>> obtenerPedidosPorIdUsuario(@PathVariable Long id){
+    public ResponseEntity<List<PedidoDTO>> obtenerPedidosPorIdUsuario(@PathVariable Long id) {
 
         List<PedidoDTO> pedidos = pedidoService.getPedidosByUsuarioId(id);
         return ResponseEntity.ok(pedidos);
@@ -88,8 +124,6 @@ public class PedidoController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 
     @GetMapping("/mis-pedidos/pagados")
     public ResponseEntity<List<PedidoDTO>> obtenerPedidosPagadosPorEmail(

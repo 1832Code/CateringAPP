@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
 import app.catering.Repository.UsuarioRepository;
+import app.catering.Entity.User.Role;
 import app.catering.Entity.User.Usuario;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,33 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    public Usuario crearUsuarioDesdeAdmin(UsuarioUpdateAdminDTO dto) {
+        Usuario usuario = new Usuario();
+
+        usuario.setDni(dto.getDni());
+        usuario.setNombres(dto.getNombres());
+        usuario.setApellidos(dto.getApellidos());
+        usuario.setTelefono(dto.getTelefono());
+        usuario.setEmail(dto.getEmail());
+        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        if (dto.getRole() != null) {
+            Role roleEntity = roleRepository.findByName(dto.getRole())
+                    .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado: " + dto.getRole()));
+            usuario.setRoles(Set.of(roleEntity));
+        }
+
+        // Aquí podrías generar verificationCode:
+        usuario.setVerificationCode(generarVerificationCode());
+        usuario.setConfirmed(false);
+
+        return usuarioRepository.save(usuario);
+    }
+
+    private String generarVerificationCode() {
+        return java.util.UUID.randomUUID().toString();
+    }
 
     // Obtener todos los usuarios
     public List<Usuario> obtenerTodos() {
@@ -101,6 +130,5 @@ public class UsuarioService {
         Usuario usuario = obtenerPorId(id);
         usuarioRepository.delete(usuario);
     }
-    
 
 }

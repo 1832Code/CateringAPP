@@ -35,6 +35,7 @@ export const InformationMainView: React.FC<Props> = ({ user, onLogin }) => {
         </div>
         <p className={styles.SecondText}>Reserva tu catering ahora!!</p>
         <ButtonReservar></ButtonReservar>
+        
       </div>
     </div>
   );

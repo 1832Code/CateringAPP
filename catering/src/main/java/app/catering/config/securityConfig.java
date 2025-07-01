@@ -49,8 +49,8 @@ public class securityConfig {
                                                 .requestMatchers(
                                                                 "/api/auth/register",
                                                                 "/api/auth/login",
-                                                                "api/auth/verify",
-                                                                "api/auth/logout",
+                                                                "/api/auth/verify",
+                                                                "/api/auth/logout",
                                                                 "/api/infomenu/predeterminados",
                                                                 "/api/items/**",
                                                                 "/api/tipo-servicio/**",
@@ -70,15 +70,20 @@ public class securityConfig {
                                                 .requestMatchers(HttpMethod.POST, "/api/infomenu/**").hasRole("ADMIN")
                                                 .requestMatchers(HttpMethod.PUT, "/api/infomenu/**").hasRole("ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/api/infomenu/**").hasRole("ADMIN")
-                                                .requestMatchers("/api/pedidos/**").authenticated()
+                                                .requestMatchers("/api/auth/me").authenticated()
+                                                .requestMatchers("/api/pedidos/*/reporte").hasRole("ADMIN")
+                                                .requestMatchers("/api/pedidos/**").permitAll()
+                                                .requestMatchers("/api/export/**").hasRole("ADMIN")
                                                 .requestMatchers("/api/usuarios/me").authenticated()
+                                                .requestMatchers("/api/admin/**", "/api/admins/**").hasRole("ADMIN")
+
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                                //.oauth2Login(oauth2 -> oauth2
-                                  //              .successHandler(oAuth2LoginSuccessHandler)
-                                    //            .failureHandler(oAuth2LoginFailureHandler))
+                                // .oauth2Login(oauth2 -> oauth2
+                                // .successHandler(oAuth2LoginSuccessHandler)
+                                // .failureHandler(oAuth2LoginFailureHandler))
                                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                                 .formLogin(form -> form.disable())
                                 .httpBasic(basic -> basic.disable())
@@ -90,7 +95,7 @@ public class securityConfig {
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
                 configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://localhost:3001"));
-                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
                 configuration.setAllowedHeaders(Arrays.asList("*"));
                 configuration.setAllowCredentials(true);
 

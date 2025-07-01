@@ -1,9 +1,9 @@
 package app.catering.Controllers;
 
-
 import app.catering.Auth.AuthResponse;
 import app.catering.Auth.AuthService;
 import app.catering.Auth.RegisterRequest;
+import app.catering.Entity.Pedido.Pedido;
 import app.catering.Entity.User.Role;
 import app.catering.Entity.User.RoleName;
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.InfoMenuRepository;
@@ -17,17 +17,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/api/admin/dashboard")
 public class AdminDashboardController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminDashboardController.class);
-
 
     @Autowired
     private UsuarioRepository userRepository;
@@ -43,8 +43,6 @@ public class AdminDashboardController {
 
     @Autowired
     private AuthService authService;
-
-
 
     @GetMapping("/userCounts")
     @PreAuthorize("hasRole('ADMIN')")
@@ -69,7 +67,6 @@ public class AdminDashboardController {
         return ResponseEntity.ok(counts);
     }
 
-
     @GetMapping("/pedidoCount")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Long> getPedidoCount() {
@@ -89,4 +86,21 @@ public class AdminDashboardController {
     public ResponseEntity<AuthResponse> crearAdmin(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.crearAdmin(request));
     }
+
+    // PEDIDOS
+
+    @GetMapping("/pedidos-por-usuario")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Map<String, List<Pedido>>> getPedidosPorUsuario() {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        Map<String, List<Pedido>> pedidosPorUsuario = new HashMap<>();
+
+        for (Pedido pedido : pedidos) {
+            String email = pedido.getUsuario().getEmail(); // Ajusta según tu entidad
+            pedidosPorUsuario.computeIfAbsent(email, k -> new ArrayList<>()).add(pedido);
+        }
+
+        return ResponseEntity.ok(pedidosPorUsuario);
+    }
+
 }

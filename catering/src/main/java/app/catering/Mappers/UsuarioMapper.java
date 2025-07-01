@@ -1,5 +1,6 @@
 package app.catering.Mappers;
 
+import app.catering.DTO.UsuarioAdminDto;
 import app.catering.DTO.UsuarioDTO;
 import app.catering.DTO.UsuarioResponseDTO;
 import app.catering.DTO.UsuarioUpdateAdminDTO;
@@ -11,8 +12,30 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UsuarioMapper {
+
+public static UsuarioAdminDto toAdminDTO(Usuario usuario) {
+    return UsuarioAdminDto.builder()
+            .id(usuario.getId())
+            .dni(usuario.getDni())
+            .nombres(usuario.getNombres())
+            .apellidos(usuario.getApellidos())
+            .telefono(usuario.getTelefono())
+            .email(usuario.getEmail())
+            .confirmed(usuario.isConfirmed())
+            .verificationCode(usuario.getVerificationCode())
+            .roles(
+                    usuario.getRoles()
+                            .stream()
+                            .map(r -> r.getName().name())
+                            .collect(Collectors.toSet())
+            )
+            .build();
+}
+
+
     public static UsuarioDTO toDTO(Usuario usuario) {
         UsuarioDTO dto = new UsuarioDTO();
         dto.setId(usuario.getId());

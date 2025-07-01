@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
- public AuthResponse register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) {
         // 1. Check if user already exists
         if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("El correo electrónico ya está registrado.");
@@ -45,7 +46,8 @@ public class AuthService {
 
         // 2. Find the default role (e.g., ROLE_USER)
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Rol USER no encontrado. Por favor, contacte al administrador."));
+                .orElseThrow(
+                        () -> new RuntimeException("Rol USER no encontrado. Por favor, contacte al administrador."));
 
         // 3. Generate verification code
         String verificationCode = generateRandomCode(6); // Generate a 6-digit code
@@ -68,10 +70,10 @@ public class AuthService {
         // 5. Send verification email
         String subject = "Verificación de tu cuenta de Catering App";
         String body = "Hola " + usuario.getNombres() + ",\n\n"
-                    + "Gracias por registrarte en Catering App. Por favor, usa el siguiente código para verificar tu cuenta:\n\n"
-                    + "Código de Verificación: " + verificationCode + "\n\n"
-                    + "Si no solicitaste esto, puedes ignorar este correo.\n\n"
-                    + "Saludos,\nTu equipo de Catering App";
+                + "Gracias por registrarte en Catering App. Por favor, usa el siguiente código para verificar tu cuenta:\n\n"
+                + "Código de Verificación: " + verificationCode + "\n\n"
+                + "Si no solicitaste esto, puedes ignorar este correo.\n\n"
+                + "Saludos,\nTu equipo de Catering App";
         emailService.sendEmail(usuario.getEmail(), subject, body);
 
         // 6. Return a response indicating pending verification
@@ -80,19 +82,26 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
-        Usuario user = usuarioRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    // AuthService.java (ejemplo simplificado)
+    public AuthResponse login(LoginRequest loginRequest) {
+        Usuario usuario = usuarioRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
 
-        if (!user.isConfirmed()) {
-            throw new RuntimeException("Tu cuenta no ha sido verificada. Por favor, revisa tu correo para el código de verificación.");
+        if (!passwordEncoder.matches(loginRequest.getPassword(), usuario.getPassword())) {
+            throw new RuntimeException("Credenciales inválidas");
         }
 
-        String jwt = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwt).email(user.getEmail()).build();
+        // ⚠️ Verifica solo si no es ADMIN
+        if (!usuario.getRoles().contains("ROLE_ADMIN") && !usuario.isConfirmed()) {
+            throw new RuntimeException("Cuenta no verificada. Revisa tu email.");
+        }
+
+        String token = jwtService.generateToken(usuario);
+        return AuthResponse.builder()
+                .token(token)
+                .email(usuario.getEmail())
+                .roles(usuario.getRoles().stream().map(r -> r.getName().name()).toList())
+                .build();
     }
 
     public boolean verifyUser(String email, String code) {
@@ -125,8 +134,6 @@ public class AuthService {
         return code.toString();
     }
 
-
-
     public AuthResponse crearAdmin(RegisterRequest request) {
         if (usuarioRepository.findByEmailWithRoles(request.getEmail()).isPresent()) {
             throw new RuntimeException("Ya existe un usuario con este email.");
@@ -155,4 +162,10 @@ public class AuthService {
                 .roles(nuevoAdmin.getRoles().stream().map(r -> r.getName().name()).toList())
                 .build();
     }
+
+
+
+
+
+
 }
