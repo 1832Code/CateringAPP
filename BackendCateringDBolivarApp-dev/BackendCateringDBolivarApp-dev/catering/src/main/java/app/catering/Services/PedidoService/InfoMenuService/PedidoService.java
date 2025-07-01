@@ -11,6 +11,7 @@ import app.catering.Entity.Pedido.DatosEvento;
 import app.catering.Entity.Pedido.InfoMenu.InfoMenu;
 import app.catering.Entity.Pedido.Pedido;
 import app.catering.Repository.UsuarioRepository;
+import app.catering.Services.EmailService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -29,19 +30,21 @@ public class PedidoService {
     private final InfoMenuRepository infoMenuRepository;
     private final DatosEventoMapper datosEventoMapper;
     private final InfoMenuMapper infoMenuMapper;
+    private final EmailService emailService;
     @Autowired
     private Validator validator;
 
 
     public PedidoService(PedidoRepository pedidoRepository,
                          PedidoMapper pedidoMapper,
-                         UsuarioRepository usuarioRepository, InfoMenuRepository infoMenuRepository, DatosEventoMapper datosEventoMapper, InfoMenuMapper infoMenuMapper) {
+                         UsuarioRepository usuarioRepository, InfoMenuRepository infoMenuRepository, DatosEventoMapper datosEventoMapper, InfoMenuMapper infoMenuMapper, EmailService emailService) {
         this.pedidoRepository = pedidoRepository;
         this.pedidoMapper = pedidoMapper;
         this.usuarioRepository = usuarioRepository;
         this.infoMenuRepository = infoMenuRepository;
         this.datosEventoMapper = datosEventoMapper;
         this.infoMenuMapper = infoMenuMapper;
+        this.emailService = emailService;
     }
 
     public List<PedidoDTO> findAll() {
@@ -136,7 +139,15 @@ public class PedidoService {
         pedido.setEstado(dto.getEstado());
 
         Pedido saved = pedidoRepository.save(pedido);
+        // Enviar correo con PDF de confirmación
+        try {
+            emailService.enviarCorreoConPDF(saved);
+        } catch (Exception e) {
+            // Manejar o registrar el error, pero no interrumpir el flujo si falla el envío
+            System.err.println("Error al enviar correo: " + e.getMessage());
+        }
         return pedidoMapper.toDTO(saved);
+
     }
 
     public PedidoDTO update(Long id, PedidoDTO pedidoDTO) {
