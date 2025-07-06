@@ -44,7 +44,7 @@
   background: linear-gradient(145deg, #222, #2e2e2e);
   border-radius: 25px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.5);
   margin-bottom: 2rem;
   animation: fadeIn 0.8s ease-in-out;
   border: 1px solid #3d3d3d;
@@ -248,3 +248,82 @@
     transform: scale(1);
   }
 }
+
+/*Eliminar y modificar*/
+
+.modal-botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.btn-editar {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-editar:hover {
+  background-color: #2980b9;
+}
+
+.btn-eliminar {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-eliminar:hover {
+  background-color: #c0392b;
+}
+
+/*para modificairf*/
+
+.modal input {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #333;
+}
+
+.modal label {
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+}
+
+
+
+/******nuevo*/
+.botones-superiores {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.botones-horizontales {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.botones-horizontales button {
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
