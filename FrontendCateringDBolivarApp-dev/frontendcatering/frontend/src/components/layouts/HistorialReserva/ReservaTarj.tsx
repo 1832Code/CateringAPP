@@ -164,27 +164,29 @@ const ReservaTarj: React.FC = () => {
           <h2>Reserva de Catering</h2>
           <p>Servicios profesionales para eventos inolvidables</p>
 
-          <div className="botones-horizontales">
-            <button className="btn-pagar">Pagar</button>
-            <button
-              onClick={() => {
-                setModoAccion("modificar");
-                setEsperandoSeleccion(true);
-                alert("Haz clic en una reserva para modificar.");
-              }}
-            >
-              Modificar
-            </button>
-            <button
-              onClick={() => {
-                setModoAccion("eliminar");
-                setEsperandoSeleccion(true);
-                alert("Haz clic en una reserva para eliminar.");
-              }}
-            >
-              Eliminar
-            </button>
-          </div>
+          {tabActiva === "reservas" && (
+            <div className="botones-horizontales">
+              <button className="btn-pagar">Pagar</button>
+              <button
+                onClick={() => {
+                  setModoAccion("modificar");
+                  setEsperandoSeleccion(true);
+                  alert("Haz clic en una reserva para modificar.");
+                }}
+              >
+                Modificar
+              </button>
+              <button
+                onClick={() => {
+                  setModoAccion("eliminar");
+                  setEsperandoSeleccion(true);
+                  alert("Haz clic en una reserva para eliminar.");
+                }}
+              >
+                Eliminar
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
