@@ -3,6 +3,7 @@ package app.catering.Services;
 import app.catering.Entity.User.Usuario;
 import app.catering.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +25,10 @@ public class CustomUserDetailService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByEmailWithRoles(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        // 👉 Copiar los roles a un nuevo Set para evitar ConcurrentModificationException
+        if (!usuario.isConfirmed()) {
+            throw new BadCredentialsException("La cuenta no ha sido confirmada aún. Por favor revisa tu correo.");
+        }
+
         Set<String> nombresRoles = usuario.getRoles().stream()
                 .map(role -> role.getName().name())
                 .collect(Collectors.toSet());

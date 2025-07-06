@@ -64,9 +64,11 @@ export const RegisterForm = ({ onCancelarClick }: RegisterFormProps) => {
       const data = await res.json();
 
       if (res.ok) {
-        await login({ email, password }); // usar contexto para iniciar sesión tras registro
-        alert("Registro exitoso");
-        router.refresh();
+        alert(
+          data.message ||
+            "Registro exitoso. Por favor confirma tu correo antes de iniciar sesión."
+        );
+        onCancelarClick(); // opcional: cerrar el formulario de registro
       } else {
         alert(data.error || "Error al registrar");
       }

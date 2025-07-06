@@ -14,7 +14,7 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { login, setShowLogin } = useAuth();
+  const { login, setShowLogin, authError, setAuthError } = useAuth();
 
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
@@ -24,11 +24,11 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
     try {
       console.log("Iniciando autenticación...");
       await login({ email, password: contraseña });
+      // Si llega aquí es que no falló:
       setShowLogin(false);
       router.refresh(); // Refresca la página
     } catch (error: any) {
-      alert(error.message || "Error al iniciar sesión");
-    } finally {
+      setAuthError(error.message || "Usuario o contraseña incorrectos");
     }
   };
   return (
@@ -38,20 +38,29 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
       </div>
       <div className={styles.LoginArea}>
         <h2>Iniciar Sesión</h2>
+        {authError && (
+          <p style={{ color: "red", marginBottom: "1rem" }}>{authError}</p>
+        )}
         <form>
           <input
             className={styles.UserField}
             type="text"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (authError) setAuthError(null);
+            }}
           />
           <input
             className={styles.PasswordField}
             type="password"
             placeholder="Contraseña"
             value={contraseña}
-            onChange={(e) => setContraseña(e.target.value)}
+            onChange={(e) => {
+              setContraseña(e.target.value);
+              if (authError) setAuthError(null);
+            }}
           />
           <div className={styles.ButtonsArea}>
             <div className={styles.LoginButtonArea}>

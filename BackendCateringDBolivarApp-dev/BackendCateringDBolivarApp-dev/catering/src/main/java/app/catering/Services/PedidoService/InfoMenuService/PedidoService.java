@@ -149,7 +149,44 @@ public class PedidoService {
         return pedidoMapper.toDTO(saved);
 
     }
+    // Este update no genera un nuevo pedido
+    public PedidoDTO updatev2(Long id, PedidoDTO pedidoDTO) {
+        Pedido existing = pedidoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
 
+        // Actualizar usuario si es necesario
+        if (pedidoDTO.getUsuarioId() != null) {
+            Usuario usuario = usuarioRepository.findById(pedidoDTO.getUsuarioId())
+                    .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con ID: " + pedidoDTO.getUsuarioId()));
+            existing.setUsuario(usuario);
+        }
+
+        // Actualizar infoMenu si es necesario
+        if (pedidoDTO.getInfoMenuId() != null) {
+            InfoMenu infoMenu = infoMenuRepository.findById(pedidoDTO.getInfoMenuId())
+                    .orElseThrow(() -> new EntityNotFoundException("InfoMenu no encontrado con ID: " + pedidoDTO.getInfoMenuId()));
+            existing.setInfoMenu(infoMenu);
+        }
+
+        // Actualizar manualmente los campos de DatosEvento sin reemplazar el objeto
+        DatosEvento datosEventoExistente = existing.getDatosEvento();
+        DatosEvento nuevosDatos = datosEventoMapper.toEntity(pedidoDTO.getDatosEvento());
+
+        datosEventoExistente.setFechaEvento(nuevosDatos.getFechaEvento());
+        datosEventoExistente.setHoraInicio(nuevosDatos.getHoraInicio());
+        datosEventoExistente.setCantHorasEvento(nuevosDatos.getCantHorasEvento());
+        datosEventoExistente.setTipoEvento(nuevosDatos.getTipoEvento());
+        datosEventoExistente.setDireccion(nuevosDatos.getDireccion());
+        datosEventoExistente.setDistrito(nuevosDatos.getDistrito());
+
+        // Estado
+        existing.setEstado(pedidoDTO.getEstado());
+
+        Pedido updated = pedidoRepository.save(existing);
+        return pedidoMapper.toDTO(updated);
+    }
+
+    //Este update si genera un nuevo pedido
     public PedidoDTO update(Long id, PedidoDTO pedidoDTO) {
         Pedido existing = pedidoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
@@ -176,6 +213,7 @@ public class PedidoService {
         Pedido updated = pedidoRepository.save(existing);
         return pedidoMapper.toDTO(updated);
     }
+
 
     public void delete(Long id) {
         Pedido pedido = pedidoRepository.findById(id)

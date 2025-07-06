@@ -51,6 +51,7 @@ public class securityConfig {
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "api/auth/logout",
+                                "api/auth/verify",
                                 "/api/infomenu/predeterminados",
                                 "/api/items/**",
                                 "/api/tipo-servicio/**",

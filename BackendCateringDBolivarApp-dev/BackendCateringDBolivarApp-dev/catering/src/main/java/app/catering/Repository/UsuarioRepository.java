@@ -23,6 +23,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     long countByRolesContaining(Role role);
 
+    Optional<Usuario> findByVerificationCode(String verificationCode);
+
+
     // Nuevo metodo para usar el procedimiento almacenado
     @Transactional
     @Query(value = "CALL sp_registrarCliente(:dni, :nombres, :apellidos, :email, :telefono, :username, :password)",

@@ -31,9 +31,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setRoles([]);
     }
   };
-
+  const [authError, setAuthError] = useState<string | null>(null);
   const login = async (data: LoginData) => {
     setIsAuthenticating(true);
+    setAuthError(null);
     try {
       const res = await fetch("http://localhost:8084/api/auth/login", {
         method: "POST",
@@ -41,20 +42,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         credentials: "include",
         body: JSON.stringify(data),
       });
-
-      if (!res.ok) throw new Error("Error al iniciar sesión");
-
       const result = await res.json();
-      // Leer token directamente desde cookie
-      const cookieToken = getTokenFromCookie();
-      console.log("Token desde cookie luego del login:", cookieToken);
 
-      if (cookieToken) {
-        setToken(cookieToken);
-        decodeAndSetRoles(cookieToken);
+      if (!res.ok) {
+        if (result.error === "user_not_verified") {
+          throw new Error(
+            "Por favor confirma tu correo antes de iniciar sesión."
+          );
+        } else {
+          throw new Error(result.message || "Error al iniciar sesión");
+        }
       }
 
-      setEmail(result.email); // el backend devuelve solo el email
+      const cookieToken = getTokenFromCookie();
+      if (!cookieToken) {
+        throw new Error("No se pudo obtener el token después del login");
+      }
+
+      setToken(cookieToken);
+      decodeAndSetRoles(cookieToken);
+      setEmail(result.email);
       localStorage.setItem("email", result.email);
 
       router.refresh();
@@ -123,8 +130,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         token,
+        setToken,
         email,
+        setEmail,
         roles,
+        decodeAndSetRoles,
         login,
         logout,
         showLogin,
@@ -132,6 +142,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isAuthenticating,
         setIsAuthenticating,
         loadingAuth,
+        authError,
+        setAuthError,
       }}
     >
       {children}

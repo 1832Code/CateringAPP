@@ -66,11 +66,23 @@ public class PedidoController {
         PedidoDTO created = pedidoService.create(pedidoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
-
-    @PutMapping("/{id}")
+    //UPDATE QUE GENERA NUEVO PEDIDO
+    @PutMapping("/v1/{id}")
     public ResponseEntity<?> updatePedido(@PathVariable Long id, @Valid @RequestBody PedidoDTO pedidoDTO) {
         try {
             PedidoDTO updated = pedidoService.update(id, pedidoDTO);
+            return ResponseEntity.ok(updated);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido no encontrado con ID: " + id);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el pedido");
+        }
+    }
+    //UPDATE QUE GENERA NO GENERA NUEVO PEDIDO SOLO ACTUALIZA EL MISMO REGISTRO
+    @PutMapping("/v2/{id}")
+    public ResponseEntity<?> updatePedidov2(@PathVariable Long id, @Valid @RequestBody PedidoDTO pedidoDTO) {
+        try {
+            PedidoDTO updated = pedidoService.updatev2(id, pedidoDTO);
             return ResponseEntity.ok(updated);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido no encontrado con ID: " + id);
