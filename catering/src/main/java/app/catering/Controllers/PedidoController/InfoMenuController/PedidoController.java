@@ -39,27 +39,40 @@ public class PedidoController {
     @GetMapping("/{id}/reporte")
     public ResponseEntity<byte[]> descargarReportePedido(
             @PathVariable Long id,
-            @RequestParam(value = "tipoDocumento", required = false, defaultValue = "FACTURA") String tipoDocumento // <--
-                                                                                                                    // ADD
-                                                                                                                    // THIS
+            @RequestParam(value = "tipoDocumento", required = false, defaultValue = "FACTURA") String tipoDocumento
     ) {
         try {
             PedidoDTO pedido = pedidoService.findById(id);
-            // Now pass both the PedidoDTO and the tipoDocumento
-            byte[] pdfBytes = pedidoReportService.generarReportePedido(pedido, tipoDocumento); // <-- CORRECTED CALL
+            
+            if (pedido == null) {
+                System.err.println("Pedido no encontrado con ID: " + id);
+                return ResponseEntity.notFound().build();
+            }
+            
+            // Log para debugging
+            System.out.println("Generando reporte para pedido ID: " + id + ", tipo: " + tipoDocumento);
+            
+            byte[] pdfBytes = pedidoReportService.generarReportePedido(pedido, tipoDocumento);
+            
+            if (pdfBytes == null || pdfBytes.length == 0) {
+                System.err.println("Error: PDF generado está vacío para pedido ID: " + id);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
 
             return ResponseEntity.ok()
                     .header("Content-Disposition",
                             "attachment; filename=pedido_" + id + "_" + tipoDocumento.toLowerCase() + ".pdf")
                     .header("Content-Type", "application/pdf")
                     .body(pdfBytes);
+                    
         } catch (EntityNotFoundException e) {
+            System.err.println("Pedido no encontrado: " + e.getMessage());
             return ResponseEntity.notFound().build();
         } catch (Exception ex) {
-            // Log the exception details for debugging
-            ex.printStackTrace(); // REMOVE IN PRODUCTION, USE A PROPER LOGGER
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Return empty body or a
-                                                                                       // specific error message
+            // Log detallado del error
+            System.err.println("Error generando reporte para pedido ID " + id + ": " + ex.getMessage());
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
     //

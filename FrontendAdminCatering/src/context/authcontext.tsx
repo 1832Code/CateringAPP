@@ -19,6 +19,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (data: LoginData): Promise<DecodedToken | null> => {
     setIsAuthenticating(true);
     try {
+      console.log("Iniciando login con:", data.email);
+      
       const res = await fetch("http://localhost:8084/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -26,9 +28,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         body: JSON.stringify(data),
       });
 
+      console.log("Respuesta de login:", res.status, res.statusText);
+      console.log("Headers de respuesta de login:", Object.fromEntries(res.headers.entries()));
+
       if (!res.ok) throw new Error(await res.text());
 
       const { email, roles } = await res.json();
+      console.log("Login exitoso:", { email, roles });
 
       setAuthState({
         token: "cookie-httpOnly", // Simulamos que tenemos el token
@@ -59,18 +65,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const checkAuth = async () => {
     try {
+      console.log("Verificando autenticación...");
+      
+      // Log de cookies disponibles
+      console.log("Cookies disponibles:", document.cookie);
+      
       const res = await fetch("http://localhost:8084/api/auth/me", {
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+
+      console.log("Respuesta de /api/auth/me:", res.status, res.statusText);
+      console.log("Headers de respuesta:", Object.fromEntries(res.headers.entries()));
 
       if (res.ok) {
         const { email, roles } = await res.json();
+        console.log("Datos de autenticación recibidos:", { email, roles });
+        
         setAuthState({
           token: "cookie-httpOnly",
           email,
           roles: roles || [],
         });
       } else {
+        console.log("Sesión no válida, redirigiendo a login");
         // sesión no válida
         setAuthState({ token: null, email: null, roles: [] });
       }

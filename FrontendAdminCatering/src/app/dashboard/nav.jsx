@@ -250,7 +250,7 @@ export default function NavSlider() {
               icon={icons.ventas}
               label="Ventas"
               items={[
-                { label: "Productos", href: "/ventas/productos" },
+                { label: "Menus", href: "/dashboard/menus" },
                 { label: "Ventas", href: "/ventas/lista" },
                 { label: "Reembolsos", href: "/dashboard/ventas/reembolsos" },
                 { label: "Envíos", href: "/dashboard/ventas/envios" },
@@ -278,14 +278,14 @@ export default function NavSlider() {
             />
             <SidebarItem
               icon={icons.login}
-              label="Clientes"
-              href="/dashboard/clientes"
+              label="Categorias"
+              href="/dashboard/categoria"
               onClick={closeSidebar}
             />
             <SidebarItem
               icon={icons.register}
-              label="Reservas"
-              href="/dashboard/reservas"
+              label="items"
+              href="/dashboard/items"
               onClick={closeSidebar}
             />
             <SidebarItem

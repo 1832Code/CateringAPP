@@ -15,7 +15,8 @@ export default function TablaUsuarios() {
     email: "",
     telefono: "",
     password: "",
-    role: "USER",
+    role: "ROLE_USER",
+    confirmed: true,
   });
 
   const [editing, setEditing] = useState(false);
@@ -53,43 +54,55 @@ export default function TablaUsuarios() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      dni: formData.dni,
+      nombres: formData.nombres,
+      apellidos: formData.apellidos,
+      email: formData.email,
+      telefono: formData.telefono,
+      password: formData.password || undefined,
+      role: formData.role,
+      confirmed: formData.confirmed,
+    };
+    console.log("Payload:", payload);
 
     try {
-      const payload = {
-        dni: formData.dni,
-        nombres: formData.nombres,
-        apellidos: formData.apellidos,
-        email: formData.email,
-        telefono: formData.telefono,
-        password: formData.password || undefined,
-        role: formData.role,
+      const token = getTokenFromCookie();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
       };
 
       if (editing) {
         await axios.put(
           `http://localhost:8084/api/admins/usuarios/${formData.id}`,
           payload,
-          { withCredentials: true }
+          config
         );
       } else {
-        await axios.post(`http://localhost:8084/api/admins/usuarios`, payload, {
-          withCredentials: true,
-        });
+        await axios.post(
+          `http://localhost:8084/api/admins/usuarios`,
+          payload,
+          config
+        );
       }
 
       await cargarUsuarios();
       resetForm();
     } catch (err) {
       console.error("Error guardando usuario", err);
+      console.log("Error:", err.response);
       alert("Error guardando usuario: " + err?.response?.data?.message);
     }
   };
@@ -103,7 +116,8 @@ export default function TablaUsuarios() {
       email: usuario.email || "",
       telefono: usuario.telefono || "",
       password: "",
-      role: usuario.roles?.[0] || "USER",
+      role: usuario.roles?.[0] || "ROLE_USER",
+      confirmed: usuario.confirmed ?? true,
     });
     setEditing(true);
   };
@@ -117,10 +131,16 @@ export default function TablaUsuarios() {
       email: "",
       telefono: "",
       password: "",
-      role: "USER",
+      role: "ROLE_USER",
+      confirmed: true,
     });
     setEditing(false);
   };
+
+  function getTokenFromCookie() {
+    const match = document.cookie.match(new RegExp('(^| )token=([^;]+)'));
+    return match ? match[2] : null;
+  }
 
   return (
     <div className="p-4">
@@ -130,7 +150,7 @@ export default function TablaUsuarios() {
 
       <form
         onSubmit={handleSubmit}
-        className="mb-6 grid grid-cols-2 gap-4 bg-gray-100 p-4 rounded"
+        className="mb-6 grid grid-cols-2 gap-4 bg-gray-100 p-4 rounded dark:bg-slate-800"
       >
         <input
           type="text"
@@ -165,7 +185,7 @@ export default function TablaUsuarios() {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          className="border p-2"
+          className="border p-2 dark:bg-slate-800"
           required
         />
         <input
@@ -183,20 +203,31 @@ export default function TablaUsuarios() {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          className="border p-2"
+          className="border p-2 "
           required={!editing}
         />
         <select
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-          className="border p-2"
-          required
-        >
-          <option value="">Seleccione un rol</option>
-          <option value="ADMIN">ADMIN</option>
-          <option value="USER">USER</option>
-        </select>
+  name="role"
+  value={formData.role}
+  onChange={handleChange}
+  className="border p-2"
+  required
+>
+  <option value="">Seleccione un rol</option>
+  <option value="ROLE_ADMIN">ADMIN</option>
+  <option value="ROLE_USER">USER</option>
+</select>
+
+        <label className="flex items-center col-span-2">
+          <input
+            type="checkbox"
+            name="confirmed"
+            checked={formData.confirmed}
+            onChange={handleChange}
+            className="mr-2"
+          />
+          Usuario confirmado
+        </label>
 
         <div className="flex space-x-2 col-span-2">
           <button
@@ -220,7 +251,7 @@ export default function TablaUsuarios() {
       {loading ? (
         <p>Cargando...</p>
       ) : (
-        <table className="min-w-full bg-white border rounded shadow text-sm">
+        <table className="min-w-full bg-white border rounded shadow text-sm dark:bg-slate-700 dark:border-slate-500">
           <thead>
             <tr>
               <th className="border px-2 py-2">ID</th>

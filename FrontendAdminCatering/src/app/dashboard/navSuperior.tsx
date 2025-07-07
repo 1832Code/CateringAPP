@@ -14,6 +14,8 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/authcontext";
+import { useTheme } from "@/context/ThemeContext";
 
 type AdminData = {
   id: number;
@@ -24,9 +26,11 @@ type AdminData = {
 };
 
 export default function NavSuperior() {
+  const { email, roles, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [admin, setAdmin] = useState<AdminData | null>(null);
-  const [dark, setDark] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [, setIsMobile] = useState(false);
   const router = useRouter();
 
@@ -41,86 +45,74 @@ export default function NavSuperior() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Alternar modo oscuro
+  // Crear datos del admin desde el contexto de autenticación
   useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+    if (email) {
+      console.log("NavSuperior: Creando admin data con email:", email);
+      
+      // Extraer nombre y apellido del email
+      const emailParts = email.split('@')[0];
+      const nameParts = emailParts.split('.');
+      const firstName = nameParts[0] || 'Admin';
+      const lastName = nameParts[1] || 'User';
+      
+      const adminData: AdminData = {
+        id: 0, // No tenemos ID del contexto
+        email: email,
+        firstName: firstName.charAt(0).toUpperCase() + firstName.slice(1),
+        lastName: lastName.charAt(0).toUpperCase() + lastName.slice(1),
+        roles: roles || [],
+      };
+      
+      console.log("NavSuperior: Admin data creada:", adminData);
+      setAdmin(adminData);
+      setIsLoading(false);
     } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      setAdmin(null);
+      setIsLoading(false);
     }
-  }, [dark]);
+  }, [email, roles]);
 
-  // Cargar tema preferido
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDark(true);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setAdmin(null);
+      router.push("/auth/login");
+    } catch (error) {
+      console.error("Error en logout:", error);
+      // Forzar logout local si falla la petición
+      setAdmin(null);
+      router.push("/auth/login");
     }
-  }, []);
-
-  // Obtener detalles del administrador
-  useEffect(() => {
-    const fetchAdminDetails = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setAdmin(null);
-        return;
-      }
-
-      try {
-        const res = await fetch("http://localhost:8084/api/auth/me-admin", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-        });
-
-        if (res.ok) {
-          const data: AdminData = await res.json();
-          setAdmin(data);
-        } else if (res.status === 401 || res.status === 403) {
-          handleLogout();
-        } else {
-          setAdmin(null);
-          console.error(
-            "Error al obtener el admin:",
-            res.status,
-            await res.text()
-          );
-        }
-      } catch (error) {
-        console.error("Error de red:", error);
-        setAdmin(null);
-      }
-    };
-
-    fetchAdminDetails();
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userRoles");
-    setAdmin(null);
-    router.push("/auth/login");
   };
 
-  const toggleTheme = () => {
-    setDark(!dark);
+  // Generar iniciales para el avatar
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
+  // Generar color de fondo para el avatar
+  const getAvatarColor = (name: string) => {
+    const colors = [
+      "bg-blue-500",
+      "bg-gray-800", 
+      "bg-gray-100",
+      "bg-pink-500",
+      "bg-indigo-500",
+      "bg-red-500",
+      "bg-yellow-500",
+      "bg-teal-500"
+    ];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
   };
 
   return (
     <Navbar
       fluid
-      className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 sm:px-6"
+      className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 sm:px-6 shadow-sm"
     >
-      <div className="flex flex-wrap items-center justify-between w-full max-w-7xl mx-auto">
+      <div className="flex flex-wrap items-center justify-between">
         {/* Logo y marca */}
         <NavbarBrand
           href="/"
@@ -140,10 +132,10 @@ export default function NavSuperior() {
         <div className="hidden md:flex items-center space-x-4">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            aria-label={dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+            aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
           >
-            {dark ? (
+            {theme === "dark" ? (
               <svg
                 className="w-5 h-5 text-gray-800 dark:text-white"
                 fill="currentColor"
@@ -162,58 +154,94 @@ export default function NavSuperior() {
             )}
           </button>
 
-          {admin && (
+          {!isLoading && admin && (
             <div className="flex items-center space-x-4">
               <Dropdown
                 arrowIcon={false}
                 inline
                 label={
-                  <div className="flex items-center">
+                  <div className="flex items-center cursor-pointer hover:opacity-80 transition-opacity">
                     <Avatar
                       alt={`${admin.firstName} ${admin.lastName}`}
-                      img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                      img=""
                       rounded
-                      className="border-2 border-gray-300 dark:border-gray-600"
-                    />
+                      className={` dark:border-gray-600 ${(admin.firstName)}`}
+                    >
+                      
+                    </Avatar>
                     <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300 hidden lg:inline">
-                      {admin.firstName} {admin.lastName}
+                      {admin.firstName} 
                     </span>
+                    <svg className="w-4 h-4 ml-1 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
                   </div>
                 }
                 className="z-50 dark:bg-gray-800"
               >
                 <DropdownHeader className="dark:bg-gray-700">
                   <div className="px-4 py-3">
-                    <span className="block text-sm font-medium text-gray-900 dark:text-white">
-                      {admin.firstName} {admin.lastName}
-                    </span>
-                    <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                      {admin.email}
-                    </span>
+                    <div className="flex items-center space-x-3">
+                      <Avatar
+                        alt={`${admin.firstName}`}
+                        img=""
+                        rounded
+                        className={`${getAvatarColor(admin.firstName)}`}
+                      >
+                        
+                      </Avatar>
+                      <div>
+                        <span className="block text-sm font-medium text-gray-900 dark:text-white">
+                          {admin.firstName} 
+                        </span>
+                        <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
+                          {admin.email}
+                        </span>
+                        <span className="block text-xs text-blue-600 dark:text-blue-400 mt-1">
+                          Administrador
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </DropdownHeader>
                 <DropdownItem
                   as={Link}
                   href="/dashboard/setting"
-                  className="dark:hover:bg-gray-700 dark:text-gray-300"
+                  className="dark:hover:bg-gray-700 dark:text-gray-300 flex items-center"
                 >
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                  </svg>
                   Configuración
                 </DropdownItem>
                 <DropdownItem
                   as={Link}
                   href="/dashboard/perfil"
-                  className="dark:hover:bg-gray-700 dark:text-gray-300"
+                  className="dark:hover:bg-gray-700 dark:text-gray-300 flex items-center"
                 >
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                  </svg>
                   Perfil
                 </DropdownItem>
                 <DropdownDivider className="dark:border-gray-700" />
                 <DropdownItem
                   onClick={handleLogout}
-                  className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-gray-700"
+                  className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-gray-700 flex items-center"
                 >
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
+                  </svg>
                   Cerrar Sesión
                 </DropdownItem>
               </Dropdown>
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+              <div className="w-20 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
             </div>
           )}
         </div>
@@ -222,10 +250,10 @@ export default function NavSuperior() {
         <div className="flex md:hidden items-center space-x-2">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            aria-label={dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+            aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
           >
-            {dark ? (
+            {theme === "dark" ? (
               <svg
                 className="w-5 h-5 text-gray-800 dark:text-white"
                 fill="currentColor"
@@ -256,16 +284,20 @@ export default function NavSuperior() {
           className={`md:hidden w-full mt-2 ${isOpen ? "block" : "hidden"}`}
         >
           <div className="flex flex-col items-center py-4 space-y-4">
-            {admin && (
+            {!isLoading && admin && (
               <div className="flex flex-col items-center w-full">
                 <div className="flex flex-col items-center mb-4">
                   <Avatar
                     alt={`${admin.firstName} ${admin.lastName}`}
-                    img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                    img=""
                     rounded
                     size="lg"
-                    className="border-2 border-gray-300 dark:border-gray-600 mb-2"
-                  />
+                    className={`border-2 border-gray-300 dark:border-gray-600 mb-2 ${getAvatarColor(admin.firstName)}`}
+                  >
+                    <div className="text-white font-semibold text-lg">
+                      {getInitials(admin.firstName, admin.lastName)}
+                    </div>
+                  </Avatar>
                   <div className="text-center">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       {admin.firstName} {admin.lastName}
@@ -273,22 +305,31 @@ export default function NavSuperior() {
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       {admin.email}
                     </p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                      Administrador
+                    </p>
                   </div>
                 </div>
 
                 <div className="w-full space-y-2">
                   <Link
                     href="/dashboard/setting"
-                    className="block w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
+                    className="flex items-center w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
                     onClick={() => setIsOpen(false)}
                   >
+                    <svg className="w-4 h-4 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                    </svg>
                     Configuración
                   </Link>
                   <Link
                     href="/dashboard/perfil"
-                    className="block w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
+                    className="flex items-center w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
                     onClick={() => setIsOpen(false)}
                   >
+                    <svg className="w-4 h-4 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                    </svg>
                     Perfil
                   </Link>
                   <button
@@ -296,11 +337,22 @@ export default function NavSuperior() {
                       handleLogout();
                       setIsOpen(false);
                     }}
-                    className="block w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-red-600 dark:text-red-400"
+                    className="flex items-center w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-red-600 dark:text-red-400"
                   >
+                    <svg className="w-4 h-4 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
+                    </svg>
                     Cerrar Sesión
                   </button>
                 </div>
+              </div>
+            )}
+
+            {isLoading && (
+              <div className="flex flex-col items-center w-full">
+                <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse mb-4"></div>
+                <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+                <div className="w-48 h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
               </div>
             )}
           </div>

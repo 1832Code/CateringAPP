@@ -87,5 +87,9 @@ public static UsuarioAdminDto toAdminDTO(Usuario usuario) {
                     .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado: " + dto.getRole()));
             usuario.setRoles(Set.of(roleEntity));
         }
+
+        if (dto.getConfirmed() != null) {
+            usuario.setConfirmed(dto.getConfirmed());
+        }
     }
 }

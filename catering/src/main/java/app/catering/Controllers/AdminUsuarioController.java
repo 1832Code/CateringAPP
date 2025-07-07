@@ -44,6 +44,11 @@ public class AdminUsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> actualizar(@PathVariable Long id,
             @RequestBody UsuarioUpdateAdminDTO dto) {
+        System.out.println("\n=== AdminUsuarioController PUT /api/admins/usuarios/" + id + " ===");
+        System.out.println("DTO recibido: " + dto);
+        // Si tienes autenticación, puedes imprimir el usuario autenticado:
+        // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // System.out.println("Usuario autenticado: " + (auth != null ? auth.getName() : "null"));
         return ResponseEntity.ok(usuarioService.actualizarUsuarioPorId(id, dto));
     }
 

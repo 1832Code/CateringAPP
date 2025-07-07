@@ -1,5 +1,4 @@
 package app.catering.Controllers.PedidoController.InfoMenuController;
-
 import app.catering.DTO.InfoMenuDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,10 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import app.catering.Services.PedidoService.InfoMenuService.InfoMenuService;
 import app.catering.Entity.Pedido.InfoMenu.InfoMenu;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -29,10 +26,9 @@ public class InfoMenuController {
     // Crear un nuevo InfoMenu
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<InfoMenuDTO> createInfoMenu(@RequestBody InfoMenuDTO dto) {
-        InfoMenu created = infoMenuService.createInfoMenu(dto);
-        InfoMenuDTO responseDTO = infoMenuService.convertInfoToDTO(created);
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    public ResponseEntity<InfoMenu> crearInfoMenu(@RequestBody InfoMenuDTO dto) {
+        InfoMenu infoMenu = infoMenuService.createInfoMenu(dto);
+        return ResponseEntity.ok(infoMenu);
     }
 
     // Obtener todos los InfoMenu
@@ -50,6 +46,7 @@ public class InfoMenuController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     // Obtener todos los InfoMenu tipo "Predeterminado"
+
     @GetMapping("/predeterminados")
     public ResponseEntity<?> getPredeterminedMenus() {
         return ResponseEntity.ok(infoMenuService.getAllInfoMenusDefault());

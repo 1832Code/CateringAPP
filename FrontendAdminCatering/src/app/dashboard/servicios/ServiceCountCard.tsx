@@ -15,7 +15,7 @@ const ServiceCountCard: React.FC = () => {
         "http://localhost:8084/api/admin/dashboard/infomenu/cant-predeterminados",
         {
           method: "GET",
-          credentials: "include", // ✅ importante para enviar cookies automáticamente
+          credentials: "include", 
         }
       );
 
@@ -26,6 +26,7 @@ const ServiceCountCard: React.FC = () => {
 
       const data = await response.json();
       setServiceCount(data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Error desconocido");
       console.error("Error al obtener el conteo de servicios:", err);
@@ -57,28 +58,11 @@ const ServiceCountCard: React.FC = () => {
   }
 
   return (
-    <div className="rounded-xl p-6 shadow-lg border border-gray-200 bg-gradient-to-br from-gray-50 to-white hover:from-gray-100 hover:to-gray-50 dark:from-gray-900 dark:to-gray-800 dark:border-gray-700 dark:hover:from-gray-800 dark:hover:to-gray-700 transition-all duration-300 group">
-      <div className="flex flex-col items-center">
-        <div className="p-3 mb-4 rounded-full bg-blue-100 dark:bg-blue-900/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/50 transition-colors duration-300">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 text-blue-600 dark:text-blue-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            />
-          </svg>
-        </div>
-        <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">
-          Total de Servicios
-        </h2>
-        <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+    <div className="rounded-xl p-6 shadow-lg bg-gradient-to-br from-gray-50 to-white hover:from-gray-100 hover:to-gray-50 dark:from-gray-900 dark:to-gray-800 dark:border-gray-700 dark:hover:from-gray-800 dark:hover:to-gray-700 transition-all duration-300 group">
+      <div className="flex flex-row gap-2 items-center">
+       
+       
+        <div className="text-4xl font-bold text-gray-100 dark:text-blue-400 mb-1">
           {serviceCount}
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400">

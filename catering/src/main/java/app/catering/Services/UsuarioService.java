@@ -42,9 +42,12 @@ public class UsuarioService {
             usuario.setRoles(Set.of(roleEntity));
         }
 
+        if (dto.getConfirmed() != null) {
+            usuario.setConfirmed(dto.getConfirmed());
+        }
+
         // Aquí podrías generar verificationCode:
         usuario.setVerificationCode(generarVerificationCode());
-        usuario.setConfirmed(false);
 
         return usuarioRepository.save(usuario);
     }

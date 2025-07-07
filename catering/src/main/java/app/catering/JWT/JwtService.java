@@ -29,7 +29,14 @@ public class JwtService {
      * Extrae el correo (subject) desde el token JWT.
      */
     public String extractEmailFromToken(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            String email = extractClaim(token, Claims::getSubject);
+            System.out.println("JwtService - Email extracted from token: " + email);
+            return email;
+        } catch (Exception e) {
+            System.err.println("JwtService - Error extracting email from token: " + e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -51,8 +58,15 @@ public class JwtService {
      * Valida si el token es válido para el usuario especificado.
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String email = extractEmailFromToken(token);
-        return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        try {
+            final String email = extractEmailFromToken(token);
+            boolean isValid = email.equals(userDetails.getUsername()) && !isTokenExpired(token);
+            System.out.println("JwtService - Token validation: email=" + email + ", userDetails=" + userDetails.getUsername() + ", isValid=" + isValid);
+            return isValid;
+        } catch (Exception e) {
+            System.err.println("JwtService - Error validating token: " + e.getMessage());
+            return false;
+        }
     }
 
     /**

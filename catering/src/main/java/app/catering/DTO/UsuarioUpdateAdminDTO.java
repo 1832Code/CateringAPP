@@ -28,4 +28,6 @@ public class UsuarioUpdateAdminDTO {
 
     // El rol se recibe como texto y se transforma luego a una entidad Role
     private RoleName role;
+
+    private Boolean confirmed;
 }

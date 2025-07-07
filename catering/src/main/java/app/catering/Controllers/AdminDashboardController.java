@@ -10,6 +10,9 @@ import app.catering.Repository.PedidoRepository.InfoMenuRepository.InfoMenuRepos
 import app.catering.Repository.PedidoRepository.PedidoRepository;
 import app.catering.Repository.RoleRepository;
 import app.catering.Repository.UsuarioRepository;
+import app.catering.DTO.PedidoDTO;
+import app.catering.Services.PedidoService.InfoMenuService.PedidoService;
+import app.catering.Services.AdminReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3001", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/admin/dashboard")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminDashboardController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminDashboardController.class);
@@ -44,27 +49,41 @@ public class AdminDashboardController {
     @Autowired
     private AuthService authService;
 
-    @GetMapping("/userCounts")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Long>> getUserCounts() {
-        long totalUsers = userRepository.count();
+    @Autowired
+    private PedidoService pedidoService;
 
-        Optional<Role> adminRoleOptional = roleRepository.findByName(RoleName.ROLE_ADMIN);
+    @Autowired
+    private AdminReportService adminReportService;
 
-        long totalAdmins = 0;
-        if (adminRoleOptional.isPresent()) {
-            Role adminRole = adminRoleOptional.get();
-            totalAdmins = userRepository.countByRolesContaining(adminRole);
-        } else {
-
-            logger.warn("ROLE_ADMIN not found in the roles table.");
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Object>> getDashboardStats() {
+        try {
+            List<PedidoDTO> allPedidos = pedidoService.findAll();
+            
+            Map<String, Object> stats = new HashMap<>();
+            stats.put("totalPedidos", allPedidos.size());
+            stats.put("pedidosPendientes", allPedidos.stream().filter(p -> "pendiente".equals(p.getEstado())).count());
+            stats.put("pedidosCompletados", allPedidos.stream().filter(p -> "completado".equals(p.getEstado())).count());
+            stats.put("pedidosCancelados", allPedidos.stream().filter(p -> "cancelado".equals(p.getEstado())).count());
+            stats.put("totalIngresos", calculateTotalIngresos(allPedidos));
+            stats.put("promedioEventosPorMes", calculatePromedioEventosPorMes(allPedidos));
+            stats.put("distritosMasPopulares", getDistritosMasPopulares(allPedidos));
+            stats.put("tiposEventoMasPopulares", getTiposEventoMasPopulares(allPedidos));
+            
+            return ResponseEntity.ok(stats);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
         }
+    }
 
-        Map<String, Long> counts = new HashMap<>();
-        counts.put("totalUsers", totalUsers);
-        counts.put("totalAdmins", totalAdmins);
-
-        return ResponseEntity.ok(counts);
+    @GetMapping("/userCounts")
+    public ResponseEntity<Map<String, Object>> getUserCounts() {
+        try {
+            Map<String, Object> counts = adminReportService.getUserCounts();
+            return ResponseEntity.ok(counts);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/pedidoCount")
@@ -103,4 +122,54 @@ public class AdminDashboardController {
         return ResponseEntity.ok(pedidosPorUsuario);
     }
 
+    private double calculateTotalIngresos(List<PedidoDTO> pedidos) {
+        // Implementar lógica de cálculo de ingresos basada en tus necesidades
+        return pedidos.stream()
+                .filter(p -> "pagado".equals(p.getEstado()) || "completado".equals(p.getEstado()))
+                .mapToDouble(p -> p.getInfoMenu() != null ? p.getInfoMenu().getPrecio() : 0.0)
+                .sum();
+    }
+
+    private double calculatePromedioEventosPorMes(List<PedidoDTO> pedidos) {
+        // Implementar lógica de cálculo de promedio mensual
+        return pedidos.size() / 12.0; // Simplificado
+    }
+
+    private List<Map<String, Object>> getDistritosMasPopulares(List<PedidoDTO> pedidos) {
+        return pedidos.stream()
+                .filter(p -> p.getDatosEvento() != null && p.getDatosEvento().getDistrito() != null)
+                .collect(java.util.stream.Collectors.groupingBy(
+                        p -> p.getDatosEvento().getDistrito(),
+                        java.util.stream.Collectors.counting()
+                ))
+                .entrySet().stream()
+                .map(entry -> {
+                    Map<String, Object> distrito = new HashMap<>();
+                    distrito.put("nombre", entry.getKey());
+                    distrito.put("cantidad", entry.getValue());
+                    return distrito;
+                })
+                .sorted((a, b) -> ((Long) b.get("cantidad")).compareTo((Long) a.get("cantidad")))
+                .limit(5)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    private List<Map<String, Object>> getTiposEventoMasPopulares(List<PedidoDTO> pedidos) {
+        return pedidos.stream()
+                .filter(p -> p.getDatosEvento() != null && p.getDatosEvento().getTipoEvento() != null)
+                .collect(java.util.stream.Collectors.groupingBy(
+                        p -> p.getDatosEvento().getTipoEvento(),
+                        java.util.stream.Collectors.counting()
+                ))
+                .entrySet().stream()
+                .map(entry -> {
+                    Map<String, Object> tipo = new HashMap<>();
+                    tipo.put("nombre", entry.getKey());
+                    tipo.put("cantidad", entry.getValue());
+                    return tipo;
+                })
+                .sorted((a, b) -> ((Long) b.get("cantidad")).compareTo((Long) a.get("cantidad")))
+                .limit(5)
+                .collect(java.util.stream.Collectors.toList());
+    }
 }

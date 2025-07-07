@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import app.catering.Services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @CrossOrigin
@@ -95,12 +98,30 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> me(@AuthenticationPrincipal Jwt principal) {
-        String email = principal.getClaimAsString("sub");
-        var roles = principal.getClaimAsStringList("roles");
-        return ResponseEntity.ok(Map.of(
-                "email", email,
-                "roles", roles));
+    public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails principal) {
+        try {
+            System.out.println("AuthController /me - Principal: " + principal);
+            
+            if (principal == null) {
+                System.out.println("AuthController /me - Principal is null");
+                return ResponseEntity.status(403).body(Map.of("error", "No autenticado"));
+            }
+            
+            String email = principal.getUsername();
+            var roles = principal.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
+            
+            System.out.println("AuthController /me - Email: " + email + ", Roles: " + roles);
+            
+            return ResponseEntity.ok(Map.of(
+                    "email", email,
+                    "roles", roles));
+        } catch (Exception e) {
+            System.err.println("AuthController /me - Error: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("error", "Error interno del servidor"));
+        }
     }
 
 }

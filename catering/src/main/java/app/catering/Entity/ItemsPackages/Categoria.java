@@ -28,5 +28,5 @@ public class Categoria {
     private String descripcion;
 
     @Column(name = "activo")
-    private Boolean activo;
+    private Boolean activo = true;
 }

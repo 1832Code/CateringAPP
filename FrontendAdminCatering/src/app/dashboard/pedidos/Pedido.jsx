@@ -1,16 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useAuth } from "@/context/authcontext";
 
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [updating, setUpdating] = useState(false);
+  const [expandedOrders, setExpandedOrders] = useState(new Set());
+  const { roles } = useAuth();
 
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  // Debug: Log roles cuando cambien
+  useEffect(() => {
+    console.log("Roles del usuario:", roles);
+  }, [roles]);
 
   const fetchOrders = async () => {
     try {
@@ -31,34 +39,67 @@ const AllOrders = () => {
     }
   };
 
+  const toggleOrderExpansion = (orderId) => {
+    setExpandedOrders(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(orderId)) {
+        newSet.delete(orderId);
+      } else {
+        newSet.add(orderId);
+      }
+      return newSet;
+    });
+  };
+
   const handleEstadoChange = async (id, nuevoEstado) => {
+    // Verificar si el usuario tiene rol ADMIN
+    if (!roles.includes("ROLE_ADMIN")) {
+      alert("No tienes permisos para cambiar el estado. Se requiere rol ADMIN.");
+      return;
+    }
+
     try {
       setUpdating(true);
 
       const response = await fetch(
-        `http://localhost:8084/api/pedidos/${id}/estado`,
+        `http://localhost:8084/api/export/pedidos/${id}/estado`,
         {
           method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ estado: nuevoEstado }),
           credentials: "include",
         }
       );
 
       if (!response.ok) {
-        throw new Error("Error al actualizar el estado del pedido.");
+        if (response.status === 403) {
+          throw new Error("No tienes permisos para cambiar el estado. Se requiere rol ADMIN.");
+        } else {
+          throw new Error("Error al actualizar el estado del pedido.");
+        }
       }
 
       await fetchOrders(); // recarga los pedidos tras el cambio
     } catch (error) {
       console.error(error);
-      alert("Hubo un error actualizando el estado.");
+      alert(error.message);
     } finally {
       setUpdating(false);
     }
   };
 
   const downloadFactura = async (pedidoId) => {
+    // Verificar si el usuario tiene rol ADMIN
+    if (!roles.includes("ROLE_ADMIN")) {
+      alert("No tienes permisos para descargar facturas. Se requiere rol ADMIN.");
+      return;
+    }
+
     try {
+      console.log("Iniciando descarga de factura para pedido:", pedidoId);
+      
       const response = await fetch(
         `http://localhost:8084/api/pedidos/${pedidoId}/reporte?tipoDocumento=FACTURA`,
         {
@@ -67,22 +108,42 @@ const AllOrders = () => {
         }
       );
 
+      console.log("Respuesta del servidor:", response.status, response.statusText);
+
       if (!response.ok) {
-        throw new Error("Error al descargar el PDF");
+        if (response.status === 403) {
+          throw new Error("No tienes permisos para descargar facturas. Se requiere rol ADMIN.");
+        } else if (response.status === 404) {
+          throw new Error("Pedido no encontrado.");
+        } else if (response.status === 500) {
+          throw new Error("Error interno del servidor al generar el PDF.");
+        } else {
+          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+        }
       }
 
       const blob = await response.blob();
+      
+      if (blob.size === 0) {
+        throw new Error("El archivo PDF generado está vacío.");
+      }
+
       const url = window.URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = `pedido_${pedidoId}.pdf`;
+      link.download = `pedido_${pedidoId}_factura.pdf`;
       document.body.appendChild(link);
       link.click();
       link.remove();
+      
+      // Limpiar la URL del objeto
+      window.URL.revokeObjectURL(url);
+      
+      console.log("Factura descargada exitosamente");
     } catch (error) {
-      console.error(error);
-      alert("No se pudo descargar la factura.");
+      console.error("Error al descargar factura:", error);
+      alert(`Error al descargar la factura: ${error.message}`);
     }
   };
 
@@ -206,28 +267,33 @@ const AllOrders = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
-            {orders.map((order) => (
-              <div
-                key={order.id}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg"
-              >
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-                        Pedido #{order.id}
-                      </h2>
-                      <div className="flex items-center gap-2 mt-1">
+          <div className="space-y-4">
+            {orders.map((order) => {
+              const isExpanded = expandedOrders.has(order.id);
+              return (
+                <div
+                  key={order.id}
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg"
+                >
+                  {/* Header del acordeón - Siempre visible */}
+                  <div 
+                    className="p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200"
+                    onClick={() => toggleOrderExpansion(order.id)}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-4">
+                        <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+                          Pedido #{order.id}
+                        </h2>
                         <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${
                             order.estado === "Nuevo"
-                              ? "bg-blue-100 text-blue-800"
+                              ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                               : order.estado === "En Proceso"
-                              ? "bg-yellow-100 text-yellow-800"
+                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                               : order.estado === "Recibido"
-                              ? "bg-purple-100 text-purple-800"
-                              : "bg-green-100 text-green-800"
+                              ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
+                              : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                           }`}
                         >
                           {order.estado}
@@ -236,40 +302,44 @@ const AllOrders = () => {
                           Usuario ID: {order.usuarioId}
                         </span>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Cambiar estado:
-                      </label>
-                      <select
-                        className="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={order.estado}
-                        onChange={(e) =>
-                          handleEstadoChange(order.id, e.target.value)
-                        }
-                        disabled={updating}
-                      >
-                        <option value="Nuevo">Nuevo</option>
-                        <option value="En Proceso">En Proceso</option>
-                        <option value="Recibido">Recibido</option>
-                        <option value="Culminado">Culminado</option>
-                      </select>
-                      <button
-                        onClick={() => downloadFactura(order.id)}
-                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                      >
-                        Descargar Factura
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    {/* Datos del Evento */}
-                    <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
-                      <h3 className="font-semibold text-lg text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Cambiar estado:
+                          </label>
+                          <select
+                            className="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={order.estado}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              handleEstadoChange(order.id, e.target.value);
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            disabled={updating}
+                          >
+                            <option value="Nuevo">Nuevo</option>
+                            <option value="En Proceso">En Proceso</option>
+                            <option value="Recibido">Recibido</option>
+                            <option value="Culminado">Culminado</option>
+                          </select>
+                        </div>
+                        
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            downloadFactura(order.id);
+                          }}
+                          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+                        >
+                          Descargar Factura
+                        </button>
+                        
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
+                          className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180' : ''
+                          }`}
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -278,266 +348,295 @@ const AllOrders = () => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            d="M19 9l-7 7-7-7"
                           />
                         </svg>
-                        Datos del Evento
-                      </h3>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Tipo:
-                          </span>
-                          <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {order.datosEvento?.tipoEvento || "N/A"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Fecha:
-                          </span>
-                          <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {order.datosEvento?.fechaEvento || "N/A"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Distrito:
-                          </span>
-                          <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {order.datosEvento?.distrito || "N/A"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Hora Inicio:
-                          </span>
-                          <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {order.datosEvento?.horaInicio || "N/A"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Dirección:
-                          </span>
-                          <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {order.datosEvento?.direccion || "N/A"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Horas:
-                          </span>
-                          <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {order.datosEvento?.cantHoras || "N/A"}
-                          </span>
-                        </div>
                       </div>
                     </div>
-
-                    {/* Información del Menú */}
-                    {order.infoMenu && (
-                      <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
-                        <h3 className="font-semibold text-lg text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          Menú Contratado
-                        </h3>
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">
-                              Título:
-                            </span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200">
-                              {order.infoMenu.titulo}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">
-                              Descripción:
-                            </span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200">
-                              {order.infoMenu.descripcion}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">
-                              Precio:
-                            </span>
-                            <span className="font-medium text-blue-600 dark:text-blue-400">
-                              ${order.infoMenu.precio}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">
-                              Personas:
-                            </span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200">
-                              {order.infoMenu.cantPersonas}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">
-                              Tipo:
-                            </span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200">
-                              {order.infoMenu.tipoInfoMenu}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
 
-                  {/* Detalles adicionales */}
-                  {order.infoMenu && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {/* Servicio */}
-                      {order.infoMenu.servicio && (
-                        <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
-                          <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                              />
-                            </svg>
-                            Servicio
-                          </h3>
-                          <div className="space-y-1">
-                            <p className="font-medium text-gray-800 dark:text-gray-200">
-                              {order.infoMenu.servicio.tipoServicio?.nombre}
-                            </p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              {
-                                order.infoMenu.servicio.tipoServicio
-                                  ?.descripcion
-                              }
-                            </p>
+                  {/* Contenido expandible del acordeón */}
+                  <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-none' : 'max-h-0'}`}>
+                    <div className="px-6 pb-6 border-t border-gray-200 dark:border-gray-700">
+                      <div className="pt-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                          {/* Datos del Evento */}
+                          <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
+                            <h3 className="font-semibold text-lg text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                              </svg>
+                              Datos del Evento
+                            </h3>
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  Tipo:
+                                </span>
+                                <span className="font-medium text-gray-800 dark:text-gray-200">
+                                  {order.datosEvento?.tipoEvento || "N/A"}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  Fecha:
+                                </span>
+                                <span className="font-medium text-gray-800 dark:text-gray-200">
+                                  {order.datosEvento?.fechaEvento || "N/A"}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  Distrito:
+                                </span>
+                                <span className="font-medium text-gray-800 dark:text-gray-200">
+                                  {order.datosEvento?.distrito || "N/A"}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  Hora Inicio:
+                                </span>
+                                <span className="font-medium text-gray-800 dark:text-gray-200">
+                                  {order.datosEvento?.horaInicio || "N/A"}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  Dirección:
+                                </span>
+                                <span className="font-medium text-gray-800 dark:text-gray-200">
+                                  {order.datosEvento?.direccion || "N/A"}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  Horas:
+                                </span>
+                                <span className="font-medium text-gray-800 dark:text-gray-200">
+                                  {order.datosEvento?.cantHoras || "N/A"}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          {order.infoMenu.servicio.items?.length > 0 && (
-                            <div className="mt-3">
-                              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                Items incluidos:
-                              </h4>
-                              <ul className="space-y-1">
-                                {order.infoMenu.servicio.items.map(
-                                  (itemWrapper, idx) => (
-                                    <li
-                                      key={idx}
-                                      className="flex justify-between text-sm"
-                                    >
-                                      <span className="text-gray-600 dark:text-gray-300">
-                                        {itemWrapper.item?.nombre}
-                                      </span>
-                                      <span className="text-gray-800 dark:text-gray-200 font-medium">
-                                        ${itemWrapper.item?.precio}
-                                      </span>
-                                    </li>
-                                  )
-                                )}
-                              </ul>
+
+                          {/* Información del Menú */}
+                          {order.infoMenu && (
+                            <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
+                              <h3 className="font-semibold text-lg text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  />
+                                </svg>
+                                Menú Contratado
+                              </h3>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600 dark:text-gray-400">
+                                    Título:
+                                  </span>
+                                  <span className="font-medium text-gray-800 dark:text-gray-200">
+                                    {order.infoMenu.titulo}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600 dark:text-gray-400">
+                                    Descripción:
+                                  </span>
+                                  <span className="font-medium text-gray-800 dark:text-gray-200">
+                                    {order.infoMenu.descripcion}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600 dark:text-gray-400">
+                                    Precio:
+                                  </span>
+                                  <span className="font-medium text-blue-600 dark:text-blue-400">
+                                    ${order.infoMenu.precio}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600 dark:text-gray-400">
+                                    Personas:
+                                  </span>
+                                  <span className="font-medium text-gray-800 dark:text-gray-200">
+                                    {order.infoMenu.cantPersonas}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600 dark:text-gray-400">
+                                    Tipo:
+                                  </span>
+                                  <span className="font-medium text-gray-800 dark:text-gray-200">
+                                    {order.infoMenu.tipoInfoMenu}
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           )}
                         </div>
-                      )}
 
-                      {/* Personal */}
-                      {order.infoMenu.personal?.personalInfo?.length > 0 && (
-                        <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
-                          <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                              />
-                            </svg>
-                            Personal
-                          </h3>
-                          <ul className="space-y-2">
-                            {order.infoMenu.personal.personalInfo.map(
-                              (pers, idx) => (
-                                <li key={idx} className="flex justify-between">
-                                  <span className="text-gray-600 dark:text-gray-300">
-                                    {pers.tipoPersonal}
-                                  </span>
-                                  <span className="font-medium text-gray-800 dark:text-gray-200">
-                                    {pers.cantidad}
-                                  </span>
-                                </li>
-                              )
+                        {/* Detalles adicionales */}
+                        {order.infoMenu && (
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* Servicio */}
+                            {order.infoMenu.servicio && (
+                              <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
+                                <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                                    />
+                                  </svg>
+                                  Servicio
+                                </h3>
+                                <div className="space-y-1">
+                                  <p className="font-medium text-gray-800 dark:text-gray-200">
+                                    {order.infoMenu.servicio.tipoServicio?.nombre}
+                                  </p>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {
+                                      order.infoMenu.servicio.tipoServicio
+                                        ?.descripcion
+                                    }
+                                  </p>
+                                </div>
+                                {order.infoMenu.servicio.items?.length > 0 && (
+                                  <div className="mt-3">
+                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
+                                      Items incluidos:
+                                    </h4>
+                                    <ul className="space-y-1">
+                                      {order.infoMenu.servicio.items.map(
+                                        (itemWrapper, idx) => (
+                                          <li
+                                            key={idx}
+                                            className="flex justify-between text-sm"
+                                          >
+                                            <span className="text-gray-600 dark:text-gray-300">
+                                              {itemWrapper.item?.nombre}
+                                            </span>
+                                            <span className="text-gray-800 dark:text-gray-200 font-medium">
+                                              ${itemWrapper.item?.precio}
+                                            </span>
+                                          </li>
+                                        )
+                                      )}
+                                    </ul>
+                                  </div>
+                                )}
+                              </div>
                             )}
-                          </ul>
-                        </div>
-                      )}
 
-                      {/* Extras */}
-                      {order.infoMenu.extra?.extraInfo?.length > 0 && (
-                        <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
-                          <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                            Extras
-                          </h3>
-                          <ul className="space-y-2">
-                            {order.infoMenu.extra.extraInfo.map((ext, idx) => (
-                              <li key={idx} className="flex justify-between">
-                                <span className="text-gray-600 dark:text-gray-300">
-                                  {ext.tipoExtra}
-                                </span>
-                                <span className="font-medium text-gray-800 dark:text-gray-200">
-                                  {ext.cantidad}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                            {/* Personal */}
+                            {order.infoMenu.personal?.personalInfo?.length > 0 && (
+                              <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
+                                <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                    />
+                                  </svg>
+                                  Personal
+                                </h3>
+                                <ul className="space-y-2">
+                                  {order.infoMenu.personal.personalInfo.map(
+                                    (pers, idx) => (
+                                      <li key={idx} className="flex justify-between">
+                                        <span className="text-gray-600 dark:text-gray-300">
+                                          {pers.tipoPersonal}
+                                        </span>
+                                        <span className="font-medium text-gray-800 dark:text-gray-200">
+                                          {pers.cantidad}
+                                        </span>
+                                      </li>
+                                    )
+                                  )}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* Extras */}
+                            {order.infoMenu.extra?.extraInfo?.length > 0 && (
+                              <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
+                                <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                  </svg>
+                                  Extras
+                                </h3>
+                                <ul className="space-y-2">
+                                  {order.infoMenu.extra.extraInfo.map((ext, idx) => (
+                                    <li key={idx} className="flex justify-between">
+                                      <span className="text-gray-600 dark:text-gray-300">
+                                        {ext.tipoExtra}
+                                      </span>
+                                      <span className="font-medium text-gray-800 dark:text-gray-200">
+                                        {ext.cantidad}
+                                      </span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

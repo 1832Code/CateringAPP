@@ -36,10 +36,13 @@ public class ItemService {
     public ItemDTO createItem(ItemDTO itemDTO) {
         Item item = ItemMapper.toEntity(itemDTO);
 
-        // Establecer la categoría completa desde DB si existe
-        CategoriaDTO categoriaDTO = itemDTO.getCategoria();
-        if (categoriaDTO != null && categoriaDTO.getId() != null) {
-            categoriaRepository.findById(categoriaDTO.getId()).ifPresent(item::setCategoria);
+        // Establecer la categoría desde idCategoria o desde el objeto categoria
+        Long idCategoria = itemDTO.getIdCategoria();
+        if (idCategoria == null && itemDTO.getCategoria() != null) {
+            idCategoria = itemDTO.getCategoria().getId();
+        }
+        if (idCategoria != null) {
+            categoriaRepository.findById(idCategoria).ifPresent(item::setCategoria);
         }
 
         item.setActivo(true);
@@ -57,9 +60,13 @@ public class ItemService {
         item.setPrecio(itemDTO.getPrecio());
         item.setImageURL(itemDTO.getImageURL());
 
-        CategoriaDTO categoriaDTO = itemDTO.getCategoria();
-        if (categoriaDTO != null && categoriaDTO.getId() != null) {
-            categoriaRepository.findById(categoriaDTO.getId()).ifPresent(item::setCategoria);
+        // Establecer la categoría desde idCategoria o desde el objeto categoria
+        Long idCategoria = itemDTO.getIdCategoria();
+        if (idCategoria == null && itemDTO.getCategoria() != null) {
+            idCategoria = itemDTO.getCategoria().getId();
+        }
+        if (idCategoria != null) {
+            categoriaRepository.findById(idCategoria).ifPresent(item::setCategoria);
         }
 
         Item updatedItem = itemRepository.save(item);

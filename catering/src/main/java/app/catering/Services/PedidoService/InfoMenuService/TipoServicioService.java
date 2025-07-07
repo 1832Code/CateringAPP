@@ -41,7 +41,7 @@ public class TipoServicioService {
     public TipoServicio update(Long id, TipoServicio newData) {
         return tipoServicioRepository.findById(id).map(ts -> {
             ts.setNombre(newData.getNombre());
-            // No hay campo `config`, se elimina esa línea.
+            ts.setDescripcion(newData.getDescripcion());
             return tipoServicioRepository.save(ts);
         }).orElse(null);
     }
