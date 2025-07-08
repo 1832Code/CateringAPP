@@ -11,8 +11,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthResponse {
+    // Token JWT generado tras login o verificación
     private String token;
+
+    // Email del usuario autenticado
     private String email;
+
+    // ID del usuario autenticado
     private Long id;
+
+    // Lista de roles del usuario (por ejemplo: ADMIN, USER)
     private List<String> roles;
 }

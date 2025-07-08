@@ -1,37 +1,22 @@
 "use client";
+
 import { AuthContextType } from "@/components/Interfaces/AuthContextType";
 import { LoginData } from "@/components/Interfaces/LoginData";
 import { createContext, useContext, useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-
-interface DecodedToken {
-  roles: string[];
-  email: string;
-  id: number;
-  exp: number;
-  iat: number;
-}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [showLogin, setShowLogin] = useState(false);
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const router = useRouter();
-  const decodeAndSetRoles = (jwt: string) => {
-    try {
-      const decoded = jwtDecode<DecodedToken>(jwt);
-      setRoles(decoded.roles || []);
-    } catch (e) {
-      setRoles([]);
-    }
-  };
   const [authError, setAuthError] = useState<string | null>(null);
+
+  const router = useRouter();
+
   const login = async (data: LoginData) => {
     setIsAuthenticating(true);
     setAuthError(null);
@@ -42,9 +27,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         credentials: "include",
         body: JSON.stringify(data),
       });
-      const result = await res.json();
 
       if (!res.ok) {
+        const result = await res.json();
         if (result.error === "user_not_verified") {
           throw new Error(
             "Por favor confirma tu correo antes de iniciar sesión."
@@ -54,17 +39,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
 
-      const cookieToken = getTokenFromCookie();
-      if (!cookieToken) {
-        throw new Error("No se pudo obtener el token después del login");
-      }
-
-      setToken(cookieToken);
-      decodeAndSetRoles(cookieToken);
-      setEmail(result.email);
-      localStorage.setItem("email", result.email);
+      // Después del login el servidor ya guardó la cookie HttpOnly.
+      // Consultamos /me para obtener los datos del usuario.
+      await checkAuth();
 
       router.refresh();
+    } catch (err: any) {
+      setAuthError(err.message);
     } finally {
       setIsAuthenticating(false);
     }
@@ -79,62 +60,69 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (e) {
       console.error("Error al cerrar sesión", e);
     } finally {
-      setToken(null);
       setEmail(null);
       setRoles([]);
-      localStorage.clear();
+      setShowLogin(false);
 
-      // ⚠️ Espera antes de ejecutar checkAuth
-      setTimeout(() => {
-        router.refresh();
-      }, 300); // 300 ms es suficiente para la mayoría de navegadores
+      router.refresh();
     }
   };
 
-  const getTokenFromCookie = (): string | null => {
-    const match = document.cookie.match(/(^| )token=([^;]+)/);
-    const token = match?.[2] ?? null;
-    return token && token !== "undefined" && token !== "null" ? token : null;
-  };
-
-  const isExpired = (token: string) => {
+  const checkAuth = async () => {
     try {
-      const decoded = jwtDecode<DecodedToken>(token);
-      return decoded.exp * 1000 < Date.now(); // JWT exp está en segundos
-    } catch {
-      return true;
-    }
-  };
+      const res = await fetch("http://localhost:8084/api/auth/me", {
+        method: "GET",
+        credentials: "include",
+      });
 
-  const checkAuth = () => {
-    const savedToken = getTokenFromCookie();
-    const savedEmail = localStorage.getItem("email");
+      if (res.status === 401) {
+        console.info("Usuario no autenticado");
+        setEmail(null);
+        setRoles([]);
+        return;
+      }
 
-    if (savedToken && !isExpired(savedToken)) {
-      setToken(savedToken);
-      setEmail(savedEmail);
-      decodeAndSetRoles(savedToken);
-    } else {
-      setToken(null);
+      if (res.ok) {
+        const contentType = res.headers.get("content-type");
+        if (contentType?.includes("application/json")) {
+          const user = await res.json();
+          if (user?.email && Array.isArray(user?.roles)) {
+            setEmail(user.email);
+            setRoles(user.roles);
+          } else {
+            setEmail(null);
+            setRoles([]);
+          }
+        } else {
+          console.warn("Respuesta inesperada (no JSON)");
+          setEmail(null);
+          setRoles([]);
+        }
+      } else {
+        setEmail(null);
+        setRoles([]);
+      }
+    } catch (e) {
+      console.error("Error verificando sesión", e);
       setEmail(null);
       setRoles([]);
+    } finally {
+      setLoadingAuth(false);
     }
   };
 
   useEffect(() => {
-    checkAuth();
-    setLoadingAuth(false);
+    (async () => {
+      await checkAuth();
+    })();
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        token,
-        setToken,
         email,
         setEmail,
         roles,
-        decodeAndSetRoles,
         login,
         logout,
         showLogin,

@@ -10,11 +10,10 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
 
 
-import javax.swing.text.Element;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 
-public class PdfGenerator {
+public class PdfGeneratorReserva {
 
     public static byte[] generarResumenReserva(Pedido pedido) throws Exception {
         Rectangle smallPage = new Rectangle(400, 600); // ancho x alto en puntos (1pt = 1/72 pulgadas)
@@ -89,4 +88,6 @@ public class PdfGenerator {
         cell.setPadding(5);
         return cell;
     }
+
+
 }

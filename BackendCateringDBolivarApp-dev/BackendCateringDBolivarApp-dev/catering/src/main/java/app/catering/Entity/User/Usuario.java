@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-
-
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +17,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
-@Data
+@Getter
+@Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -73,6 +72,16 @@ public class Usuario implements UserDetails {
         return confirmed;
     }
 
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nombres='" + nombres + '\'' +
+                ", apellidos='" + apellidos + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -18,33 +18,38 @@ public class TipoServicioController {
     @Autowired
     private TipoServicioService tipoServicioService;
 
-    // Crear
+    // Crear un nuevo TipoServicio
+    // POST /api/tipo-servicio
     @PostMapping
     public TipoServicio create(@RequestBody TipoServicio tipoServicio) {
         return tipoServicioService.save(tipoServicio);
     }
 
-    // Leer todos
+    // Obtener todos los registros de TipoServicio
+    // GET /api/tipo-servicio
     @GetMapping
     public List<TipoServicio> getAll() {
         return tipoServicioService.getAll();
     }
 
-    // Leer por ID
+    // Obtener un TipoServicio específico por su ID
+    // GET /api/tipo-servicio/{id}
     @GetMapping("/{id}")
     public ResponseEntity<TipoServicio> getById(@PathVariable Long id) {
         Optional<TipoServicio> result = tipoServicioService.getById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Actualizar
+    // Actualizar un TipoServicio existente por su ID
+    // PUT /api/tipo-servicio/{id}
     @PutMapping("/{id}")
     public ResponseEntity<TipoServicio> update(@PathVariable Long id, @RequestBody TipoServicio newData) {
         TipoServicio updated = tipoServicioService.update(id, newData);
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
-    // Eliminar
+    // Eliminar un TipoServicio por su ID
+    // DELETE /api/tipo-servicio/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (tipoServicioService.delete(id)) {

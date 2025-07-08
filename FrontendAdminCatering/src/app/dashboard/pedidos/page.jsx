@@ -1,7 +1,13 @@
-import React from "react";
+// pages/admin/orders.js
+"use client";
+import AllOrders from "./Pedido";
 
-const Pedidos = () => {
-  return <div>Pedidos</div>;
+const AdminOrdersPage = () => {
+  return (
+    <div>
+      <AllOrders />
+    </div>
+  );
 };
 
-export default Pedidos;
+export default AdminOrdersPage;

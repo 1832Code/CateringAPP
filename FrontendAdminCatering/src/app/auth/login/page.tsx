@@ -1,16 +1,27 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoginData } from "@/interfaces/LoginData";
 import { useAuth } from "@/context/authcontext";
 
 export default function Login() {
   const router = useRouter();
-  const { login, isAuthenticating } = useAuth();
+  const { login, isAuthenticating, isAuthenticated, roles } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      // opcional: también puedes validar aquí el rol
+      if (roles.includes("ROLE_ADMIN")) {
+        router.replace("/dashboard");
+      } else {
+        setError("Acceso denegado: no tienes el rol de administrador.");
+      }
+    }
+  }, [isAuthenticated, roles, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,25 +29,25 @@ export default function Login() {
 
     const loginData: LoginData = { email, password };
 
-    const decoded = await login(loginData);
+    try {
+      const decoded = await login(loginData);
 
-    if (!decoded) {
+      if (!decoded) {
+        setError("Error al iniciar sesión. Verifica tus credenciales.");
+        alert("Token no válido o no recibido");
+        return;
+      }
+
+      if (!decoded.roles?.includes("ROLE_ADMIN")) {
+        setError("Acceso denegado. No tienes el rol de administrador.");
+        alert("Acceso denegado. Tu rol no es ROLE_ADMIN");
+        return;
+      }
+
+      router.push("/dashboard");
+    } catch {
       setError("Error al iniciar sesión. Verifica tus credenciales.");
-      alert("Token no válido o no recibido");
-      return;
     }
-
-    // Verificamos el rol de dos formas posibles
-    const hasAdminRole = decoded.roles?.includes("ROLE_ADMIN");
-
-    if (!hasAdminRole) {
-      setError("Acceso denegado. No tienes el rol de administrador.");
-      alert("Acceso denegado. Tu rol no es ROLE_ADMIN");
-      return;
-    }
-
-    // Si todo está bien
-    router.push("/dashboard");
   };
 
   return (

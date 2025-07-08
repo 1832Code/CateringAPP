@@ -29,6 +29,11 @@ public class UserController {
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
 
+    /**
+     * Obtiene el perfil del usuario autenticado.
+     * Ruta: GET /api/usuarios/me
+     * Accesible para cualquier usuario autenticado.
+     */
     @GetMapping("/me")
     public ResponseEntity<UsuarioDTO> getPerfil(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
@@ -37,7 +42,11 @@ public class UserController {
         return ResponseEntity.ok(UsuarioMapper.toDTO(usuario));
     }
 
-    //  Actualizar datos del usuario autenticado
+    /**
+     * Actualiza el perfil del usuario autenticado (versión demo para ADMIN).
+     * Ruta: PUT /api/usuarios/me/demo
+     * Solo accesible para usuarios con rol ADMIN.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/me/demo")
     public ResponseEntity<Usuario> actualizarPerfil(
@@ -49,6 +58,11 @@ public class UserController {
         return ResponseEntity.ok(actualizado);
     }
 
+    /**
+     * Actualiza el perfil del usuario autenticado.
+     * Ruta: PUT /api/usuarios/me
+     * Accesible para cualquier usuario autenticado.
+     */
     @PutMapping("/me")
     public ResponseEntity<UsuarioResponseDTO> actualizarPerfil(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -58,23 +72,35 @@ public class UserController {
         return ResponseEntity.ok(actualizado);
     }
 
-    //  ADMIN: Obtener todos los usuarios
+    /**
+     * ADMIN: Obtiene la lista de todos los usuarios registrados.
+     * Ruta: GET /api/usuarios
+     * Solo accesible para usuarios con rol ADMIN.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Usuario>> obtenerTodos() {
         return ResponseEntity.ok(usuarioService.obtenerTodos());
     }
 
-    //  ADMIN: Obtener usuario por ID
+    /**
+     * ADMIN: Obtiene un usuario específico por su ID.
+     * Ruta: GET /api/usuarios/{id}
+     * Solo accesible para usuarios con rol ADMIN.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerPorId(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.obtenerPorId(id));
     }
 
-    //  ADMIN: Actualizar usuario por ID
-    @PutMapping("/{id}")
+    /**
+     * ADMIN: Actualiza un usuario específico por su ID.
+     * Ruta: PUT /api/usuarios/{id}
+     * Solo accesible para usuarios con rol ADMIN.
+     */
     @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> actualizarUsuarioPorId(
             @PathVariable Long id,
             @Valid @RequestBody UsuarioUpdateAdminDTO dto
@@ -83,7 +109,11 @@ public class UserController {
         return ResponseEntity.ok(actualizado);
     }
 
-    //  ADMIN: Eliminar usuario por ID
+    /**
+     * ADMIN: Elimina un usuario específico por su ID.
+     * Ruta: DELETE /api/usuarios/{id}
+     * Solo accesible para usuarios con rol ADMIN.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {

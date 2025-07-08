@@ -2,36 +2,53 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Card, Spinner, Alert } from "flowbite-react"; // Import Flowbite components for better UI
+import {
+  Card,
+  Spinner,
+  Alert,
+  Button,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  TextInput,
+  Label,
+} from "flowbite-react"; // Import Flowbite components for better UI
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { useAuth } from "@/context/authcontext";
 
 const Perfil = () => {
   const [adminData, setAdminData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const { email, roles } = useAuth();
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [editData, setEditData] = useState(null);
+  const [editLoading, setEditLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState(null);
 
   useEffect(() => {
     const fetchAdminProfile = async () => {
       setLoading(true);
       setError(null);
-      const token = localStorage.getItem("token");
 
-      if (!token) {
+      if (!email) {
         setError(
-          "No se encontró token de autenticación. Por favor, inicie sesión."
+          "No se encontró información de autenticación. Por favor, inicie sesión."
         );
         setLoading(false);
-        // Optionally redirect to login if no token
         router.push("/auth/login");
         return;
       }
 
       try {
-        const res = await fetch("http://localhost:8080/api/auth/me-admin", {
+        const res = await fetch("http://localhost:8084/api/usuarios/me", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           credentials: "include", // Keep if your backend requires it for session or CSRF
         });
@@ -45,11 +62,6 @@ const Perfil = () => {
           setError(
             `Acceso denegado o sesión expirada: ${errorText}. Por favor, inicie sesión nuevamente.`
           );
-          // Clear invalid token and redirect
-          localStorage.removeItem("token");
-          localStorage.removeItem("userId");
-          localStorage.removeItem("userEmail");
-          localStorage.removeItem("userRoles");
           router.push("/auth/login");
         } else {
           const errorText = await res.text();
@@ -65,6 +77,81 @@ const Perfil = () => {
 
     fetchAdminProfile();
   }, [router]); // Include router in dependencies if you push inside useEffect
+
+  // Función para abrir modal de edición y setear datos actuales
+  const handleEditClick = () => {
+    setEditData({
+      firstName: adminData.firstName || "",
+      lastName: adminData.lastName || "",
+      email: adminData.email || "",
+      dni: adminData.dni || "",
+      telephone: adminData.telephone || "",
+    });
+    setShowEditModal(true);
+  };
+
+  // Función para enviar edición
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setEditLoading(true);
+    setError(null);
+    setSuccessMsg(null);
+    try {
+      const res = await fetch(
+        `http://localhost:8084/api/admins/usuarios/${adminData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(editData),
+        }
+      );
+      if (res.ok) {
+        const updated = await res.json();
+        setAdminData({ ...adminData, ...updated });
+        setSuccessMsg("Perfil actualizado correctamente.");
+        setShowEditModal(false);
+      } else {
+        const errorText = await res.text();
+        setError(`Error al actualizar: ${errorText}`);
+      }
+    } catch (err) {
+      setError("Error de conexión al servidor. Intente de nuevo más tarde.");
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
+  // Función para eliminar usuario
+  const handleDelete = async () => {
+    setDeleteLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        `http://localhost:8084/api/admins/usuarios/${adminData.id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      if (res.ok) {
+        setSuccessMsg("Cuenta eliminada correctamente. Redirigiendo...");
+        setTimeout(() => {
+          router.push("/auth/login");
+        }, 2000);
+      } else {
+        const errorText = await res.text();
+        setError(`Error al eliminar: ${errorText}`);
+      }
+    } catch (err) {
+      setError("Error de conexión al servidor. Intente de nuevo más tarde.");
+    } finally {
+      setDeleteLoading(false);
+      setShowDeleteModal(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -161,26 +248,136 @@ const Perfil = () => {
           </h3>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
-              onClick={() =>
-                alert("Funcionalidad de editar perfil aún no implementada.")
-              }
+              onClick={handleEditClick}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105"
             >
               Editar Perfil
             </button>
             <button
-              onClick={() =>
-                alert(
-                  "Funcionalidad de cambiar contraseña aún no implementada."
-                )
-              }
-              className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105"
+              onClick={() => setShowDeleteModal(true)}
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105"
             >
-              Cambiar Contraseña
+              Eliminar Cuenta
             </button>
           </div>
         </div>
       </Card>
+      {/* Modal de edición */}
+      <Modal
+        show={showEditModal}
+        size="md"
+        onClose={() => setShowEditModal(false)}
+        popup
+      >
+        <ModalHeader>Editar Perfil</ModalHeader>
+        <ModalBody>
+          <form className="space-y-4" onSubmit={handleEditSubmit}>
+            <div>
+              <Label htmlFor="firstName">Nombre</Label>
+              <TextInput
+                id="firstName"
+                value={editData?.firstName || ""}
+                onChange={(e) =>
+                  setEditData({ ...editData, firstName: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="lastName">Apellido</Label>
+              <TextInput
+                id="lastName"
+                value={editData?.lastName || ""}
+                onChange={(e) =>
+                  setEditData({ ...editData, lastName: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="email">Correo Electrónico</Label>
+              <TextInput
+                id="email"
+                type="email"
+                value={editData?.email || ""}
+                onChange={(e) =>
+                  setEditData({ ...editData, email: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="dni">DNI</Label>
+              <TextInput
+                id="dni"
+                value={editData?.dni || ""}
+                onChange={(e) =>
+                  setEditData({ ...editData, dni: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <Label htmlFor="telephone">Teléfono</Label>
+              <TextInput
+                id="telephone"
+                value={editData?.telephone || ""}
+                onChange={(e) =>
+                  setEditData({ ...editData, telephone: e.target.value })
+                }
+              />
+            </div>
+            <div className="flex justify-end gap-2 mt-4">
+              <Button
+                color="gray"
+                onClick={() => setShowEditModal(false)}
+                type="button"
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" isProcessing={editLoading}>
+                Guardar Cambios
+              </Button>
+            </div>
+          </form>
+        </ModalBody>
+      </Modal>
+      {/* Modal de confirmación de borrado */}
+      <Modal
+        show={showDeleteModal}
+        size="md"
+        onClose={() => setShowDeleteModal(false)}
+        popup
+      >
+        <ModalHeader />
+        <ModalBody>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se
+              puede deshacer.
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button
+                color="red"
+                onClick={handleDelete}
+                isProcessing={deleteLoading}
+              >
+                Sí, eliminar
+              </Button>
+              <Button color="gray" onClick={() => setShowDeleteModal(false)}>
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        </ModalBody>
+      </Modal>
+      {successMsg && (
+        <div className="p-4">
+          <Alert color="success" onDismiss={() => setSuccessMsg(null)}>
+            <span className="font-medium">Éxito:</span> {successMsg}
+          </Alert>
+        </div>
+      )}
     </div>
   );
 };

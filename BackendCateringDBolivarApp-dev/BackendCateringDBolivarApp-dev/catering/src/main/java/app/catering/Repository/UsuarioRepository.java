@@ -25,6 +25,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByVerificationCode(String verificationCode);
 
+    Optional<Usuario> findByDni(String dni);
 
     // Nuevo metodo para usar el procedimiento almacenado
     @Transactional

@@ -2,12 +2,9 @@ package app.catering.Services;
 
 import app.catering.Entity.Pedido.Pedido;
 import app.catering.Entity.User.Usuario;
-import app.catering.Generators.PdfGenerator;
+import app.catering.Generators.PdfGeneratorReserva;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +38,7 @@ public class EmailService {
         helper.setText("Hola " + pedido.getUsuario().getNombres() +
                 ",\n\nAdjuntamos el comprobante de tu reserva.\n\n¡Gracias por elegirnos!");
 
-        byte[] pdf = PdfGenerator.generarResumenReserva(pedido);
+        byte[] pdf = PdfGeneratorReserva.generarResumenReserva(pedido);
         String fileName = "reserva_" + pedido.getId() + ".pdf";
         helper.addAttachment(fileName, new ByteArrayResource(pdf));
 

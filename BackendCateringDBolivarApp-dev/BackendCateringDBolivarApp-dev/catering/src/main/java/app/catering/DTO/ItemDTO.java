@@ -10,4 +10,5 @@ public class ItemDTO {
     private Float precio;
     private String imageURL;
     private CategoriaDTO categoria;
+    private Long idCategoria;
 }

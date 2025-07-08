@@ -7,4 +7,5 @@ public class CategoriaDTO {
     private Long id;
     private String nombre;
     private String descripcion;
+    private Long idCategoria;
 }

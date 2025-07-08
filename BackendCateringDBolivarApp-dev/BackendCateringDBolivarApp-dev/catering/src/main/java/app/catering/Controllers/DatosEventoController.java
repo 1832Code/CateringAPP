@@ -26,11 +26,17 @@ public class DatosEventoController {
     @Autowired
     private DatosEventoMapper datosEventoMapper;
 
-    // Crear un nuevo evento
+    /**
+     * Crea un nuevo evento.
+     * Valida que la fecha del evento sea al menos 7 días después de hoy.
+     * Devuelve el evento creado en formato DTO o error si la fecha no es válida.
+     *
+     * POST /api/datos-evento
+     */
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid DatosEventoDTO dto) {
         try {
-            LocalDate fechaEvento = LocalDate.parse(dto.getFechaEvento()); // Asegúrate del formato
+            LocalDate fechaEvento = LocalDate.parse(dto.getFechaEvento());
             LocalDate hoy = LocalDate.now();
             LocalDate fechaMinima = hoy.plusDays(6);
 
@@ -48,7 +54,12 @@ public class DatosEventoController {
         }
     }
 
-    // Listar todos los eventos
+    /**
+     * Lista todos los eventos registrados.
+     * Devuelve una lista de eventos en formato DTO.
+     *
+     * GET /api/datos-evento
+     */
     @GetMapping
     public ResponseEntity<List<DatosEventoDTO>> getAll() {
         List<DatosEventoDTO> list = datosEventoService.getAll()
@@ -58,7 +69,12 @@ public class DatosEventoController {
         return ResponseEntity.ok(list);
     }
 
-    // Obtener por ID
+    /**
+     * Obtiene un evento específico por su ID.
+     * Devuelve el evento en formato DTO o 404 si no existe.
+     *
+     * GET /api/datos-evento/{id}
+     */
     @GetMapping("/{id}")
     public ResponseEntity<DatosEventoDTO> getById(@PathVariable Long id) {
         return datosEventoService.getById(id)
@@ -66,7 +82,12 @@ public class DatosEventoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Actualizar por ID
+    /**
+     * Actualiza un evento existente por su ID.
+     * Devuelve el evento actualizado en formato DTO o 404 si no existe.
+     *
+     * PUT /api/datos-evento/{id}
+     */
     @PutMapping("/{id}")
     public ResponseEntity<DatosEventoDTO> update(@PathVariable Long id, @RequestBody DatosEventoDTO dto) {
         DatosEvento updated = datosEventoService.update(id, datosEventoMapper.toEntity(dto));
@@ -76,7 +97,12 @@ public class DatosEventoController {
         return ResponseEntity.ok(datosEventoMapper.toDTO(updated));
     }
 
-    // Eliminar por ID
+    /**
+     * Elimina un evento por su ID.
+     * Devuelve 200 OK si se eliminó o 404 si no existe.
+     *
+     * DELETE /api/datos-evento/{id}
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = datosEventoService.delete(id);

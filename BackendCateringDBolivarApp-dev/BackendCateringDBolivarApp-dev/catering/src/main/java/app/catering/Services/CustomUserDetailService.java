@@ -22,9 +22,11 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println("CustomUserDetailService - Loading user by email: " + email);
         Usuario usuario = usuarioRepository.findByEmailWithRoles(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
+        System.out.println("CustomUserDetailService - Usuario encontrado: " + usuario.getEmail() + ", Roles: " + usuario.getRoles());
         if (!usuario.isConfirmed()) {
             throw new BadCredentialsException("La cuenta no ha sido confirmada aún. Por favor revisa tu correo.");
         }
@@ -32,10 +34,12 @@ public class CustomUserDetailService implements UserDetailsService {
         Set<String> nombresRoles = usuario.getRoles().stream()
                 .map(role -> role.getName().name())
                 .collect(Collectors.toSet());
+        System.out.println("CustomUserDetailService - Nombres de roles: " + nombresRoles);
 
         List<SimpleGrantedAuthority> authorities = nombresRoles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .toList();
+        System.out.println("CustomUserDetailService - Authorities creadas: " + authorities);
 
         return new org.springframework.security.core.userdetails.User(
                 usuario.getEmail(),

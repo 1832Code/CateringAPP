@@ -26,13 +26,20 @@ import java.util.Optional;
 public class InfoMenuController {
     private final InfoMenuService infoMenuService;
 
-    // Crear un nuevo InfoMenu
+    // Crear un nuevo InfoMenu DEVUELVE DTO
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
+    @PostMapping("/v1")
     public ResponseEntity<InfoMenuDTO> createInfoMenu(@RequestBody InfoMenuDTO dto) {
         InfoMenu created = infoMenuService.createInfoMenu(dto);
         InfoMenuDTO responseDTO = infoMenuService.convertInfoToDTO(created);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    }
+    // Crear un nuevo InfoMenu DEVUELVE OBJETO INFOMENU
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/v2")
+    public ResponseEntity<InfoMenu> crearInfoMenu(@RequestBody InfoMenuDTO dto) {
+        InfoMenu infoMenu = infoMenuService.createInfoMenu(dto);
+        return ResponseEntity.ok(infoMenu);
     }
 
     // Obtener todos los InfoMenu

@@ -3,6 +3,7 @@ package app.catering.Services;
 import app.catering.DTO.UsuarioResponseDTO;
 import app.catering.DTO.UsuarioUpdateAdminDTO;
 import app.catering.DTO.UsuarioUpdateDTO;
+import app.catering.Entity.User.Role;
 import app.catering.Mappers.UsuarioMapper;
 import app.catering.Repository.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,6 +16,7 @@ import app.catering.Entity.User.Usuario;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +53,38 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    // Actualización completa por ID (admin)
+    public Usuario crearUsuarioDesdeAdmin(UsuarioUpdateAdminDTO dto) {
+        Usuario usuario = new Usuario();
+
+        usuario.setDni(dto.getDni());
+        usuario.setNombres(dto.getNombres());
+        usuario.setApellidos(dto.getApellidos());
+        usuario.setTelefono(dto.getTelefono());
+        usuario.setEmail(dto.getEmail());
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+            throw new DataIntegrityViolationException("El email ya está registrado");
+        }
+        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        if (dto.getRole() != null) {
+            Role roleEntity = roleRepository.findByName(dto.getRole())
+                    .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado: " + dto.getRole()));
+            usuario.setRoles(Set.of(roleEntity));
+        }
+        if (dto.getConfirmed() != null) {
+            usuario.setConfirmed(dto.getConfirmed());
+        }
+        // Aquí podrías generar verificationCode:
+        usuario.setVerificationCode(generarVerificationCode());
+
+        return usuarioRepository.save(usuario);
+    }
+
+    private String generarVerificationCode() {
+        return java.util.UUID.randomUUID().toString();
+    }
+
+        // Actualización completa por ID (admin)
     public UsuarioResponseDTO actualizarUsuario(Long id, Usuario nuevosDatos) {
         Usuario usuario = obtenerPorId(id);
 

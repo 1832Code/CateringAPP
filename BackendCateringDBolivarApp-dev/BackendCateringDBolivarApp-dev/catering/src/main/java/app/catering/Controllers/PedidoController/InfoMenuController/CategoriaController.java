@@ -5,6 +5,7 @@ import app.catering.DTO.CategoriaDTO;
 import app.catering.Services.PedidoService.InfoMenuService.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -24,17 +25,20 @@ public class CategoriaController {
         return categoriaService.obtenerPorIdDTO(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public CategoriaDTO crearCategoria(@RequestBody CategoriaDTO dto) {
         return categoriaService.guardarDesdeDTO(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public CategoriaDTO actualizarCategoria(@PathVariable Long id, @RequestBody CategoriaDTO dto) {
         dto.setId(id);
         return categoriaService.guardarDesdeDTO(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void eliminarCategoria(@PathVariable Long id) {
         categoriaService.eliminar(id);
