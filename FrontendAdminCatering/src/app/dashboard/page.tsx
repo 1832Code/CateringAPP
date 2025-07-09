@@ -169,18 +169,12 @@ export default function Dashboard() {
   }, [router]);
 
   const handleExportExcel = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("No hay token de autenticación. Por favor, inicie sesión.");
-      return;
-    }
-
     try {
       const res = await fetch(
-        "http://localhost:8080/api/v1/users/export/excel",
+        "http://localhost:8084/api/export/usuarios/excel",
         {
           method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
         }
       );
 
@@ -428,21 +422,30 @@ export default function Dashboard() {
                 Exportar Usuarios
               </button>
               
-              <button className="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md">
+              <button
+                onClick={() => router.push("/dashboard/servicios")}
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 Nuevo Servicio
               </button>
               
-              <button className="flex items-center justify-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md">
+              <button
+                onClick={() => router.push("/dashboard/usuarios")}
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 Gestionar Usuarios
               </button>
               
-              <button className="flex items-center justify-center p-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md">
+              <button
+                onClick={() => router.push("/dashboard/informes")}
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>

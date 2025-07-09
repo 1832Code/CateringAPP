@@ -44,6 +44,12 @@ public static UsuarioAdminDto toAdminDTO(Usuario usuario) {
         dto.setApellidos(usuario.getApellidos());
         dto.setTelefono(usuario.getTelefono());
         dto.setEmail(usuario.getEmail());
+        dto.setRoles(
+        usuario.getRoles()
+            .stream()
+            .map(r -> r.getName().name())
+            .collect(Collectors.toSet())
+    );
         return dto;
     }
 

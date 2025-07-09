@@ -16,7 +16,7 @@ export default function DashboardLayout({
       {/* Contenido principal */}
       <div className="  flex-1 flex flex-col md:ml-64  w-full lg:w-full min-h-screen">
         {/* Navbar superior - Fijo en la parte superior */}
-        <header className="sticky top-0 z-30">
+        <header className="sticky top-0 z-30 w-full">
           <NavSuperior />
         </header>
 

@@ -110,9 +110,9 @@ export default function NavSuperior() {
   return (
     <Navbar
       fluid
-      className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 sm:px-6 shadow-sm"
+      className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 sm:px-6 shadow-sm  w-full"
     >
-      <div className="flex flex-wrap items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between w-full">
         {/* Logo y marca */}
         <NavbarBrand
           href="/"

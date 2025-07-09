@@ -176,8 +176,8 @@ const ItemPage: React.FC = () => {
   }
 
   return (
-    <div className="p-2 space-y-6 max-w-7xl mx-auto w-full">
-      <div className="w-full mx-auto  ">
+    <div className="p-2 space-y-6 w-[80%]">
+      <div className=" mx-auto  ">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6 dark:bg-gray-900">
           <div className="flex items-center justify-between">

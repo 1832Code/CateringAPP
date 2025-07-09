@@ -1,5 +1,7 @@
 package app.catering.DTO;
 
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,4 +16,5 @@ public class UsuarioDTO {
     private String apellidos;
     private String telefono;
     private String email;
+    private Set<String> roles;
 }

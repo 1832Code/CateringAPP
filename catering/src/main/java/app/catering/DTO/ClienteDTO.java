@@ -8,6 +8,6 @@ public class ClienteDTO {
     private String nombre;
     private String apellidos;
     private String email;
-      private String ruc;
+    private String ruc;
     private String direccion;
 }

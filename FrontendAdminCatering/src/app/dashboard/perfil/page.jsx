@@ -70,11 +70,11 @@ const Perfil = () => {
   // Función para abrir modal de edición y setear datos actuales
   const handleEditClick = () => {
     setEditData({
-      firstName: adminData.firstName || "",
-      lastName: adminData.lastName || "",
+      nombres: adminData.nombres || "",
+      apellidos: adminData.apellidos || "",
       email: adminData.email || "",
       dni: adminData.dni || "",
-      telephone: adminData.telephone || "",
+      telefono: adminData.telefono || "",
     });
     setShowEditModal(true);
   };
@@ -203,7 +203,7 @@ const Perfil = () => {
               Teléfono:
             </p>
             <p className="text-lg">
-              {adminData.telephone || "No especificado"}
+              {adminData.telefono || "No especificado"}
             </p>
           </div>
           <div>
@@ -251,20 +251,20 @@ const Perfil = () => {
         <ModalBody>
           <form className="space-y-4" onSubmit={handleEditSubmit}>
             <div>
-              <Label htmlFor="firstName">Nombre</Label>
+              <Label htmlFor="nombres">Nombre</Label>
               <TextInput
-                id="firstName"
-                value={editData?.firstName || ""}
-                onChange={e => setEditData({ ...editData, firstName: e.target.value })}
+                id="nombres"
+                value={editData?.nombres || ""}
+                onChange={e => setEditData({ ...editData, nombres: e.target.value })}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="lastName">Apellido</Label>
+              <Label htmlFor="apellidos">Apellido</Label>
               <TextInput
-                id="lastName"
-                value={editData?.lastName || ""}
-                onChange={e => setEditData({ ...editData, lastName: e.target.value })}
+                id="apellidos"
+                value={editData?.apellidos || ""}
+                onChange={e => setEditData({ ...editData, apellidos: e.target.value })}
                 required
               />
             </div>
@@ -287,11 +287,11 @@ const Perfil = () => {
               />
             </div>
             <div>
-              <Label htmlFor="telephone">Teléfono</Label>
+              <Label htmlFor="telefono">Teléfono</Label>
               <TextInput
-                id="telephone"
-                value={editData?.telephone || ""}
-                onChange={e => setEditData({ ...editData, telephone: e.target.value })}
+                id="telefono"
+                value={editData?.telefono || ""}
+                onChange={e => setEditData({ ...editData, telefono: e.target.value })}
               />
             </div>
             <div className="flex justify-end gap-2 mt-4">
