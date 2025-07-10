@@ -55,44 +55,85 @@ npm install
 npm run dev
 ```
 
-## 👨‍💻 Tecnologías Usadas 👨‍💻
+El sistema de D'Bolivar Gourmet está desarrollado con las siguientes tecnologías:
 
-<table>
-  <thead>
-    <tr>
-      <th>HTML</th>
-      <th>CSS</th>
-      <th>TypeScript</th>
-      <th>React</th>
-      <th>NextJS</th>
-      <th>TaildwindCSS</th>
-      <th>AceternityUI</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <img src="https://i.postimg.cc/rF6WrLjr/html.png" width="100%" />
-      </td>
-      <td>
-        <img src="https://i.postimg.cc/mgSDG9F2/css.png" width="100%" />
-      </td>
-      <td>
-        <img
-          src="https://i.postimg.cc/hPmRKjHK/pngwing-com-5.png" width="100%" />
-      </td>
-      <td>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1280px-React-icon.svg.png" width="100%" />
-      </td>
-      <td>
-        <img src="https://i.postimg.cc/d02036pt/Icon.jpg" width="100%" />
-      </td>
-      <td>
-        <img src="https://i.postimg.cc/8PxkbxVz/pngwing-com-4.png" width="100%" />
-      </td>
-      <td>
-        <img src="https://i.postimg.cc/2jKCzgy7/aceterenity.png" width="100%" />
-      </td>
-    </tr>
-  </tbody>
-</table>
+### Frontend
+- **React**: Biblioteca JavaScript para construir interfaces de usuario
+- **HTML5/CSS3**: Estructura y estilos modernos
+- **Tailwind**: Framework de diseño responsive
+- **AceternityUI/Uiverse**: Librerias de componentes
+- **NextJS**: Framework de desarrollo web construido sobre React.
+  
+### Backend
+- **Spring Boot**: Framework Java para aplicaciones empresariales
+- **Spring Security**: Gestión de autenticación y autorización
+- **RESTful API**: Comunicación entre frontend y backend
+
+### Base de Datos
+- **MySQL**: Sistema de gestión de bases de datos relacional
+
+### Herramientas de Desarrollo
+- **Git/GitHub**: Control de versiones y colaboración
+- **Maven**: Gestión de dependencias
+- **npm**: Gestores de paquetes para frontend
+
+## Ejecución del Proyecto en Local
+
+Para ejecutar este proyecto en tu entorno local, sigue estos pasos:
+
+### Requisitos Previos
+- Java JDK 17 o superior
+- Node.js (22.0 o superior)
+- npm
+- MySQL 8.0 o superior
+- Git
+
+### Pasos de Instalación
+
+#### 1. Clonar el Repositorio
+```bash
+git clone https://github.com/1832Code/APP_CATERING/edit/main/README.md
+cd dbolivar-gourmet
+```
+
+#### 2. Configurar la Base de Datos
+```bash
+# Crear base de datos en MySQL
+mysql -u root -p
+CREATE DATABASE dbolivar_db;
+```
+
+#### 3. Configurar Backend (Spring Boot)
+```bash
+# Navegar a la carpeta del backend
+cd backend
+
+# Editar el archivo application.properties con tus credenciales
+# src/main/resources/application.properties
+
+# Ejecutar el backend
+./mvnw spring-boot:run
+```
+
+#### 4. Configurar Frontend (React)
+```bash
+# En otra terminal, navegar a la carpeta del frontend
+cd frontend
+
+# Instalar dependencias
+npm install
+
+# Ejecutar el frontend
+npm run dev
+```
+
+#### 5. Acceder a la Aplicación
+- Frontend: http://localhost:3000
+- API Backend: http://localhost:8083
+
+### Notas Adicionales
+- La API está documentada en: http://localhost:8080/swagger-ui.html
+- Usuario administrador por defecto: admin@dbolivar.com / admin123
+- Para cualquier problema durante la instalación, consultar la sección de issues en GitHub
+
+[![DBolivar-Gourmet-Image-Main.png](https://i.postimg.cc/1tB8zB21/DBolivar-Gourmet-Image-Main.png)](https://postimg.cc/tZ1qS39B)
