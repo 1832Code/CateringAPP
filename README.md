@@ -37,23 +37,7 @@
 
 *D'Bolivar Gourmet - Elevando cada celebración con sabores excepcionales*
 
-## 💻 Instalación 💻
-
-- Locate in the folder that will contain the project
-- Open command terminal
-  - git clone
-  - cd DBolivarGourmet2025
-  - Then, we will install dependencies
-
-```Bash
-npm install
-```
-
-- Then we execute the project
-
-```Bash
-npm run dev
-```
+## 💻 Tecnologías Usadas 💻
 
 El sistema de D'Bolivar Gourmet está desarrollado con las siguientes tecnologías:
 
