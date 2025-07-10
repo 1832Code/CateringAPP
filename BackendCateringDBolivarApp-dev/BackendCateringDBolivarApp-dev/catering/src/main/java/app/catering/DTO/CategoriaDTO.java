@@ -8,4 +8,5 @@ public class CategoriaDTO {
     private String nombre;
     private String descripcion;
     private Long idCategoria;
+    private Boolean activo;
 }

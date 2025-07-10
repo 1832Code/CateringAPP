@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 export default function Confirmation() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setToken, setEmail, setShowLogin, decodeAndSetRoles } = useAuth();
+  const { setEmail, setShowLogin } = useAuth();
 
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
@@ -39,9 +39,8 @@ export default function Confirmation() {
         }
 
         // guarda datos en contexto
-        setToken(data.token);
+
         setEmail(data.email);
-        decodeAndSetRoles(data.token);
 
         setStatus("success");
 

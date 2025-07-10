@@ -219,9 +219,7 @@ const Perfil = () => {
             <p className="text-md font-semibold text-amber-600 dark:text-amber-300">
               Teléfono:
             </p>
-            <p className="text-lg">
-              {adminData.telephone || "No especificado"}
-            </p>
+            <p className="text-lg">{adminData.telefono || "No especificado"}</p>
           </div>
           <div>
             <p className="text-md font-semibold text-amber-600 dark:text-amber-300">

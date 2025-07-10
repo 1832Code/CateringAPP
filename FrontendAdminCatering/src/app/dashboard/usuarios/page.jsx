@@ -274,16 +274,16 @@ export default function TablaUsuarios() {
                 </td>
                 <td className="border px-2 py-2">{u.verificationCode}</td>
                 <td className="border px-2 py-2">{u.roles?.join(", ")}</td>
-                <td className="border px-2 py-2 space-x-2">
+                <td className="border px-2 py-2 space-x-2 ">
                   <button
                     onClick={() => handleEdit(u)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                    className="cursor-pointer bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => eliminarUsuario(u.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                    className="cursor-pointer bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mt-2"
                   >
                     Eliminar
                   </button>

@@ -270,35 +270,43 @@ const InfoMenuPage: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
     if (!isAdmin) return;
+
     setFeedback(null);
+
     try {
       let imageURL = form.imageURL || "";
       if (imageFile) {
         imageURL = await uploadImage(imageFile);
       }
+
       const payload = {
         ...form,
         imageURL,
       };
-      const token = getTokenFromCookie();
+
       const method = editId ? "PUT" : "POST";
       const url = editId
         ? `http://localhost:8084/api/infomenu/${editId}`
-        : "http://localhost:8084/api/infomenu";
+        : "http://localhost:8084/api/infomenu/v2";
+
       const res = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
-        credentials: "include",
+        credentials: "include", // usa cookies HttpOnly para autenticar
         body: JSON.stringify(payload),
       });
+
       if (!res.ok) throw new Error("Error al guardar el menú");
+
       setFeedback(
         editId ? "Menú actualizado exitosamente" : "Menú creado exitosamente"
       );
+
+      // Reset del formulario
       setForm({
         titulo: "",
         descripcion: "",

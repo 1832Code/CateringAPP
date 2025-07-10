@@ -240,33 +240,43 @@ const Informes = () => {
     }
   };
 
-  const generateReport = async (reportType) => {
+  const generateReport = async (reportType, pedidoId = null) => {
     try {
-      const params = new URLSearchParams({
-        tipo: reportType,
-        fechaInicio: dateRange.startDate,
-        fechaFin: dateRange.endDate,
-      });
+      let url = "";
+      if (pedidoId) {
+        // Descargar reporte individual de pedido
+        url = `http://localhost:8084/api/admin/reports/pedido/${pedidoId}`;
+      } else {
+        // Reportes generales
+        const params = new URLSearchParams({
+          tipo: reportType,
+          fechaInicio: dateRange.startDate,
+          fechaFin: dateRange.endDate,
+        });
+        url = `http://localhost:8084/api/admin/reports/${reportType}?${params}`;
+      }
 
-      const response = await fetch(
-        `http://localhost:8084/api/admin/reports/${reportType}?${params}`,
-        {
-          credentials: "include",
-        }
-      );
+      const response = await fetch(url, {
+        credentials: "include",
+      });
 
       if (response.ok) {
         const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+        const downloadName = pedidoId
+          ? `reporte_pedido_${pedidoId}_${
+              new Date().toISOString().split("T")[0]
+            }.pdf`
+          : `reporte_${reportType}_${
+              new Date().toISOString().split("T")[0]
+            }.pdf`;
+        const urlBlob = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
-        a.href = url;
-        a.download = `reporte_${reportType}_${
-          new Date().toISOString().split("T")[0]
-        }.pdf`;
+        a.href = urlBlob;
+        a.download = downloadName;
         document.body.appendChild(a);
         a.click();
         a.remove();
-        window.URL.revokeObjectURL(url);
+        window.URL.revokeObjectURL(urlBlob);
       } else {
         alert("Error al generar el reporte");
       }

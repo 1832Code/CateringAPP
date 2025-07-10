@@ -335,7 +335,7 @@ const AllOrders = () => {
                             <option value="Nuevo">Nuevo</option>
                             <option value="En Proceso">En Proceso</option>
                             <option value="Recibido">Recibido</option>
-                            <option value="Culminado">Culminado</option>
+                            <option value="Pagado">Pagado</option>
                           </select>
                         </div>
 

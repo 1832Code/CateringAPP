@@ -1,5 +1,7 @@
 package app.catering.Controllers;
 
+import app.catering.Entity.User.Usuario;
+import app.catering.Services.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -39,6 +41,9 @@ public class ExportController {
 
     @Autowired
     private PedidoService pedidoService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/pedidos/excel")
@@ -299,6 +304,60 @@ public class ExportController {
         }
 
         document.close();
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/usuarios/excel")
+    public void exportUsuariosToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=usuarios.xlsx");
+
+        List<Usuario> usuarios = usuarioService.obtenerTodos();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Usuarios");
+
+        // Estilo encabezado
+        CellStyle headerStyle = workbook.createCellStyle();
+        org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+        font.setBold(true);
+        font.setColor(IndexedColors.WHITE.getIndex());
+        headerStyle.setFont(font);
+        headerStyle.setFillForegroundColor(IndexedColors.DARK_BLUE.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        String[] headers = {
+                "ID", "DNI", "Nombres", "Apellidos", "Teléfono", "Email", "Roles", "Confirmado"
+        };
+
+        Row header = sheet.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = header.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        int rowIdx = 1;
+        for (Usuario usuario : usuarios) {
+            Row row = sheet.createRow(rowIdx++);
+            int colIdx = 0;
+            row.createCell(colIdx++).setCellValue(usuario.getId() != null ? usuario.getId() : 0);
+            row.createCell(colIdx++).setCellValue(usuario.getDni() != null ? usuario.getDni() : "");
+            row.createCell(colIdx++).setCellValue(usuario.getNombres() != null ? usuario.getNombres() : "");
+            row.createCell(colIdx++).setCellValue(usuario.getApellidos() != null ? usuario.getApellidos() : "");
+            row.createCell(colIdx++).setCellValue(usuario.getTelefono() != null ? usuario.getTelefono() : "");
+            row.createCell(colIdx++).setCellValue(usuario.getEmail() != null ? usuario.getEmail() : "");
+            // Roles como string separado por comas
+            String roles = usuario.getRoles() != null ? usuario.getRoles().stream().map(r -> r.getName().name()).reduce((a, b) -> a + ", " + b).orElse("") : "";
+            row.createCell(colIdx++).setCellValue(roles);
+            row.createCell(colIdx++).setCellValue(usuario.isConfirmed() ? "Sí" : "No");
+        }
+
+        for (int i = 0; i < headers.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
     }
 
     // 2. Actualizar estado del pedido (en backend)

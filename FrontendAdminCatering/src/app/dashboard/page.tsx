@@ -173,7 +173,7 @@ export default function Dashboard() {
   const handleExportExcel = async () => {
     try {
       const res = await fetch(
-        "http://localhost:8080/api/v1/users/export/excel",
+        "http://localhost:8084/api/export/usuarios/excel",
         {
           method: "GET",
           credentials: "include", // incluye las cookies
@@ -453,7 +453,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
                 onClick={handleExportExcel}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+                className="flex cursor-pointer items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -471,7 +471,12 @@ export default function Dashboard() {
                 Exportar Usuarios
               </button>
 
-              <button className="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md">
+              <button
+                onClick={() => {
+                  router.push("/dashboard/menus");
+                }}
+                className="flex cursor-pointer items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
                 <svg
                   className="w-5 h-5 mr-2"
                   fill="none"
@@ -485,10 +490,15 @@ export default function Dashboard() {
                     d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-                Nuevo Servicio
+                Nuevo Menú
               </button>
 
-              <button className="flex items-center justify-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md">
+              <button
+                onClick={() => {
+                  router.push("/dashboard/usuarios");
+                }}
+                className="flex cursor-pointer items-center justify-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
                 <svg
                   className="w-5 h-5 mr-2"
                   fill="none"
@@ -505,7 +515,12 @@ export default function Dashboard() {
                 Gestionar Usuarios
               </button>
 
-              <button className="flex items-center justify-center p-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md">
+              <button
+                onClick={() => {
+                  router.push("/dashboard/informes");
+                }}
+                className="flex cursor-pointer items-center justify-center p-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
                 <svg
                   className="w-5 h-5 mr-2"
                   fill="none"

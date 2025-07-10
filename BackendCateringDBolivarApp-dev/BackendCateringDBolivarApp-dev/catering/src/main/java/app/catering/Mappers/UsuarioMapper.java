@@ -7,6 +7,8 @@ import app.catering.Repository.RoleRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,12 @@ public class UsuarioMapper {
         dto.setApellidos(usuario.getApellidos());
         dto.setTelefono(usuario.getTelefono());
         dto.setEmail(usuario.getEmail());
+        dto.setRoles(
+                usuario.getRoles()
+                        .stream()
+                        .map(r -> r.getName().name())
+                        .collect(Collectors.toSet())
+        );
         return dto;
     }
 
@@ -80,8 +88,9 @@ public class UsuarioMapper {
         if (dto.getRole() != null) {
             Role roleEntity = roleRepository.findByName(dto.getRole())
                     .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado: " + dto.getRole()));
-            usuario.setRoles(Set.of(roleEntity));
+            usuario.setRoles(new HashSet<>(List.of(roleEntity)));
         }
+
         if (dto.getConfirmed() != null) {
             usuario.setConfirmed(dto.getConfirmed());
         }

@@ -474,19 +474,19 @@ const CategoriaPage: React.FC = () => {
                                   : "bg-red-100 text-red-800"
                               }`}
                             >
-                              {cat.activo ? "Activo" : "Inactivo"}
+                              {cat.activo ? "activo" : "inactivo"}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <button
                               onClick={() => handleEdit(cat)}
-                              className="text-blue-600 hover:text-blue-900 mr-4"
+                              className="cursor-pointer text-blue-600 hover:text-blue-900 mr-4"
                             >
                               Editar
                             </button>
                             <button
                               onClick={() => handleDelete(cat.id)}
-                              className="text-red-600 hover:text-red-900"
+                              className="cursor-pointer text-red-600 hover:text-red-900"
                             >
                               Eliminar
                             </button>

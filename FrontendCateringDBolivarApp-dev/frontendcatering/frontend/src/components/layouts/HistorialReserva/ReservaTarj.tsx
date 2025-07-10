@@ -64,7 +64,7 @@ const ReservaTarj: React.FC = () => {
 
   const handleClickReserva = (reserva: PedidoReserva) => {
     if (esperandoSeleccion && modoAccion) {
-      if (reserva.estado === "pagada") {
+      if (reserva.estado === "Pagado") {
         alert("No se puede modificar o eliminar una reserva pagada.");
         setModoAccion(null);
         setEsperandoSeleccion(false);
@@ -151,8 +151,8 @@ const ReservaTarj: React.FC = () => {
 
   const reservasFiltradas = reservas.filter((reserva) =>
     tabActiva === "pagadas"
-      ? reserva.estado === "pagada"
-      : reserva.estado !== "pagada"
+      ? reserva.estado === "Pagado"
+      : reserva.estado !== "Pagado"
   );
 
   return (
