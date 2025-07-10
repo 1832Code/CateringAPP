@@ -2,9 +2,40 @@
 
 [![DBolivar-Gourmet-Image-Main.png](https://i.postimg.cc/1tB8zB21/DBolivar-Gourmet-Image-Main.png)](https://postimg.cc/tZ1qS39B)
 
-## 📜 Resumen 📜
+# D'Bolivar Gourmet
 
-Comprehensive software focused on D'Bolivar Gourmet catering management
+## Servicios de Catering
+
+### Nuestras Especialidades
+
+**Comidas:**
+- Banquetes gourmet para eventos
+- Menús personalizados
+- Opciones vegetarianas y veganas
+- Platos tradicionales con toque gourmet
+- Finger food y canapés
+
+**Bebidas:**
+- Barra libre personalizada
+- Cócteles de autor
+- Selección de vinos premium
+- Refrescos y jugos naturales
+- Café y té gourmet
+
+### Cómo Funciona
+
+1. **Consulta inicial:** Contáctanos para discutir tu evento
+2. **Diseño del menú:** Creamos opciones adaptadas a tus necesidades
+3. **Degustación:** Prueba los platos antes del evento
+4. **Servicio impecable:** Nuestro equipo profesional se encarga de todo
+
+### Contáctanos
+
+📱 Teléfono: [Número]  
+📧 Email: info@dbolivargourmet.com  
+🌐 Web: www.dbolivargourmet.com
+
+*D'Bolivar Gourmet - Elevando cada celebración con sabores excepcionales*
 
 ## 💻 Instalación 💻
 
