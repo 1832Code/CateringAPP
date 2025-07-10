@@ -76,15 +76,15 @@ Para ejecutar este proyecto en tu entorno local, sigue estos pasos:
 
 #### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/1832Code/APP_CATERING/edit/main/README.md
-cd dbolivar-gourmet
+git clone https://github.com/1832Code/CateringAPP.git
+cd (lugar de proyecto)
 ```
 
 #### 2. Configurar la Base de Datos
 ```bash
 # Crear base de datos en MySQL
 mysql -u root -p
-CREATE DATABASE dbolivar_db;
+CREATE DATABASE catering_service;
 ```
 
 #### 3. Configurar Backend (Spring Boot)
@@ -112,12 +112,12 @@ npm run dev
 ```
 
 #### 5. Acceder a la Aplicación
-- Frontend: http://localhost:3000
-- API Backend: http://localhost:8083
+- Frontend Usuario: http://localhost:3000
+- Frontend Administrador: http://localhost:3001
+- API Backend: http://localhost:8084
 
 ### Notas Adicionales
-- La API está documentada en: http://localhost:8080/swagger-ui.html
-- Usuario administrador por defecto: admin@dbolivar.com / admin123
+- La API está documentada en: http://localhost:8084/swagger-ui.html
 - Para cualquier problema durante la instalación, consultar la sección de issues en GitHub
 
 [![DBolivar-Gourmet-Image-Main.png](https://i.postimg.cc/1tB8zB21/DBolivar-Gourmet-Image-Main.png)](https://postimg.cc/tZ1qS39B)
