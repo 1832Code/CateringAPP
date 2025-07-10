@@ -1,11 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
+<<<<<<< HEAD
 import {
   User,
   Shield,
   Bell,
   Settings as SettingsIcon,
+=======
+import { 
+  User, 
+  Shield, 
+  Bell, 
+  Settings as SettingsIcon, 
+>>>>>>> origin/auth
   Save,
   Eye,
   EyeOff,
@@ -16,7 +24,11 @@ import {
   Globe,
   Palette,
   Database,
+<<<<<<< HEAD
   Key,
+=======
+  Key
+>>>>>>> origin/auth
 } from "lucide-react";
 
 const Settings = () => {
@@ -32,7 +44,11 @@ const Settings = () => {
     phone: "+51 999 888 777",
     address: "Av. Principal 123",
     company: "Catering Services S.A.",
+<<<<<<< HEAD
     website: "www.catering.com",
+=======
+    website: "www.catering.com"
+>>>>>>> origin/auth
   });
 
   const [securityData, setSecurityData] = useState({
@@ -40,7 +56,11 @@ const Settings = () => {
     newPassword: "",
     confirmPassword: "",
     twoFactorAuth: false,
+<<<<<<< HEAD
     sessionTimeout: 30,
+=======
+    sessionTimeout: 30
+>>>>>>> origin/auth
   });
 
   const [notificationData, setNotificationData] = useState({
@@ -49,7 +69,11 @@ const Settings = () => {
     pushNotifications: true,
     orderUpdates: true,
     systemAlerts: true,
+<<<<<<< HEAD
     marketingEmails: false,
+=======
+    marketingEmails: false
+>>>>>>> origin/auth
   });
 
   const [systemData, setSystemData] = useState({
@@ -59,6 +83,7 @@ const Settings = () => {
     currency: "PEN",
     theme: "light",
     autoBackup: true,
+<<<<<<< HEAD
     backupFrequency: "daily",
   });
 
@@ -76,6 +101,25 @@ const Settings = () => {
 
   const handleSystemChange = (field, value) => {
     setSystemData((prev) => ({ ...prev, [field]: value }));
+=======
+    backupFrequency: "daily"
+  });
+
+  const handleProfileChange = (field, value) => {
+    setProfileData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSecurityChange = (field, value) => {
+    setSecurityData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleNotificationChange = (field, value) => {
+    setNotificationData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSystemChange = (field, value) => {
+    setSystemData(prev => ({ ...prev, [field]: value }));
+>>>>>>> origin/auth
   };
 
   const handleSave = (section) => {
@@ -84,9 +128,15 @@ const Settings = () => {
       profile: profileData,
       security: securityData,
       notifications: notificationData,
+<<<<<<< HEAD
       system: systemData,
     });
 
+=======
+      system: systemData
+    });
+    
+>>>>>>> origin/auth
     // Simular guardado exitoso
     alert(`Configuración de ${section} guardada exitosamente`);
   };
@@ -95,7 +145,11 @@ const Settings = () => {
     { id: "profile", label: "Perfil", icon: User },
     { id: "security", label: "Seguridad", icon: Shield },
     { id: "notifications", label: "Notificaciones", icon: Bell },
+<<<<<<< HEAD
     { id: "system", label: "Sistema", icon: SettingsIcon },
+=======
+    { id: "system", label: "Sistema", icon: SettingsIcon }
+>>>>>>> origin/auth
   ];
 
   return (
@@ -103,12 +157,17 @@ const Settings = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
+<<<<<<< HEAD
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Configuración
           </h1>
           <p className="text-gray-600">
             Gestiona la configuración de tu cuenta y sistema
           </p>
+=======
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Configuración</h1>
+          <p className="text-gray-600">Gestiona la configuración de tu cuenta y sistema</p>
+>>>>>>> origin/auth
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border dark:bg-slate-900">
@@ -140,9 +199,13 @@ const Settings = () => {
             {activeTab === "profile" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
+<<<<<<< HEAD
                   <h2 className="text-xl font-semibold text-gray-900">
                     Información del Perfil
                   </h2>
+=======
+                  <h2 className="text-xl font-semibold text-gray-900">Información del Perfil</h2>
+>>>>>>> origin/auth
                   <button
                     onClick={() => handleSave("profile")}
                     className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -160,9 +223,13 @@ const Settings = () => {
                     <input
                       type="text"
                       value={profileData.firstName}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleProfileChange("firstName", e.target.value)
                       }
+=======
+                      onChange={(e) => handleProfileChange("firstName", e.target.value)}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -174,9 +241,13 @@ const Settings = () => {
                     <input
                       type="text"
                       value={profileData.lastName}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleProfileChange("lastName", e.target.value)
                       }
+=======
+                      onChange={(e) => handleProfileChange("lastName", e.target.value)}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -190,9 +261,13 @@ const Settings = () => {
                       <input
                         type="email"
                         value={profileData.email}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleProfileChange("email", e.target.value)
                         }
+=======
+                        onChange={(e) => handleProfileChange("email", e.target.value)}
+>>>>>>> origin/auth
                         className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -207,9 +282,13 @@ const Settings = () => {
                       <input
                         type="tel"
                         value={profileData.phone}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleProfileChange("phone", e.target.value)
                         }
+=======
+                        onChange={(e) => handleProfileChange("phone", e.target.value)}
+>>>>>>> origin/auth
                         className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -224,9 +303,13 @@ const Settings = () => {
                       <input
                         type="text"
                         value={profileData.address}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleProfileChange("address", e.target.value)
                         }
+=======
+                        onChange={(e) => handleProfileChange("address", e.target.value)}
+>>>>>>> origin/auth
                         className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -241,9 +324,13 @@ const Settings = () => {
                       <input
                         type="text"
                         value={profileData.company}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleProfileChange("company", e.target.value)
                         }
+=======
+                        onChange={(e) => handleProfileChange("company", e.target.value)}
+>>>>>>> origin/auth
                         className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -258,9 +345,13 @@ const Settings = () => {
                       <input
                         type="url"
                         value={profileData.website}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleProfileChange("website", e.target.value)
                         }
+=======
+                        onChange={(e) => handleProfileChange("website", e.target.value)}
+>>>>>>> origin/auth
                         className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -272,9 +363,13 @@ const Settings = () => {
             {activeTab === "security" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
+<<<<<<< HEAD
                   <h2 className="text-xl font-semibold text-gray-900">
                     Configuración de Seguridad
                   </h2>
+=======
+                  <h2 className="text-xl font-semibold text-gray-900">Configuración de Seguridad</h2>
+>>>>>>> origin/auth
                   <button
                     onClick={() => handleSave("security")}
                     className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -295,12 +390,16 @@ const Settings = () => {
                         <input
                           type={showPassword ? "text" : "password"}
                           value={securityData.currentPassword}
+<<<<<<< HEAD
                           onChange={(e) =>
                             handleSecurityChange(
                               "currentPassword",
                               e.target.value
                             )
                           }
+=======
+                          onChange={(e) => handleSecurityChange("currentPassword", e.target.value)}
+>>>>>>> origin/auth
                           className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                         <button
@@ -308,11 +407,15 @@ const Settings = () => {
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
+<<<<<<< HEAD
                           {showPassword ? (
                             <EyeOff className="w-5 h-5" />
                           ) : (
                             <Eye className="w-5 h-5" />
                           )}
+=======
+                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+>>>>>>> origin/auth
                         </button>
                       </div>
                     </div>
@@ -326,9 +429,13 @@ const Settings = () => {
                         <input
                           type={showNewPassword ? "text" : "password"}
                           value={securityData.newPassword}
+<<<<<<< HEAD
                           onChange={(e) =>
                             handleSecurityChange("newPassword", e.target.value)
                           }
+=======
+                          onChange={(e) => handleSecurityChange("newPassword", e.target.value)}
+>>>>>>> origin/auth
                           className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                         <button
@@ -336,11 +443,15 @@ const Settings = () => {
                           onClick={() => setShowNewPassword(!showNewPassword)}
                           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
+<<<<<<< HEAD
                           {showNewPassword ? (
                             <EyeOff className="w-5 h-5" />
                           ) : (
                             <Eye className="w-5 h-5" />
                           )}
+=======
+                          {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+>>>>>>> origin/auth
                         </button>
                       </div>
                     </div>
@@ -355,16 +466,21 @@ const Settings = () => {
                       <input
                         type={showConfirmPassword ? "text" : "password"}
                         value={securityData.confirmPassword}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleSecurityChange(
                             "confirmPassword",
                             e.target.value
                           )
                         }
+=======
+                        onChange={(e) => handleSecurityChange("confirmPassword", e.target.value)}
+>>>>>>> origin/auth
                         className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                       <button
                         type="button"
+<<<<<<< HEAD
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
                         }
@@ -375,29 +491,44 @@ const Settings = () => {
                         ) : (
                           <Eye className="w-5 h-5" />
                         )}
+=======
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+>>>>>>> origin/auth
                       </button>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div>
+<<<<<<< HEAD
                       <h3 className="font-medium text-gray-900">
                         Autenticación de Dos Factores
                       </h3>
                       <p className="text-sm text-gray-600">
                         Añade una capa extra de seguridad a tu cuenta
                       </p>
+=======
+                      <h3 className="font-medium text-gray-900">Autenticación de Dos Factores</h3>
+                      <p className="text-sm text-gray-600">Añade una capa extra de seguridad a tu cuenta</p>
+>>>>>>> origin/auth
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={securityData.twoFactorAuth}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleSecurityChange(
                             "twoFactorAuth",
                             e.target.checked
                           )
                         }
+=======
+                        onChange={(e) => handleSecurityChange("twoFactorAuth", e.target.checked)}
+>>>>>>> origin/auth
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -410,12 +541,16 @@ const Settings = () => {
                     </label>
                     <select
                       value={securityData.sessionTimeout}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleSecurityChange(
                           "sessionTimeout",
                           parseInt(e.target.value)
                         )
                       }
+=======
+                      onChange={(e) => handleSecurityChange("sessionTimeout", parseInt(e.target.value))}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value={15}>15 minutos</option>
@@ -432,9 +567,13 @@ const Settings = () => {
             {activeTab === "notifications" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
+<<<<<<< HEAD
                   <h2 className="text-xl font-semibold text-gray-900">
                     Preferencias de Notificaciones
                   </h2>
+=======
+                  <h2 className="text-xl font-semibold text-gray-900">Preferencias de Notificaciones</h2>
+>>>>>>> origin/auth
                   <button
                     onClick={() => handleSave("notifications")}
                     className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -447,6 +586,7 @@ const Settings = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div>
+<<<<<<< HEAD
                       <h3 className="font-medium text-gray-900">
                         Notificaciones por Email
                       </h3>
@@ -454,17 +594,25 @@ const Settings = () => {
                         Recibe actualizaciones importantes por correo
                         electrónico
                       </p>
+=======
+                      <h3 className="font-medium text-gray-900">Notificaciones por Email</h3>
+                      <p className="text-sm text-gray-600">Recibe actualizaciones importantes por correo electrónico</p>
+>>>>>>> origin/auth
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={notificationData.emailNotifications}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleNotificationChange(
                             "emailNotifications",
                             e.target.checked
                           )
                         }
+=======
+                        onChange={(e) => handleNotificationChange("emailNotifications", e.target.checked)}
+>>>>>>> origin/auth
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -473,23 +621,32 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div>
+<<<<<<< HEAD
                       <h3 className="font-medium text-gray-900">
                         Notificaciones SMS
                       </h3>
                       <p className="text-sm text-gray-600">
                         Recibe alertas importantes por mensaje de texto
                       </p>
+=======
+                      <h3 className="font-medium text-gray-900">Notificaciones SMS</h3>
+                      <p className="text-sm text-gray-600">Recibe alertas importantes por mensaje de texto</p>
+>>>>>>> origin/auth
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={notificationData.smsNotifications}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleNotificationChange(
                             "smsNotifications",
                             e.target.checked
                           )
                         }
+=======
+                        onChange={(e) => handleNotificationChange("smsNotifications", e.target.checked)}
+>>>>>>> origin/auth
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -498,23 +655,32 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div>
+<<<<<<< HEAD
                       <h3 className="font-medium text-gray-900">
                         Notificaciones Push
                       </h3>
                       <p className="text-sm text-gray-600">
                         Recibe notificaciones en tiempo real en el navegador
                       </p>
+=======
+                      <h3 className="font-medium text-gray-900">Notificaciones Push</h3>
+                      <p className="text-sm text-gray-600">Recibe notificaciones en tiempo real en el navegador</p>
+>>>>>>> origin/auth
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={notificationData.pushNotifications}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleNotificationChange(
                             "pushNotifications",
                             e.target.checked
                           )
                         }
+=======
+                        onChange={(e) => handleNotificationChange("pushNotifications", e.target.checked)}
+>>>>>>> origin/auth
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -523,23 +689,32 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div>
+<<<<<<< HEAD
                       <h3 className="font-medium text-gray-900">
                         Actualizaciones de Pedidos
                       </h3>
                       <p className="text-sm text-gray-600">
                         Notificaciones sobre el estado de los pedidos
                       </p>
+=======
+                      <h3 className="font-medium text-gray-900">Actualizaciones de Pedidos</h3>
+                      <p className="text-sm text-gray-600">Notificaciones sobre el estado de los pedidos</p>
+>>>>>>> origin/auth
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={notificationData.orderUpdates}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleNotificationChange(
                             "orderUpdates",
                             e.target.checked
                           )
                         }
+=======
+                        onChange={(e) => handleNotificationChange("orderUpdates", e.target.checked)}
+>>>>>>> origin/auth
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -548,23 +723,32 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div>
+<<<<<<< HEAD
                       <h3 className="font-medium text-gray-900">
                         Alertas del Sistema
                       </h3>
                       <p className="text-sm text-gray-600">
                         Notificaciones sobre mantenimiento y actualizaciones
                       </p>
+=======
+                      <h3 className="font-medium text-gray-900">Alertas del Sistema</h3>
+                      <p className="text-sm text-gray-600">Notificaciones sobre mantenimiento y actualizaciones</p>
+>>>>>>> origin/auth
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={notificationData.systemAlerts}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleNotificationChange(
                             "systemAlerts",
                             e.target.checked
                           )
                         }
+=======
+                        onChange={(e) => handleNotificationChange("systemAlerts", e.target.checked)}
+>>>>>>> origin/auth
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -573,23 +757,32 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div>
+<<<<<<< HEAD
                       <h3 className="font-medium text-gray-900">
                         Emails de Marketing
                       </h3>
                       <p className="text-sm text-gray-600">
                         Recibe ofertas especiales y novedades
                       </p>
+=======
+                      <h3 className="font-medium text-gray-900">Emails de Marketing</h3>
+                      <p className="text-sm text-gray-600">Recibe ofertas especiales y novedades</p>
+>>>>>>> origin/auth
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={notificationData.marketingEmails}
+<<<<<<< HEAD
                         onChange={(e) =>
                           handleNotificationChange(
                             "marketingEmails",
                             e.target.checked
                           )
                         }
+=======
+                        onChange={(e) => handleNotificationChange("marketingEmails", e.target.checked)}
+>>>>>>> origin/auth
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -602,9 +795,13 @@ const Settings = () => {
             {activeTab === "system" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
+<<<<<<< HEAD
                   <h2 className="text-xl font-semibold text-gray-900">
                     Configuración del Sistema
                   </h2>
+=======
+                  <h2 className="text-xl font-semibold text-gray-900">Configuración del Sistema</h2>
+>>>>>>> origin/auth
                   <button
                     onClick={() => handleSave("system")}
                     className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -621,9 +818,13 @@ const Settings = () => {
                     </label>
                     <select
                       value={systemData.language}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleSystemChange("language", e.target.value)
                       }
+=======
+                      onChange={(e) => handleSystemChange("language", e.target.value)}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="es">Español</option>
@@ -638,9 +839,13 @@ const Settings = () => {
                     </label>
                     <select
                       value={systemData.timezone}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleSystemChange("timezone", e.target.value)
                       }
+=======
+                      onChange={(e) => handleSystemChange("timezone", e.target.value)}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="America/Lima">Lima (GMT-5)</option>
@@ -656,9 +861,13 @@ const Settings = () => {
                     </label>
                     <select
                       value={systemData.dateFormat}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleSystemChange("dateFormat", e.target.value)
                       }
+=======
+                      onChange={(e) => handleSystemChange("dateFormat", e.target.value)}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="DD/MM/YYYY">DD/MM/YYYY</option>
@@ -673,9 +882,13 @@ const Settings = () => {
                     </label>
                     <select
                       value={systemData.currency}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleSystemChange("currency", e.target.value)
                       }
+=======
+                      onChange={(e) => handleSystemChange("currency", e.target.value)}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="PEN">Soles (PEN)</option>
@@ -690,9 +903,13 @@ const Settings = () => {
                     </label>
                     <select
                       value={systemData.theme}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleSystemChange("theme", e.target.value)
                       }
+=======
+                      onChange={(e) => handleSystemChange("theme", e.target.value)}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="light">Claro</option>
@@ -707,9 +924,13 @@ const Settings = () => {
                     </label>
                     <select
                       value={systemData.backupFrequency}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleSystemChange("backupFrequency", e.target.value)
                       }
+=======
+                      onChange={(e) => handleSystemChange("backupFrequency", e.target.value)}
+>>>>>>> origin/auth
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="daily">Diario</option>
@@ -721,20 +942,29 @@ const Settings = () => {
 
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <div>
+<<<<<<< HEAD
                     <h3 className="font-medium text-gray-900">
                       Respaldo Automático
                     </h3>
                     <p className="text-sm text-gray-600">
                       Realizar respaldos automáticos de la base de datos
                     </p>
+=======
+                    <h3 className="font-medium text-gray-900">Respaldo Automático</h3>
+                    <p className="text-sm text-gray-600">Realizar respaldos automáticos de la base de datos</p>
+>>>>>>> origin/auth
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
                       type="checkbox"
                       checked={systemData.autoBackup}
+<<<<<<< HEAD
                       onChange={(e) =>
                         handleSystemChange("autoBackup", e.target.checked)
                       }
+=======
+                      onChange={(e) => handleSystemChange("autoBackup", e.target.checked)}
+>>>>>>> origin/auth
                       className="sr-only peer"
                     />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>

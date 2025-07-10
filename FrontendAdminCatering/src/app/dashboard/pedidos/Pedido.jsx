@@ -40,7 +40,11 @@ const AllOrders = () => {
   };
 
   const toggleOrderExpansion = (orderId) => {
+<<<<<<< HEAD
     setExpandedOrders((prev) => {
+=======
+    setExpandedOrders(prev => {
+>>>>>>> origin/auth
       const newSet = new Set(prev);
       if (newSet.has(orderId)) {
         newSet.delete(orderId);
@@ -54,9 +58,13 @@ const AllOrders = () => {
   const handleEstadoChange = async (id, nuevoEstado) => {
     // Verificar si el usuario tiene rol ADMIN
     if (!roles.includes("ROLE_ADMIN")) {
+<<<<<<< HEAD
       alert(
         "No tienes permisos para cambiar el estado. Se requiere rol ADMIN."
       );
+=======
+      alert("No tienes permisos para cambiar el estado. Se requiere rol ADMIN.");
+>>>>>>> origin/auth
       return;
     }
 
@@ -77,9 +85,13 @@ const AllOrders = () => {
 
       if (!response.ok) {
         if (response.status === 403) {
+<<<<<<< HEAD
           throw new Error(
             "No tienes permisos para cambiar el estado. Se requiere rol ADMIN."
           );
+=======
+          throw new Error("No tienes permisos para cambiar el estado. Se requiere rol ADMIN.");
+>>>>>>> origin/auth
         } else {
           throw new Error("Error al actualizar el estado del pedido.");
         }
@@ -97,15 +109,23 @@ const AllOrders = () => {
   const downloadFactura = async (pedidoId) => {
     // Verificar si el usuario tiene rol ADMIN
     if (!roles.includes("ROLE_ADMIN")) {
+<<<<<<< HEAD
       alert(
         "No tienes permisos para descargar facturas. Se requiere rol ADMIN."
       );
+=======
+      alert("No tienes permisos para descargar facturas. Se requiere rol ADMIN.");
+>>>>>>> origin/auth
       return;
     }
 
     try {
       console.log("Iniciando descarga de factura para pedido:", pedidoId);
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> origin/auth
       const response = await fetch(
         `http://localhost:8084/api/pedidos/${pedidoId}/reporte?tipoDocumento=FACTURA`,
         {
@@ -114,6 +134,7 @@ const AllOrders = () => {
         }
       );
 
+<<<<<<< HEAD
       console.log(
         "Respuesta del servidor:",
         response.status,
@@ -125,19 +146,34 @@ const AllOrders = () => {
           throw new Error(
             "No tienes permisos para descargar facturas. Se requiere rol ADMIN."
           );
+=======
+      console.log("Respuesta del servidor:", response.status, response.statusText);
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new Error("No tienes permisos para descargar facturas. Se requiere rol ADMIN.");
+>>>>>>> origin/auth
         } else if (response.status === 404) {
           throw new Error("Pedido no encontrado.");
         } else if (response.status === 500) {
           throw new Error("Error interno del servidor al generar el PDF.");
         } else {
+<<<<<<< HEAD
           throw new Error(
             `Error del servidor: ${response.status} ${response.statusText}`
           );
+=======
+          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+>>>>>>> origin/auth
         }
       }
 
       const blob = await response.blob();
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> origin/auth
       if (blob.size === 0) {
         throw new Error("El archivo PDF generado está vacío.");
       }
@@ -150,10 +186,17 @@ const AllOrders = () => {
       document.body.appendChild(link);
       link.click();
       link.remove();
+<<<<<<< HEAD
 
       // Limpiar la URL del objeto
       window.URL.revokeObjectURL(url);
 
+=======
+      
+      // Limpiar la URL del objeto
+      window.URL.revokeObjectURL(url);
+      
+>>>>>>> origin/auth
       console.log("Factura descargada exitosamente");
     } catch (error) {
       console.error("Error al descargar factura:", error);
@@ -290,7 +333,11 @@ const AllOrders = () => {
                   className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg"
                 >
                   {/* Header del acordeón - Siempre visible */}
+<<<<<<< HEAD
                   <div
+=======
+                  <div 
+>>>>>>> origin/auth
                     className="p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200"
                     onClick={() => toggleOrderExpansion(order.id)}
                   >
@@ -316,7 +363,11 @@ const AllOrders = () => {
                           Usuario ID: {order.usuarioId}
                         </span>
                       </div>
+<<<<<<< HEAD
 
+=======
+                      
+>>>>>>> origin/auth
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">
                           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -335,10 +386,17 @@ const AllOrders = () => {
                             <option value="Nuevo">Nuevo</option>
                             <option value="En Proceso">En Proceso</option>
                             <option value="Recibido">Recibido</option>
+<<<<<<< HEAD
                             <option value="Pagado">Pagado</option>
                           </select>
                         </div>
 
+=======
+                            <option value="Culminado">Culminado</option>
+                          </select>
+                        </div>
+                        
+>>>>>>> origin/auth
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -348,11 +406,19 @@ const AllOrders = () => {
                         >
                           Descargar Factura
                         </button>
+<<<<<<< HEAD
 
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${
                             isExpanded ? "rotate-180" : ""
+=======
+                        
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180' : ''
+>>>>>>> origin/auth
                           }`}
                           fill="none"
                           viewBox="0 0 24 24"
@@ -370,11 +436,15 @@ const AllOrders = () => {
                   </div>
 
                   {/* Contenido expandible del acordeón */}
+<<<<<<< HEAD
                   <div
                     className={`overflow-hidden transition-all duration-300 ${
                       isExpanded ? "max-h-none" : "max-h-0"
                     }`}
                   >
+=======
+                  <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-none' : 'max-h-0'}`}>
+>>>>>>> origin/auth
                     <div className="px-6 pb-6 border-t border-gray-200 dark:border-gray-700">
                       <div className="pt-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -540,10 +610,14 @@ const AllOrders = () => {
                                 </h3>
                                 <div className="space-y-1">
                                   <p className="font-medium text-gray-800 dark:text-gray-200">
+<<<<<<< HEAD
                                     {
                                       order.infoMenu.servicio.tipoServicio
                                         ?.nombre
                                     }
+=======
+                                    {order.infoMenu.servicio.tipoServicio?.nombre}
+>>>>>>> origin/auth
                                   </p>
                                   <p className="text-sm text-gray-600 dark:text-gray-400">
                                     {
@@ -580,8 +654,12 @@ const AllOrders = () => {
                             )}
 
                             {/* Personal */}
+<<<<<<< HEAD
                             {order.infoMenu.personal?.personalInfo?.length >
                               0 && (
+=======
+                            {order.infoMenu.personal?.personalInfo?.length > 0 && (
+>>>>>>> origin/auth
                               <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
                                 <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
                                   <svg
@@ -603,10 +681,14 @@ const AllOrders = () => {
                                 <ul className="space-y-2">
                                   {order.infoMenu.personal.personalInfo.map(
                                     (pers, idx) => (
+<<<<<<< HEAD
                                       <li
                                         key={idx}
                                         className="flex justify-between"
                                       >
+=======
+                                      <li key={idx} className="flex justify-between">
+>>>>>>> origin/auth
                                         <span className="text-gray-600 dark:text-gray-300">
                                           {pers.tipoPersonal}
                                         </span>
@@ -641,6 +723,7 @@ const AllOrders = () => {
                                   Extras
                                 </h3>
                                 <ul className="space-y-2">
+<<<<<<< HEAD
                                   {order.infoMenu.extra.extraInfo.map(
                                     (ext, idx) => (
                                       <li
@@ -656,6 +739,18 @@ const AllOrders = () => {
                                       </li>
                                     )
                                   )}
+=======
+                                  {order.infoMenu.extra.extraInfo.map((ext, idx) => (
+                                    <li key={idx} className="flex justify-between">
+                                      <span className="text-gray-600 dark:text-gray-300">
+                                        {ext.tipoExtra}
+                                      </span>
+                                      <span className="font-medium text-gray-800 dark:text-gray-200">
+                                        {ext.cantidad}
+                                      </span>
+                                    </li>
+                                  ))}
+>>>>>>> origin/auth
                                 </ul>
                               </div>
                             )}
@@ -674,4 +769,8 @@ const AllOrders = () => {
   );
 };
 
+<<<<<<< HEAD
 export default AllOrders;
+=======
+export default AllOrders;
+>>>>>>> origin/auth

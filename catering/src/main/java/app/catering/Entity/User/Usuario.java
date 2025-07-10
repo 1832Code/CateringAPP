@@ -1,0 +1,105 @@
+package app.catering.Entity.User;
+import app.catering.Entity.Pedido.Pedido;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Usuario implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "El DNI es obligatorio")
+    private String dni;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Nombres son obligatorios")
+    private String nombres;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Apellidos son obligatorios")
+    private String apellidos;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Teléfono es obligatorio")
+    private String telefono;
+
+    @Column(nullable = false, unique = true)
+    @Email(message = "Correo electrónico no válido")
+    private String email;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Contraseña es obligatoria")
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pedido> pedidos;
+
+    private String verificationCode;
+
+    private boolean confirmed;
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .toList();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}

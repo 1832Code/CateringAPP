@@ -22,6 +22,7 @@ const ItemPage: React.FC = () => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+<<<<<<< HEAD
   const [form, setForm] = useState<Partial<Item>>({
     nombre: "",
     descripcion: "",
@@ -29,6 +30,9 @@ const ItemPage: React.FC = () => {
     imagenUrl: "",
     idCategoria: undefined,
   });
+=======
+  const [form, setForm] = useState<Partial<Item>>({ nombre: "", descripcion: "", precio: 0, imagenUrl: "", idCategoria: undefined });
+>>>>>>> origin/auth
   const [editId, setEditId] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -47,7 +51,11 @@ const ItemPage: React.FC = () => {
       if (!res.ok) throw new Error("Error al cargar items");
       const data = await res.json();
       setItems(data);
+<<<<<<< HEAD
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+=======
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> origin/auth
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -64,7 +72,11 @@ const ItemPage: React.FC = () => {
       if (!res.ok) throw new Error("Error al cargar categorías");
       const data = await res.json();
       setCategorias(data);
+<<<<<<< HEAD
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+=======
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> origin/auth
     } catch (e: any) {
       setError(e.message);
     }
@@ -76,6 +88,7 @@ const ItemPage: React.FC = () => {
   }, []);
 
   // Handlers
+<<<<<<< HEAD
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -89,6 +102,11 @@ const ItemPage: React.FC = () => {
           ? Number(value)
           : value,
     });
+=======
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: name === "precio" ? Number(value) : name === "idCategoria" ? Number(value) : value });
+>>>>>>> origin/auth
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -133,18 +151,26 @@ const ItemPage: React.FC = () => {
         body: JSON.stringify({ ...form, imagenUrl }),
       });
       if (!res.ok) throw new Error("Error al guardar el item");
+<<<<<<< HEAD
       setFeedback(
         editId ? "Item actualizado exitosamente" : "Item creado exitosamente"
       );
       resetForm();
       fetchItems();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+=======
+      setFeedback(editId ? "Item actualizado exitosamente" : "Item creado exitosamente");
+      resetForm();
+      fetchItems();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> origin/auth
     } catch (e: any) {
       setFeedback(e.message);
     }
   };
 
   const resetForm = () => {
+<<<<<<< HEAD
     setForm({
       nombre: "",
       descripcion: "",
@@ -152,6 +178,9 @@ const ItemPage: React.FC = () => {
       imagenUrl: "",
       idCategoria: undefined,
     });
+=======
+    setForm({ nombre: "", descripcion: "", precio: 0, imagenUrl: "", idCategoria: undefined });
+>>>>>>> origin/auth
     setEditId(null);
     setImageFile(null);
     setImagePreview(null);
@@ -159,6 +188,7 @@ const ItemPage: React.FC = () => {
   };
 
   const handleEdit = (item: Item) => {
+<<<<<<< HEAD
     setForm({
       nombre: item.nombre,
       descripcion: item.descripcion,
@@ -166,6 +196,9 @@ const ItemPage: React.FC = () => {
       imagenUrl: item.imagenUrl,
       idCategoria: item.idCategoria,
     });
+=======
+    setForm({ nombre: item.nombre, descripcion: item.descripcion, precio: item.precio, imagenUrl: item.imagenUrl, idCategoria: item.idCategoria });
+>>>>>>> origin/auth
     setEditId(item.id);
     setImagePreview(item.imagenUrl);
     setImageFile(null);
@@ -174,8 +207,12 @@ const ItemPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     if (!isAdmin) return;
+<<<<<<< HEAD
     if (!window.confirm("¿Estás seguro de que deseas eliminar este item?"))
       return;
+=======
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este item?")) return;
+>>>>>>> origin/auth
     try {
       const res = await fetch(`http://localhost:8084/api/items/${id}`, {
         method: "DELETE",
@@ -184,7 +221,11 @@ const ItemPage: React.FC = () => {
       if (!res.ok) throw new Error("Error al eliminar el item");
       setFeedback("Item eliminado exitosamente");
       fetchItems();
+<<<<<<< HEAD
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+=======
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> origin/auth
     } catch (e: any) {
       setFeedback(e.message);
     }
@@ -195,6 +236,7 @@ const ItemPage: React.FC = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+<<<<<<< HEAD
             <svg
               className="w-8 h-8 text-red-600"
               fill="none"
@@ -215,6 +257,14 @@ const ItemPage: React.FC = () => {
           <p className="text-gray-600">
             Solo los administradores pueden acceder a esta sección.
           </p>
+=======
+            <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H8m13-2.5V6a2 2 0 00-2-2H5a2 2 0 00-2 2v8.5l3.5-3.5h8l3.5 3.5z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Acceso Restringido</h2>
+          <p className="text-gray-600">Solo los administradores pueden acceder a esta sección.</p>
+>>>>>>> origin/auth
         </div>
       </div>
     );
@@ -227,17 +277,23 @@ const ItemPage: React.FC = () => {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6 dark:bg-gray-900">
           <div className="flex items-center justify-between">
             <div>
+<<<<<<< HEAD
               <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-400">
                 Gestión de Items
               </h1>
               <p className="text-gray-600 mt-1">
                 Administra el catálogo de productos
               </p>
+=======
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-400">Gestión de Items</h1>
+              <p className="text-gray-600 mt-1">Administra el catálogo de productos</p>
+>>>>>>> origin/auth
             </div>
             <button
               onClick={() => setShowForm(!showForm)}
               className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
             >
+<<<<<<< HEAD
               <svg
                 className="w-5 h-5 mr-2"
                 fill="none"
@@ -250,6 +306,10 @@ const ItemPage: React.FC = () => {
                   strokeWidth={2}
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
+=======
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+>>>>>>> origin/auth
               </svg>
               {showForm ? "Ocultar Formulario" : "Nuevo Item"}
             </button>
@@ -258,6 +318,7 @@ const ItemPage: React.FC = () => {
 
         {/* Notifications */}
         {feedback && (
+<<<<<<< HEAD
           <div
             className={`mb-6 p-4 rounded-lg border ${
               feedback.includes("Error") || feedback.includes("error")
@@ -286,6 +347,19 @@ const ItemPage: React.FC = () => {
                     strokeWidth={2}
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
+=======
+          <div className={`mb-6 p-4 rounded-lg border ${
+            feedback.includes("Error") || feedback.includes("error") 
+              ? "bg-red-50 border-red-200 text-red-800" 
+              : "bg-green-50 border-green-200 text-green-800"
+          }`}>
+            <div className="flex items-center">
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {feedback.includes("Error") || feedback.includes("error") ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+>>>>>>> origin/auth
                 )}
               </svg>
               {feedback}
@@ -296,6 +370,7 @@ const ItemPage: React.FC = () => {
         {error && (
           <div className="mb-6 p-4 rounded-lg border bg-red-50 border-red-200 text-red-800">
             <div className="flex items-center">
+<<<<<<< HEAD
               <svg
                 className="w-5 h-5 mr-2"
                 fill="none"
@@ -308,6 +383,10 @@ const ItemPage: React.FC = () => {
                   strokeWidth={2}
                   d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
+=======
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+>>>>>>> origin/auth
               </svg>
               {error}
             </div>
@@ -339,9 +418,13 @@ const ItemPage: React.FC = () => {
                     Precio *
                   </label>
                   <div className="relative">
+<<<<<<< HEAD
                     <span className="absolute left-3 top-2 text-gray-500">
                       S/
                     </span>
+=======
+                    <span className="absolute left-3 top-2 text-gray-500">S/</span>
+>>>>>>> origin/auth
                     <input
                       name="precio"
                       type="number"
@@ -382,9 +465,13 @@ const ItemPage: React.FC = () => {
                 >
                   <option value="">Selecciona una categoría</option>
                   {categorias.map((cat) => (
+<<<<<<< HEAD
                     <option key={cat.id} value={cat.id}>
                       {cat.nombre}
                     </option>
+=======
+                    <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+>>>>>>> origin/auth
                   ))}
                 </select>
               </div>
@@ -402,10 +489,17 @@ const ItemPage: React.FC = () => {
                   />
                   {imagePreview && (
                     <div className="relative">
+<<<<<<< HEAD
                       <img
                         src={imagePreview}
                         alt="Vista previa"
                         className="h-16 w-16 object-cover rounded-lg border border-gray-300 shadow-sm"
+=======
+                      <img 
+                        src={imagePreview} 
+                        alt="Vista previa" 
+                        className="h-16 w-16 object-cover rounded-lg border border-gray-300 shadow-sm" 
+>>>>>>> origin/auth
                       />
                       <button
                         type="button"
@@ -448,7 +542,11 @@ const ItemPage: React.FC = () => {
               Items ({items.length})
             </h3>
           </div>
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> origin/auth
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -456,6 +554,7 @@ const ItemPage: React.FC = () => {
             </div>
           ) : items.length === 0 ? (
             <div className="text-center py-12">
+<<<<<<< HEAD
               <svg
                 className="w-12 h-12 text-gray-400 mx-auto mb-4"
                 fill="none"
@@ -472,12 +571,19 @@ const ItemPage: React.FC = () => {
               <h3 className="text-lg font-medium text-gray-900 mb-1">
                 No hay items
               </h3>
+=======
+              <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+              </svg>
+              <h3 className="text-lg font-medium text-gray-900 mb-1">No hay items</h3>
+>>>>>>> origin/auth
               <p className="text-gray-500">Comienza creando tu primer item.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50 ">
+<<<<<<< HEAD
                   <tr className="dark:bg-slate-950">
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       ID
@@ -500,21 +606,39 @@ const ItemPage: React.FC = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Acciones
                     </th>
+=======
+                  <tr  className="dark:bg-slate-950">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagen</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+>>>>>>> origin/auth
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {items.map((item) => (
+<<<<<<< HEAD
                     <tr
                       key={item.id}
                       className="hover:bg-gray-50 transition-colors dark:bg-slate-900 dark:text-slate-300"
                     >
+=======
+                    <tr key={item.id} className="hover:bg-gray-50 transition-colors dark:bg-slate-900 dark:text-slate-300">
+>>>>>>> origin/auth
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium dark:text-slate-300 text-gray-900">
                         #{item.id}
                       </td>
                       <td className="px-6 py-4 dark:text-slate-300 whitespace-nowrap">
+<<<<<<< HEAD
                         <div className="text-sm font-medium text-gray-900 dark:text-slate-300">
                           {item.nombre}
                         </div>
+=======
+                        <div className="text-sm font-medium text-gray-900 dark:text-slate-300">{item.nombre}</div>
+>>>>>>> origin/auth
                       </td>
                       <td className="px-6 py-4 dark:text-slate-300">
                         <div className="text-sm text-gray-900 max-w-xs truncate dark:text-slate-300">
@@ -522,18 +646,27 @@ const ItemPage: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap dark:text-slate-300">
+<<<<<<< HEAD
                         <div className="text-sm font-semibold text-gray-900 dark:text-slate-300">
+=======
+                        <div className="text-sm font-semibold text-gray-900 dark:text-slate-300" >
+>>>>>>> origin/auth
                           S/ {item.precio.toFixed(2)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap dark:text-slate-300">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+<<<<<<< HEAD
                           {categorias.find((cat) => cat.id === item.idCategoria)
                             ?.nombre || "Sin categoría"}
+=======
+                          {categorias.find((cat) => cat.id === item.idCategoria)?.nombre || "Sin categoría"}
+>>>>>>> origin/auth
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {item.imagenUrl ? (
+<<<<<<< HEAD
                           <img
                             src={item.imagenUrl}
                             alt={item.nombre}
@@ -553,6 +686,17 @@ const ItemPage: React.FC = () => {
                                 strokeWidth={2}
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                               />
+=======
+                          <img 
+                            src={item.imagenUrl} 
+                            alt={item.nombre} 
+                            className="h-12 w-12 object-cover rounded-lg border border-gray-300 shadow-sm" 
+                          />
+                        ) : (
+                          <div className="h-12 w-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+>>>>>>> origin/auth
                             </svg>
                           </div>
                         )}
@@ -585,4 +729,8 @@ const ItemPage: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default ItemPage;
+=======
+export default ItemPage;
+>>>>>>> origin/auth

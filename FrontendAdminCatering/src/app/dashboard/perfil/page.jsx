@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+<<<<<<< HEAD
 import {
   Card,
   Spinner,
@@ -14,6 +15,9 @@ import {
   TextInput,
   Label,
 } from "flowbite-react"; // Import Flowbite components for better UI
+=======
+import { Card, Spinner, Alert, Button, Modal, ModalBody, ModalHeader, ModalFooter, TextInput, Label } from "flowbite-react"; // Import Flowbite components for better UI
+>>>>>>> origin/auth
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useAuth } from "@/context/authcontext";
 
@@ -81,11 +85,19 @@ const Perfil = () => {
   // Función para abrir modal de edición y setear datos actuales
   const handleEditClick = () => {
     setEditData({
+<<<<<<< HEAD
       firstName: adminData.firstName || "",
       lastName: adminData.lastName || "",
       email: adminData.email || "",
       dni: adminData.dni || "",
       telephone: adminData.telephone || "",
+=======
+      nombres: adminData.nombres || "",
+      apellidos: adminData.apellidos || "",
+      email: adminData.email || "",
+      dni: adminData.dni || "",
+      telefono: adminData.telefono || "",
+>>>>>>> origin/auth
     });
     setShowEditModal(true);
   };
@@ -96,18 +108,27 @@ const Perfil = () => {
     setEditLoading(true);
     setError(null);
     setSuccessMsg(null);
+<<<<<<< HEAD
     try {
       const res = await fetch(
         `http://localhost:8084/api/admins/usuarios/${adminData.id}`,
         {
+=======
+          try {
+        const res = await fetch(`http://localhost:8084/api/admins/usuarios/${adminData.id}`, {
+>>>>>>> origin/auth
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
           body: JSON.stringify(editData),
+<<<<<<< HEAD
         }
       );
+=======
+        });
+>>>>>>> origin/auth
       if (res.ok) {
         const updated = await res.json();
         setAdminData({ ...adminData, ...updated });
@@ -128,6 +149,7 @@ const Perfil = () => {
   const handleDelete = async () => {
     setDeleteLoading(true);
     setError(null);
+<<<<<<< HEAD
     try {
       const res = await fetch(
         `http://localhost:8084/api/admins/usuarios/${adminData.id}`,
@@ -152,6 +174,29 @@ const Perfil = () => {
       setShowDeleteModal(false);
     }
   };
+=======
+          try {
+        const res = await fetch(`http://localhost:8084/api/admins/usuarios/${adminData.id}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+              if (res.ok) {
+          setSuccessMsg("Cuenta eliminada correctamente. Redirigiendo...");
+          setTimeout(() => {
+            router.push("/auth/login");
+          }, 2000);
+        } else {
+          const errorText = await res.text();
+          setError(`Error al eliminar: ${errorText}`);
+        }
+      } catch (err) {
+        setError("Error de conexión al servidor. Intente de nuevo más tarde.");
+      } finally {
+        setDeleteLoading(false);
+        setShowDeleteModal(false);
+      }
+    };
+>>>>>>> origin/auth
 
   if (loading) {
     return (
@@ -219,7 +264,13 @@ const Perfil = () => {
             <p className="text-md font-semibold text-amber-600 dark:text-amber-300">
               Teléfono:
             </p>
+<<<<<<< HEAD
             <p className="text-lg">{adminData.telefono || "No especificado"}</p>
+=======
+            <p className="text-lg">
+              {adminData.telefono || "No especificado"}
+            </p>
+>>>>>>> origin/auth
           </div>
           <div>
             <p className="text-md font-semibold text-amber-600 dark:text-amber-300">
@@ -261,16 +312,21 @@ const Perfil = () => {
         </div>
       </Card>
       {/* Modal de edición */}
+<<<<<<< HEAD
       <Modal
         show={showEditModal}
         size="md"
         onClose={() => setShowEditModal(false)}
         popup
       >
+=======
+      <Modal show={showEditModal} size="md" onClose={() => setShowEditModal(false)} popup>
+>>>>>>> origin/auth
         <ModalHeader>Editar Perfil</ModalHeader>
         <ModalBody>
           <form className="space-y-4" onSubmit={handleEditSubmit}>
             <div>
+<<<<<<< HEAD
               <Label htmlFor="firstName">Nombre</Label>
               <TextInput
                 id="firstName"
@@ -278,10 +334,18 @@ const Perfil = () => {
                 onChange={(e) =>
                   setEditData({ ...editData, firstName: e.target.value })
                 }
+=======
+              <Label htmlFor="nombres">Nombre</Label>
+              <TextInput
+                id="nombres"
+                value={editData?.nombres || ""}
+                onChange={e => setEditData({ ...editData, nombres: e.target.value })}
+>>>>>>> origin/auth
                 required
               />
             </div>
             <div>
+<<<<<<< HEAD
               <Label htmlFor="lastName">Apellido</Label>
               <TextInput
                 id="lastName"
@@ -289,6 +353,13 @@ const Perfil = () => {
                 onChange={(e) =>
                   setEditData({ ...editData, lastName: e.target.value })
                 }
+=======
+              <Label htmlFor="apellidos">Apellido</Label>
+              <TextInput
+                id="apellidos"
+                value={editData?.apellidos || ""}
+                onChange={e => setEditData({ ...editData, apellidos: e.target.value })}
+>>>>>>> origin/auth
                 required
               />
             </div>
@@ -298,9 +369,13 @@ const Perfil = () => {
                 id="email"
                 type="email"
                 value={editData?.email || ""}
+<<<<<<< HEAD
                 onChange={(e) =>
                   setEditData({ ...editData, email: e.target.value })
                 }
+=======
+                onChange={e => setEditData({ ...editData, email: e.target.value })}
+>>>>>>> origin/auth
                 required
               />
             </div>
@@ -309,6 +384,7 @@ const Perfil = () => {
               <TextInput
                 id="dni"
                 value={editData?.dni || ""}
+<<<<<<< HEAD
                 onChange={(e) =>
                   setEditData({ ...editData, dni: e.target.value })
                 }
@@ -330,6 +406,21 @@ const Perfil = () => {
                 onClick={() => setShowEditModal(false)}
                 type="button"
               >
+=======
+                onChange={e => setEditData({ ...editData, dni: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="telefono">Teléfono</Label>
+              <TextInput
+                id="telefono"
+                value={editData?.telefono || ""}
+                onChange={e => setEditData({ ...editData, telefono: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end gap-2 mt-4">
+              <Button color="gray" onClick={() => setShowEditModal(false)} type="button">
+>>>>>>> origin/auth
                 Cancelar
               </Button>
               <Button type="submit" isProcessing={editLoading}>
@@ -340,17 +431,22 @@ const Perfil = () => {
         </ModalBody>
       </Modal>
       {/* Modal de confirmación de borrado */}
+<<<<<<< HEAD
       <Modal
         show={showDeleteModal}
         size="md"
         onClose={() => setShowDeleteModal(false)}
         popup
       >
+=======
+      <Modal show={showDeleteModal} size="md" onClose={() => setShowDeleteModal(false)} popup>
+>>>>>>> origin/auth
         <ModalHeader />
         <ModalBody>
           <div className="text-center">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+<<<<<<< HEAD
               ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se
               puede deshacer.
             </h3>
@@ -360,6 +456,12 @@ const Perfil = () => {
                 onClick={handleDelete}
                 isProcessing={deleteLoading}
               >
+=======
+              ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="red" onClick={handleDelete} isProcessing={deleteLoading}>
+>>>>>>> origin/auth
                 Sí, eliminar
               </Button>
               <Button color="gray" onClick={() => setShowDeleteModal(false)}>

@@ -6,7 +6,10 @@ import axios from "axios";
 export default function TablaUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
+<<<<<<< HEAD
   const [successMessage, setSuccessMessage] = useState("");
+=======
+>>>>>>> origin/auth
 
   const [formData, setFormData] = useState({
     id: null,
@@ -64,7 +67,10 @@ export default function TablaUsuarios() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/auth
     const payload = {
       dni: formData.dni,
       nombres: formData.nombres,
@@ -75,12 +81,27 @@ export default function TablaUsuarios() {
       role: formData.role,
       confirmed: formData.confirmed,
     };
+<<<<<<< HEAD
 
     try {
+=======
+    console.log("Payload:", payload);
+
+    try {
+      const token = getTokenFromCookie();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      };
+
+>>>>>>> origin/auth
       if (editing) {
         await axios.put(
           `http://localhost:8084/api/admins/usuarios/${formData.id}`,
           payload,
+<<<<<<< HEAD
           { withCredentials: true }
         );
         setSuccessMessage("Usuario actualizado con éxito");
@@ -89,14 +110,30 @@ export default function TablaUsuarios() {
           withCredentials: true,
         });
         setSuccessMessage("Usuario creado con éxito");
+=======
+          config
+        );
+      } else {
+        await axios.post(
+          `http://localhost:8084/api/admins/usuarios`,
+          payload,
+          config
+        );
+>>>>>>> origin/auth
       }
 
       await cargarUsuarios();
       resetForm();
+<<<<<<< HEAD
 
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Error guardando usuario", err);
+=======
+    } catch (err) {
+      console.error("Error guardando usuario", err);
+      console.log("Error:", err.response);
+>>>>>>> origin/auth
       alert("Error guardando usuario: " + err?.response?.data?.message);
     }
   };
@@ -131,17 +168,28 @@ export default function TablaUsuarios() {
     setEditing(false);
   };
 
+<<<<<<< HEAD
+=======
+  function getTokenFromCookie() {
+    const match = document.cookie.match(new RegExp('(^| )token=([^;]+)'));
+    return match ? match[2] : null;
+  }
+
+>>>>>>> origin/auth
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">
         Gestión de Usuarios (Admin CRUD)
       </h2>
 
+<<<<<<< HEAD
       {successMessage && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
           {successMessage}
         </div>
       )}
+=======
+>>>>>>> origin/auth
       <form
         onSubmit={handleSubmit}
         className="mb-6 grid grid-cols-2 gap-4 bg-gray-100 p-4 rounded dark:bg-slate-800"
@@ -197,6 +245,7 @@ export default function TablaUsuarios() {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+<<<<<<< HEAD
           className="border p-2"
           required={!editing}
         />
@@ -211,6 +260,22 @@ export default function TablaUsuarios() {
           <option value="ROLE_ADMIN">ADMIN</option>
           <option value="ROLE_USER">USER</option>
         </select>
+=======
+          className="border p-2 "
+          required={!editing}
+        />
+        <select
+  name="role"
+  value={formData.role}
+  onChange={handleChange}
+  className="border p-2"
+  required
+>
+  <option value="">Seleccione un rol</option>
+  <option value="ROLE_ADMIN">ADMIN</option>
+  <option value="ROLE_USER">USER</option>
+</select>
+>>>>>>> origin/auth
 
         <label className="flex items-center col-span-2">
           <input
@@ -274,16 +339,27 @@ export default function TablaUsuarios() {
                 </td>
                 <td className="border px-2 py-2">{u.verificationCode}</td>
                 <td className="border px-2 py-2">{u.roles?.join(", ")}</td>
+<<<<<<< HEAD
                 <td className="border px-2 py-2 space-x-2 ">
                   <button
                     onClick={() => handleEdit(u)}
                     className="cursor-pointer bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+=======
+                <td className="border px-2 py-2 space-x-2">
+                  <button
+                    onClick={() => handleEdit(u)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+>>>>>>> origin/auth
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => eliminarUsuario(u.id)}
+<<<<<<< HEAD
                     className="cursor-pointer bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mt-2"
+=======
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+>>>>>>> origin/auth
                   >
                     Eliminar
                   </button>

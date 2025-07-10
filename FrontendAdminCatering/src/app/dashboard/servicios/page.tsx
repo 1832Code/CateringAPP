@@ -9,7 +9,11 @@ interface TipoServicio {
 }
 
 function getTokenFromCookie() {
+<<<<<<< HEAD
   const match = document.cookie.match(new RegExp("(^| )token=([^;]+)"));
+=======
+  const match = document.cookie.match(new RegExp('(^| )token=([^;]+)'));
+>>>>>>> origin/auth
   return match ? match[2] : null;
 }
 
@@ -18,10 +22,14 @@ const TipoServicioPage: React.FC = () => {
   const [tipos, setTipos] = useState<TipoServicio[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+<<<<<<< HEAD
   const [form, setForm] = useState<Omit<TipoServicio, "id">>({
     nombre: "",
     descripcion: "",
   });
+=======
+  const [form, setForm] = useState<Omit<TipoServicio, "id">>({ nombre: "", descripcion: "" });
+>>>>>>> origin/auth
   const [editId, setEditId] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -31,19 +39,28 @@ const TipoServicioPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
+<<<<<<< HEAD
       const res = await fetch("http://localhost:8084/api/tipo-servicio", {
         credentials: "include",
       });
+=======
+      const res = await fetch("http://localhost:8084/api/tipo-servicio", { credentials: "include" });
+>>>>>>> origin/auth
       if (!res.ok) throw new Error("Error al cargar tipos de servicio");
       const data = await res.json();
       setTipos(data);
     } catch (e: unknown) {
+<<<<<<< HEAD
       setError(e instanceof Error ? e.message : "Error desconocido");
+=======
+      setError(e instanceof Error ? e.message : 'Error desconocido');
+>>>>>>> origin/auth
     } finally {
       setLoading(false);
     }
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     fetchTipos();
   }, []);
@@ -53,6 +70,13 @@ const TipoServicioPage: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+=======
+  useEffect(() => { fetchTipos(); }, []);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+>>>>>>> origin/auth
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -75,17 +99,25 @@ const TipoServicioPage: React.FC = () => {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error("Error al guardar el tipo de servicio");
+<<<<<<< HEAD
       setFeedback(
         editId
           ? "Tipo de servicio actualizado exitosamente"
           : "Tipo de servicio creado exitosamente"
       );
+=======
+      setFeedback(editId ? "Tipo de servicio actualizado exitosamente" : "Tipo de servicio creado exitosamente");
+>>>>>>> origin/auth
       setForm({ nombre: "", descripcion: "" });
       setEditId(null);
       setShowForm(false);
       fetchTipos();
     } catch (e: unknown) {
+<<<<<<< HEAD
       setFeedback(e instanceof Error ? e.message : "Error desconocido");
+=======
+      setFeedback(e instanceof Error ? e.message : 'Error desconocido');
+>>>>>>> origin/auth
     }
   };
 
@@ -97,12 +129,16 @@ const TipoServicioPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     if (!isAdmin) return;
+<<<<<<< HEAD
     if (
       !window.confirm(
         "¿Estás seguro de que deseas eliminar este tipo de servicio?"
       )
     )
       return;
+=======
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este tipo de servicio?")) return;
+>>>>>>> origin/auth
     try {
       const token = getTokenFromCookie();
       const res = await fetch(`http://localhost:8084/api/tipo-servicio/${id}`, {
@@ -114,7 +150,11 @@ const TipoServicioPage: React.FC = () => {
       setFeedback("Tipo de servicio eliminado exitosamente");
       fetchTipos();
     } catch (e: unknown) {
+<<<<<<< HEAD
       setFeedback(e instanceof Error ? e.message : "Error desconocido");
+=======
+      setFeedback(e instanceof Error ? e.message : 'Error desconocido');
+>>>>>>> origin/auth
     }
   };
 
@@ -129,6 +169,7 @@ const TipoServicioPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
           <div className="mb-4">
+<<<<<<< HEAD
             <svg
               className="mx-auto h-12 w-12 text-red-500"
               fill="none"
@@ -149,6 +190,14 @@ const TipoServicioPage: React.FC = () => {
           <p className="text-gray-600">
             Solo los administradores pueden acceder a esta sección.
           </p>
+=======
+            <svg className="mx-auto h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Acceso Restringido</h2>
+          <p className="text-gray-600">Solo los administradores pueden acceder a esta sección.</p>
+>>>>>>> origin/auth
         </div>
       </div>
     );
@@ -161,18 +210,24 @@ const TipoServicioPage: React.FC = () => {
         <div className="bg-white shadow-sm rounded-lg mb-8 p-6 dark:bg-slate-700">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
+<<<<<<< HEAD
               <h1 className="text-2xl font-bold text-gray-900">
                 Tipos de Servicio
               </h1>
               <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
                 Gestiona los tipos de servicio disponibles en el sistema
               </p>
+=======
+              <h1 className="text-2xl font-bold text-gray-900">Tipos de Servicio</h1>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">Gestiona los tipos de servicio disponibles en el sistema</p>
+>>>>>>> origin/auth
             </div>
             <div className="mt-4 sm:mt-0">
               <button
                 onClick={() => setShowForm(!showForm)}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
               >
+<<<<<<< HEAD
                 <svg
                   className="w-5 h-5 mr-2"
                   fill="none"
@@ -187,6 +242,12 @@ const TipoServicioPage: React.FC = () => {
                   />
                 </svg>
                 {showForm ? "Cerrar Formulario" : "Nuevo Tipo de Servicio"}
+=======
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                {showForm ? 'Cerrar Formulario' : 'Nuevo Tipo de Servicio'}
+>>>>>>> origin/auth
               </button>
             </div>
           </div>
@@ -194,6 +255,7 @@ const TipoServicioPage: React.FC = () => {
 
         {/* Feedback Messages */}
         {feedback && (
+<<<<<<< HEAD
           <div
             className={`mb-6 p-4 rounded-md ${
               feedback.includes("Error")
@@ -217,6 +279,16 @@ const TipoServicioPage: React.FC = () => {
                     }
                     clipRule="evenodd"
                   />
+=======
+          <div className={`mb-6 p-4 rounded-md ${feedback.includes('Error') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d={feedback.includes('Error') ? 
+                    "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" :
+                    "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  } clipRule="evenodd" />
+>>>>>>> origin/auth
                 </svg>
               </div>
               <div className="ml-3">
@@ -230,6 +302,7 @@ const TipoServicioPage: React.FC = () => {
           <div className="mb-6 p-4 rounded-md bg-red-50 text-red-700">
             <div className="flex">
               <div className="flex-shrink-0">
+<<<<<<< HEAD
                 <svg
                   className="h-5 w-5"
                   fill="currentColor"
@@ -240,6 +313,10 @@ const TipoServicioPage: React.FC = () => {
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                     clipRule="evenodd"
                   />
+=======
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+>>>>>>> origin/auth
                 </svg>
               </div>
               <div className="ml-3">
@@ -253,15 +330,23 @@ const TipoServicioPage: React.FC = () => {
         {showForm && (
           <div className="bg-white shadow-sm rounded-lg mb-8 p-6">
             <h2 className="text-lg font-medium text-gray-900 mb-6">
+<<<<<<< HEAD
               {editId ? "Editar Tipo de Servicio" : "Nuevo Tipo de Servicio"}
+=======
+              {editId ? 'Editar Tipo de Servicio' : 'Nuevo Tipo de Servicio'}
+>>>>>>> origin/auth
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
+<<<<<<< HEAD
                   <label
                     htmlFor="nombre"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
+=======
+                  <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-2">
+>>>>>>> origin/auth
                     Nombre
                   </label>
                   <input
@@ -276,10 +361,14 @@ const TipoServicioPage: React.FC = () => {
                   />
                 </div>
                 <div className="sm:col-span-2">
+<<<<<<< HEAD
                   <label
                     htmlFor="descripcion"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
+=======
+                  <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700 mb-2">
+>>>>>>> origin/auth
                     Descripción
                   </label>
                   <textarea
@@ -306,7 +395,11 @@ const TipoServicioPage: React.FC = () => {
                   type="submit"
                   className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                 >
+<<<<<<< HEAD
                   {editId ? "Actualizar" : "Crear"}
+=======
+                  {editId ? 'Actualizar' : 'Crear'}
+>>>>>>> origin/auth
                 </button>
               </div>
             </form>
@@ -316,9 +409,13 @@ const TipoServicioPage: React.FC = () => {
         {/* Table */}
         <div className="bg-white shadow-sm rounded-lg overflow-hidden dark:bg-slate-800">
           <div className="px-6 py-4 border-b border-gray-200">
+<<<<<<< HEAD
             <h3 className="text-lg font-medium text-gray-900 dark:text-slate-200">
               Lista de Tipos de Servicio
             </h3>
+=======
+            <h3 className="text-lg font-medium text-gray-900 dark:text-slate-200">Lista de Tipos de Servicio</h3>
+>>>>>>> origin/auth
           </div>
           {loading ? (
             <div className="flex justify-center items-center py-12">
@@ -327,6 +424,7 @@ const TipoServicioPage: React.FC = () => {
             </div>
           ) : tipos.length === 0 ? (
             <div className="text-center py-12">
+<<<<<<< HEAD
               <svg
                 className="mx-auto h-12 w-12 text-gray-400"
                 fill="none"
@@ -346,6 +444,13 @@ const TipoServicioPage: React.FC = () => {
               <p className="mt-1 text-sm text-gray-500">
                 Comienza creando un nuevo tipo de servicio.
               </p>
+=======
+              <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <h3 className="mt-2 text-sm font-medium text-gray-900">No hay tipos de servicio</h3>
+              <p className="mt-1 text-sm text-gray-500">Comienza creando un nuevo tipo de servicio.</p>
+>>>>>>> origin/auth
             </div>
           ) : (
             <div className="overflow-x-auto dark:bg-slate-700">
@@ -376,10 +481,14 @@ const TipoServicioPage: React.FC = () => {
                         {tipo.nombre}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
+<<<<<<< HEAD
                         <div
                           className="max-w-xs truncate"
                           title={tipo.descripcion}
                         >
+=======
+                        <div className="max-w-xs truncate" title={tipo.descripcion}>
+>>>>>>> origin/auth
                           {tipo.descripcion}
                         </div>
                       </td>
@@ -389,6 +498,7 @@ const TipoServicioPage: React.FC = () => {
                             onClick={() => handleEdit(tipo)}
                             className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                           >
+<<<<<<< HEAD
                             <svg
                               className="w-4 h-4 mr-1"
                               fill="none"
@@ -401,6 +511,10 @@ const TipoServicioPage: React.FC = () => {
                                 strokeWidth={2}
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                               />
+=======
+                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+>>>>>>> origin/auth
                             </svg>
                             Editar
                           </button>
@@ -408,6 +522,7 @@ const TipoServicioPage: React.FC = () => {
                             onClick={() => handleDelete(tipo.id)}
                             className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
                           >
+<<<<<<< HEAD
                             <svg
                               className="w-4 h-4 mr-1"
                               fill="none"
@@ -420,6 +535,10 @@ const TipoServicioPage: React.FC = () => {
                                 strokeWidth={2}
                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                               />
+=======
+                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+>>>>>>> origin/auth
                             </svg>
                             Eliminar
                           </button>
@@ -437,4 +556,8 @@ const TipoServicioPage: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default TipoServicioPage;
+=======
+export default TipoServicioPage;
+>>>>>>> origin/auth

@@ -49,6 +49,7 @@ export default function NavSuperior() {
   useEffect(() => {
     if (email) {
       console.log("NavSuperior: Creando admin data con email:", email);
+<<<<<<< HEAD
 
       // Extraer nombre y apellido del email
       const emailParts = email.split("@")[0];
@@ -56,6 +57,15 @@ export default function NavSuperior() {
       const firstName = nameParts[0] || "Admin";
       const lastName = nameParts[1] || "User";
 
+=======
+      
+      // Extraer nombre y apellido del email
+      const emailParts = email.split('@')[0];
+      const nameParts = emailParts.split('.');
+      const firstName = nameParts[0] || 'Admin';
+      const lastName = nameParts[1] || 'User';
+      
+>>>>>>> origin/auth
       const adminData: AdminData = {
         id: 0, // No tenemos ID del contexto
         email: email,
@@ -63,7 +73,11 @@ export default function NavSuperior() {
         lastName: lastName.charAt(0).toUpperCase() + lastName.slice(1),
         roles: roles || [],
       };
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> origin/auth
       console.log("NavSuperior: Admin data creada:", adminData);
       setAdmin(adminData);
       setIsLoading(false);
@@ -95,13 +109,21 @@ export default function NavSuperior() {
   const getAvatarColor = (name: string) => {
     const colors = [
       "bg-blue-500",
+<<<<<<< HEAD
       "bg-gray-800",
+=======
+      "bg-gray-800", 
+>>>>>>> origin/auth
       "bg-gray-100",
       "bg-pink-500",
       "bg-indigo-500",
       "bg-red-500",
       "bg-yellow-500",
+<<<<<<< HEAD
       "bg-teal-500",
+=======
+      "bg-teal-500"
+>>>>>>> origin/auth
     ];
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
@@ -110,9 +132,15 @@ export default function NavSuperior() {
   return (
     <Navbar
       fluid
+<<<<<<< HEAD
       className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 sm:px-6 shadow-sm"
     >
       <div className="flex flex-wrap items-center justify-between">
+=======
+      className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 sm:px-6 shadow-sm  w-full"
+    >
+      <div className="flex flex-wrap items-center justify-between w-full">
+>>>>>>> origin/auth
         {/* Logo y marca */}
         <NavbarBrand
           href="/"
@@ -133,11 +161,15 @@ export default function NavSuperior() {
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+<<<<<<< HEAD
             aria-label={
               theme === "dark"
                 ? "Cambiar a modo claro"
                 : "Cambiar a modo oscuro"
             }
+=======
+            aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+>>>>>>> origin/auth
           >
             {theme === "dark" ? (
               <svg
@@ -169,6 +201,7 @@ export default function NavSuperior() {
                       alt={`${admin.firstName} ${admin.lastName}`}
                       img=""
                       rounded
+<<<<<<< HEAD
                       className={` dark:border-gray-600 ${admin.firstName}`}
                     ></Avatar>
                     <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300 hidden lg:inline">
@@ -184,6 +217,17 @@ export default function NavSuperior() {
                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                         clipRule="evenodd"
                       />
+=======
+                      className={` dark:border-gray-600 ${(admin.firstName)}`}
+                    >
+                      
+                    </Avatar>
+                    <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300 hidden lg:inline">
+                      {admin.firstName} 
+                    </span>
+                    <svg className="w-4 h-4 ml-1 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+>>>>>>> origin/auth
                     </svg>
                   </div>
                 }
@@ -197,10 +241,19 @@ export default function NavSuperior() {
                         img=""
                         rounded
                         className={`${getAvatarColor(admin.firstName)}`}
+<<<<<<< HEAD
                       ></Avatar>
                       <div>
                         <span className="block text-sm font-medium text-gray-900 dark:text-white">
                           {admin.firstName}
+=======
+                      >
+                        
+                      </Avatar>
+                      <div>
+                        <span className="block text-sm font-medium text-gray-900 dark:text-white">
+                          {admin.firstName} 
+>>>>>>> origin/auth
                         </span>
                         <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
                           {admin.email}
@@ -217,6 +270,7 @@ export default function NavSuperior() {
                   href="/dashboard/setting"
                   className="dark:hover:bg-gray-700 dark:text-gray-300 flex items-center"
                 >
+<<<<<<< HEAD
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -227,6 +281,10 @@ export default function NavSuperior() {
                       d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
                       clipRule="evenodd"
                     />
+=======
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+>>>>>>> origin/auth
                   </svg>
                   Configuración
                 </DropdownItem>
@@ -235,6 +293,7 @@ export default function NavSuperior() {
                   href="/dashboard/perfil"
                   className="dark:hover:bg-gray-700 dark:text-gray-300 flex items-center"
                 >
+<<<<<<< HEAD
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -245,6 +304,10 @@ export default function NavSuperior() {
                       d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                       clipRule="evenodd"
                     />
+=======
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+>>>>>>> origin/auth
                   </svg>
                   Perfil
                 </DropdownItem>
@@ -253,6 +316,7 @@ export default function NavSuperior() {
                   onClick={handleLogout}
                   className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-gray-700 flex items-center"
                 >
+<<<<<<< HEAD
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -263,6 +327,10 @@ export default function NavSuperior() {
                       d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
                       clipRule="evenodd"
                     />
+=======
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
+>>>>>>> origin/auth
                   </svg>
                   Cerrar Sesión
                 </DropdownItem>
@@ -283,11 +351,15 @@ export default function NavSuperior() {
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+<<<<<<< HEAD
             aria-label={
               theme === "dark"
                 ? "Cambiar a modo claro"
                 : "Cambiar a modo oscuro"
             }
+=======
+            aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+>>>>>>> origin/auth
           >
             {theme === "dark" ? (
               <svg
@@ -328,9 +400,13 @@ export default function NavSuperior() {
                     img=""
                     rounded
                     size="lg"
+<<<<<<< HEAD
                     className={`border-2 border-gray-300 dark:border-gray-600 mb-2 ${getAvatarColor(
                       admin.firstName
                     )}`}
+=======
+                    className={`border-2 border-gray-300 dark:border-gray-600 mb-2 ${getAvatarColor(admin.firstName)}`}
+>>>>>>> origin/auth
                   >
                     <div className="text-white font-semibold text-lg">
                       {getInitials(admin.firstName, admin.lastName)}
@@ -355,6 +431,7 @@ export default function NavSuperior() {
                     className="flex items-center w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
                     onClick={() => setIsOpen(false)}
                   >
+<<<<<<< HEAD
                     <svg
                       className="w-4 h-4 mr-3"
                       fill="currentColor"
@@ -365,6 +442,10 @@ export default function NavSuperior() {
                         d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
                         clipRule="evenodd"
                       />
+=======
+                    <svg className="w-4 h-4 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+>>>>>>> origin/auth
                     </svg>
                     Configuración
                   </Link>
@@ -373,6 +454,7 @@ export default function NavSuperior() {
                     className="flex items-center w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
                     onClick={() => setIsOpen(false)}
                   >
+<<<<<<< HEAD
                     <svg
                       className="w-4 h-4 mr-3"
                       fill="currentColor"
@@ -383,6 +465,10 @@ export default function NavSuperior() {
                         d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                         clipRule="evenodd"
                       />
+=======
+                    <svg className="w-4 h-4 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+>>>>>>> origin/auth
                     </svg>
                     Perfil
                   </Link>
@@ -393,6 +479,7 @@ export default function NavSuperior() {
                     }}
                     className="flex items-center w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-red-600 dark:text-red-400"
                   >
+<<<<<<< HEAD
                     <svg
                       className="w-4 h-4 mr-3"
                       fill="currentColor"
@@ -403,6 +490,10 @@ export default function NavSuperior() {
                         d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
                         clipRule="evenodd"
                       />
+=======
+                    <svg className="w-4 h-4 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
+>>>>>>> origin/auth
                     </svg>
                     Cerrar Sesión
                   </button>

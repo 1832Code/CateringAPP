@@ -15,7 +15,11 @@ const ServiceCountCard: React.FC = () => {
         "http://localhost:8084/api/admin/dashboard/infomenu/cant-predeterminados",
         {
           method: "GET",
+<<<<<<< HEAD
           credentials: "include",
+=======
+          credentials: "include", 
+>>>>>>> origin/auth
         }
       );
 
@@ -26,7 +30,11 @@ const ServiceCountCard: React.FC = () => {
 
       const data = await response.json();
       setServiceCount(data);
+<<<<<<< HEAD
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+=======
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> origin/auth
     } catch (err: any) {
       setError(err.message || "Error desconocido");
       console.error("Error al obtener el conteo de servicios:", err);
@@ -60,6 +68,11 @@ const ServiceCountCard: React.FC = () => {
   return (
     <div className="rounded-xl p-6 shadow-lg bg-gradient-to-br from-gray-50 to-white hover:from-gray-100 hover:to-gray-50 dark:from-gray-900 dark:to-gray-800 dark:border-gray-700 dark:hover:from-gray-800 dark:hover:to-gray-700 transition-all duration-300 group">
       <div className="flex flex-row gap-2 items-center">
+<<<<<<< HEAD
+=======
+       
+       
+>>>>>>> origin/auth
         <div className="text-4xl font-bold text-gray-100 dark:text-blue-400 mb-1">
           {serviceCount}
         </div>

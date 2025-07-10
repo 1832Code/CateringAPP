@@ -3,6 +3,7 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { useAuth } from "@/context/authcontext";
 
 // --- Tipos para la estructura anidada ---
+<<<<<<< HEAD
 interface ItemRef {
   id: number;
 }
@@ -10,25 +11,37 @@ interface ServicioItem {
   id?: number;
   item: ItemRef;
 }
+=======
+interface ItemRef { id: number }
+interface ServicioItem { id?: number; item: ItemRef }
+>>>>>>> origin/auth
 interface Servicio {
   id?: number;
   tipoServicio: { id: number };
   items: ServicioItem[];
 }
+<<<<<<< HEAD
 interface PersonalInfo {
   id?: number;
   tipoPersonal: string;
   cantidad: number;
 }
+=======
+interface PersonalInfo { id?: number; tipoPersonal: string; cantidad: number }
+>>>>>>> origin/auth
 interface Personal {
   id?: number;
   personalInfo: PersonalInfo[];
 }
+<<<<<<< HEAD
 interface ExtraInfo {
   id?: number;
   tipoExtra: string;
   cantidad: number;
 }
+=======
+interface ExtraInfo { id?: number; tipoExtra: string; cantidad: number }
+>>>>>>> origin/auth
 interface Extra {
   id?: number;
   extraInfo: ExtraInfo[];
@@ -60,7 +73,11 @@ interface InfoMenuForm {
 }
 
 function getTokenFromCookie() {
+<<<<<<< HEAD
   const match = document.cookie.match(new RegExp("(^| )token=([^;]+)"));
+=======
+  const match = document.cookie.match(new RegExp('(^| )token=([^;]+)'));
+>>>>>>> origin/auth
   return match ? match[2] : null;
 }
 
@@ -91,18 +108,30 @@ const InfoMenuPage: React.FC = () => {
 
   // Toggle dark mode
   useEffect(() => {
+<<<<<<< HEAD
     const savedMode = localStorage.getItem("darkMode");
+=======
+    const savedMode = localStorage.getItem('darkMode');
+>>>>>>> origin/auth
     if (savedMode) {
       setDarkMode(JSON.parse(savedMode));
     }
   }, []);
 
   useEffect(() => {
+<<<<<<< HEAD
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
     if (darkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
+=======
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+>>>>>>> origin/auth
     }
   }, [darkMode]);
 
@@ -118,7 +147,11 @@ const InfoMenuPage: React.FC = () => {
       const data = await res.json();
       setMenus(data);
     } catch (e: unknown) {
+<<<<<<< HEAD
       setError(e instanceof Error ? e.message : "Error desconocido");
+=======
+      setError(e instanceof Error ? e.message : 'Error desconocido');
+>>>>>>> origin/auth
     } finally {
       setLoading(false);
     }
@@ -129,6 +162,7 @@ const InfoMenuPage: React.FC = () => {
   }, []);
 
   // Handlers
+<<<<<<< HEAD
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -141,6 +175,17 @@ const InfoMenuPage: React.FC = () => {
           : ["precio", "cantPersonas"].includes(name)
           ? Number(value) || 0
           : value,
+=======
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox"
+        ? (e.target as HTMLInputElement).checked
+        : ["precio", "cantPersonas"].includes(name)
+        ? Number(value) || 0
+        : value
+>>>>>>> origin/auth
     }));
   };
 
@@ -181,9 +226,13 @@ const InfoMenuPage: React.FC = () => {
       ...prev,
       servicio: {
         ...prev.servicio,
+<<<<<<< HEAD
         items: prev.servicio.items.map((it, i) =>
           i === idx ? { ...it, item: { id } } : it
         ),
+=======
+        items: prev.servicio.items.map((it, i) => i === idx ? { ...it, item: { id } } : it),
+>>>>>>> origin/auth
       },
     }));
   };
@@ -202,6 +251,7 @@ const InfoMenuPage: React.FC = () => {
       ...prev,
       personal: {
         ...prev.personal,
+<<<<<<< HEAD
         personalInfo: [
           ...prev.personal.personalInfo,
           { tipoPersonal: "", cantidad: 1 },
@@ -214,6 +264,13 @@ const InfoMenuPage: React.FC = () => {
     field: string,
     value: string | number
   ) => {
+=======
+        personalInfo: [...prev.personal.personalInfo, { tipoPersonal: "", cantidad: 1 }],
+      },
+    }));
+  };
+  const updatePersonalInfo = (idx: number, field: string, value: string | number) => {
+>>>>>>> origin/auth
     setForm((prev) => ({
       ...prev,
       personal: {
@@ -243,11 +300,15 @@ const InfoMenuPage: React.FC = () => {
       },
     }));
   };
+<<<<<<< HEAD
   const updateExtraInfo = (
     idx: number,
     field: string,
     value: string | number
   ) => {
+=======
+  const updateExtraInfo = (idx: number, field: string, value: string | number) => {
+>>>>>>> origin/auth
     setForm((prev) => ({
       ...prev,
       extra: {
@@ -270,31 +331,48 @@ const InfoMenuPage: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+<<<<<<< HEAD
 
     if (!isAdmin) return;
 
     setFeedback(null);
 
+=======
+    if (!isAdmin) return;
+    setFeedback(null);
+>>>>>>> origin/auth
     try {
       let imageURL = form.imageURL || "";
       if (imageFile) {
         imageURL = await uploadImage(imageFile);
       }
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/auth
       const payload = {
         ...form,
         imageURL,
       };
+<<<<<<< HEAD
 
       const method = editId ? "PUT" : "POST";
       const url = editId
         ? `http://localhost:8084/api/infomenu/${editId}`
         : "http://localhost:8084/api/infomenu/v2";
 
+=======
+      const token = getTokenFromCookie();
+      const method = editId ? "PUT" : "POST";
+      const url = editId
+        ? `http://localhost:8084/api/infomenu/${editId}`
+        : "http://localhost:8084/api/infomenu";
+>>>>>>> origin/auth
       const res = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
+<<<<<<< HEAD
         },
         credentials: "include", // usa cookies HttpOnly para autenticar
         body: JSON.stringify(payload),
@@ -307,6 +385,15 @@ const InfoMenuPage: React.FC = () => {
       );
 
       // Reset del formulario
+=======
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Error al guardar el menú");
+      setFeedback(editId ? "Menú actualizado exitosamente" : "Menú creado exitosamente");
+>>>>>>> origin/auth
       setForm({
         titulo: "",
         descripcion: "",
@@ -325,7 +412,11 @@ const InfoMenuPage: React.FC = () => {
       setShowForm(false);
       fetchMenus();
     } catch (e: unknown) {
+<<<<<<< HEAD
       setFeedback(e instanceof Error ? e.message : "Error desconocido");
+=======
+      setFeedback(e instanceof Error ? e.message : 'Error desconocido');
+>>>>>>> origin/auth
     }
   };
 
@@ -350,8 +441,12 @@ const InfoMenuPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     if (!isAdmin) return;
+<<<<<<< HEAD
     if (!window.confirm("¿Estás seguro de que deseas eliminar este menú?"))
       return;
+=======
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este menú?")) return;
+>>>>>>> origin/auth
     try {
       const token = getTokenFromCookie();
       const res = await fetch(`http://localhost:8084/api/infomenu/${id}`, {
@@ -365,7 +460,11 @@ const InfoMenuPage: React.FC = () => {
       setFeedback("Menú eliminado exitosamente");
       fetchMenus();
     } catch (e: unknown) {
+<<<<<<< HEAD
       setFeedback(e instanceof Error ? e.message : "Error desconocido");
+=======
+      setFeedback(e instanceof Error ? e.message : 'Error desconocido');
+>>>>>>> origin/auth
     }
   };
 
@@ -393,6 +492,7 @@ const InfoMenuPage: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900 dark:to-red-800 flex items-center justify-center p-4">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 text-center max-w-md">
           <div className="w-20 h-20 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-4">
+<<<<<<< HEAD
             <svg
               className="w-10 h-10 text-red-600 dark:text-red-400"
               fill="none"
@@ -413,17 +513,29 @@ const InfoMenuPage: React.FC = () => {
           <p className="text-gray-600 dark:text-gray-300">
             Solo los administradores pueden acceder a esta página.
           </p>
+=======
+            <svg className="w-10 h-10 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">Acceso Restringido</h2>
+          <p className="text-gray-600 dark:text-gray-300">Solo los administradores pueden acceder a esta página.</p>
+>>>>>>> origin/auth
         </div>
       </div>
     );
   }
 
   return (
+<<<<<<< HEAD
     <div
       className={`h-auto transition-colors duration-300 ${
         darkMode ? "dark" : ""
       }`}
     >
+=======
+    <div className={`h-auto transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
+>>>>>>> origin/auth
       <div className="w-[80%] bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           {/* Header */}
@@ -438,10 +550,15 @@ const InfoMenuPage: React.FC = () => {
                 </p>
               </div>
               <div className="flex items-center gap-4">
+<<<<<<< HEAD
+=======
+               
+>>>>>>> origin/auth
                 <button
                   onClick={() => setShowForm(!showForm)}
                   className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold flex items-center gap-2"
                 >
+<<<<<<< HEAD
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -454,6 +571,10 @@ const InfoMenuPage: React.FC = () => {
                       strokeWidth={2}
                       d="M12 4v16m8-8H4"
                     />
+=======
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+>>>>>>> origin/auth
                   </svg>
                   Nuevo Menú
                 </button>
@@ -463,6 +584,7 @@ const InfoMenuPage: React.FC = () => {
 
           {/* Feedback Messages */}
           {feedback && (
+<<<<<<< HEAD
             <div
               className={`mb-6 p-4 rounded-xl shadow-lg ${
                 feedback.includes("Error")
@@ -498,6 +620,21 @@ const InfoMenuPage: React.FC = () => {
                       strokeWidth={2}
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
+=======
+            <div className={`mb-6 p-4 rounded-xl shadow-lg ${
+              feedback.includes('Error') 
+                ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400' 
+                : 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400'
+            }`}>
+              <div className="flex items-center gap-2">
+                {feedback.includes('Error') ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+>>>>>>> origin/auth
                   </svg>
                 )}
                 {feedback}
@@ -508,6 +645,7 @@ const InfoMenuPage: React.FC = () => {
           {error && (
             <div className="mb-6 p-4 rounded-xl shadow-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400">
               <div className="flex items-center gap-2">
+<<<<<<< HEAD
                 <svg
                   className="w-5 h-5"
                   fill="none"
@@ -520,6 +658,10 @@ const InfoMenuPage: React.FC = () => {
                     strokeWidth={2}
                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
+=======
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+>>>>>>> origin/auth
                 </svg>
                 {error}
               </div>
@@ -531,12 +673,17 @@ const InfoMenuPage: React.FC = () => {
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-8 border border-gray-200 dark:border-gray-700">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+<<<<<<< HEAD
                   {editId ? "Editar Menú" : "Nuevo Menú"}
+=======
+                  {editId ? 'Editar Menú' : 'Nuevo Menú'}
+>>>>>>> origin/auth
                 </h2>
                 <button
                   onClick={resetForm}
                   className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
                 >
+<<<<<<< HEAD
                   <svg
                     className="w-6 h-6"
                     fill="none"
@@ -549,6 +696,10 @@ const InfoMenuPage: React.FC = () => {
                       strokeWidth={2}
                       d="M6 18L18 6M6 6l12 12"
                     />
+=======
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+>>>>>>> origin/auth
                   </svg>
                 </button>
               </div>
@@ -557,9 +708,13 @@ const InfoMenuPage: React.FC = () => {
                 {/* Basic Info */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="space-y-2">
+<<<<<<< HEAD
                     <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Título *
                     </label>
+=======
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Título *</label>
+>>>>>>> origin/auth
                     <input
                       name="titulo"
                       value={form.titulo || ""}
@@ -570,9 +725,13 @@ const InfoMenuPage: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
+<<<<<<< HEAD
                     <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Tipo de Menú *
                     </label>
+=======
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Tipo de Menú *</label>
+>>>>>>> origin/auth
                     <select
                       name="tipoInfoMenu"
                       value={form.tipoInfoMenu || "Predeterminado"}
@@ -587,9 +746,13 @@ const InfoMenuPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
+<<<<<<< HEAD
                   <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                     Descripción
                   </label>
+=======
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Descripción</label>
+>>>>>>> origin/auth
                   <textarea
                     name="descripcion"
                     value={form.descripcion || ""}
@@ -602,9 +765,13 @@ const InfoMenuPage: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div className="space-y-2">
+<<<<<<< HEAD
                     <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Precio (S/) *
                     </label>
+=======
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Precio (S/) *</label>
+>>>>>>> origin/auth
                     <input
                       name="precio"
                       type="number"
@@ -618,9 +785,13 @@ const InfoMenuPage: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
+<<<<<<< HEAD
                     <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Cantidad de Personas *
                     </label>
+=======
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Cantidad de Personas *</label>
+>>>>>>> origin/auth
                     <input
                       name="cantPersonas"
                       type="number"
@@ -633,9 +804,13 @@ const InfoMenuPage: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
+<<<<<<< HEAD
                     <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Estado
                     </label>
+=======
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Estado</label>
+>>>>>>> origin/auth
                     <label className="flex items-center gap-3 p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
                       <input
                         type="checkbox"
@@ -644,18 +819,26 @@ const InfoMenuPage: React.FC = () => {
                         onChange={handleChange}
                         className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
                       />
+<<<<<<< HEAD
                       <span className="text-gray-700 dark:text-gray-300 font-medium">
                         Activo
                       </span>
+=======
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Activo</span>
+>>>>>>> origin/auth
                     </label>
                   </div>
                 </div>
 
                 {/* Image Upload */}
                 <div className="space-y-4">
+<<<<<<< HEAD
                   <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                     Imagen del Menú
                   </label>
+=======
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Imagen del Menú</label>
+>>>>>>> origin/auth
                   <div className="flex flex-col lg:flex-row gap-4 items-start">
                     <div className="flex-1">
                       <input
@@ -667,10 +850,17 @@ const InfoMenuPage: React.FC = () => {
                     </div>
                     {imagePreview && (
                       <div className="relative">
+<<<<<<< HEAD
                         <img
                           src={imagePreview}
                           alt="Previsualización"
                           className="w-24 h-24 object-cover rounded-xl border-2 border-gray-200 dark:border-gray-600 shadow-lg"
+=======
+                        <img 
+                          src={imagePreview} 
+                          alt="Previsualización" 
+                          className="w-24 h-24 object-cover rounded-xl border-2 border-gray-200 dark:border-gray-600 shadow-lg" 
+>>>>>>> origin/auth
                         />
                         <button
                           type="button"
@@ -680,6 +870,7 @@ const InfoMenuPage: React.FC = () => {
                           }}
                           className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
                         >
+<<<<<<< HEAD
                           <svg
                             className="w-3 h-3"
                             fill="none"
@@ -692,6 +883,10 @@ const InfoMenuPage: React.FC = () => {
                               strokeWidth={2}
                               d="M6 18L18 6M6 6l12 12"
                             />
+=======
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+>>>>>>> origin/auth
                           </svg>
                         </button>
                       </div>
@@ -702,6 +897,7 @@ const InfoMenuPage: React.FC = () => {
                 {/* Servicio Section */}
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 space-y-4">
                   <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+<<<<<<< HEAD
                     <svg
                       className="w-5 h-5"
                       fill="none"
@@ -714,19 +910,28 @@ const InfoMenuPage: React.FC = () => {
                         strokeWidth={2}
                         d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                       />
+=======
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+>>>>>>> origin/auth
                     </svg>
                     Servicio
                   </h3>
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
+<<<<<<< HEAD
                         <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                           Tipo de Servicio
                         </label>
+=======
+                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Servicio</label>
+>>>>>>> origin/auth
                         <input
                           type="number"
                           value={form.servicio.tipoServicio.id}
                           min={1}
+<<<<<<< HEAD
                           onChange={(e) =>
                             setForm((f) => ({
                               ...f,
@@ -736,10 +941,17 @@ const InfoMenuPage: React.FC = () => {
                               },
                             }))
                           }
+=======
+                          onChange={e => setForm(f => ({
+                            ...f,
+                            servicio: { ...f.servicio, tipoServicio: { id: Number(e.target.value) } }
+                          }))}
+>>>>>>> origin/auth
                           className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                         />
                       </div>
                       <div className="flex items-end">
+<<<<<<< HEAD
                         <button
                           type="button"
                           onClick={addServicioItem}
@@ -757,6 +969,15 @@ const InfoMenuPage: React.FC = () => {
                               strokeWidth={2}
                               d="M12 4v16m8-8H4"
                             />
+=======
+                        <button 
+                          type="button" 
+                          onClick={addServicioItem} 
+                          className="w-full px-4 py-3 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-xl hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors font-medium flex items-center justify-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+>>>>>>> origin/auth
                           </svg>
                           Agregar Item
                         </button>
@@ -764,22 +985,31 @@ const InfoMenuPage: React.FC = () => {
                     </div>
                     <div className="space-y-3">
                       {form.servicio.items.map((it, idx) => (
+<<<<<<< HEAD
                         <div
                           key={idx}
                           className="flex gap-3 items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600"
                         >
+=======
+                        <div key={idx} className="flex gap-3 items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+>>>>>>> origin/auth
                           <div className="flex-1">
                             <input
                               type="number"
                               value={it.item.id}
                               min={1}
+<<<<<<< HEAD
                               onChange={(e) =>
                                 updateServicioItem(idx, Number(e.target.value))
                               }
+=======
+                              onChange={e => updateServicioItem(idx, Number(e.target.value))}
+>>>>>>> origin/auth
                               placeholder="ID del Item"
                               className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                             />
                           </div>
+<<<<<<< HEAD
                           <button
                             type="button"
                             onClick={() => removeServicioItem(idx)}
@@ -797,6 +1027,15 @@ const InfoMenuPage: React.FC = () => {
                                 strokeWidth={2}
                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                               />
+=======
+                          <button 
+                            type="button" 
+                            onClick={() => removeServicioItem(idx)} 
+                            className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+>>>>>>> origin/auth
                             </svg>
                           </button>
                         </div>
@@ -809,6 +1048,7 @@ const InfoMenuPage: React.FC = () => {
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 space-y-4">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+<<<<<<< HEAD
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -841,20 +1081,39 @@ const InfoMenuPage: React.FC = () => {
                           strokeWidth={2}
                           d="M12 4v16m8-8H4"
                         />
+=======
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      Personal
+                    </h3>
+                    <button 
+                      type="button" 
+                      onClick={addPersonalInfo} 
+                      className="px-4 py-2 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-200 dark:hover:bg-green-800 transition-colors font-medium flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+>>>>>>> origin/auth
                       </svg>
                       Agregar
                     </button>
                   </div>
                   <div className="space-y-3">
                     {form.personal.personalInfo.map((p, idx) => (
+<<<<<<< HEAD
                       <div
                         key={idx}
                         className="flex gap-3 items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600"
                       >
+=======
+                      <div key={idx} className="flex gap-3 items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+>>>>>>> origin/auth
                         <div className="flex-1">
                           <input
                             type="text"
                             value={p.tipoPersonal}
+<<<<<<< HEAD
                             onChange={(e) =>
                               updatePersonalInfo(
                                 idx,
@@ -862,6 +1121,9 @@ const InfoMenuPage: React.FC = () => {
                                 e.target.value
                               )
                             }
+=======
+                            onChange={e => updatePersonalInfo(idx, "tipoPersonal", e.target.value)}
+>>>>>>> origin/auth
                             placeholder="Tipo de Personal"
                             className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           />
@@ -871,6 +1133,7 @@ const InfoMenuPage: React.FC = () => {
                             type="number"
                             value={p.cantidad}
                             min={1}
+<<<<<<< HEAD
                             onChange={(e) =>
                               updatePersonalInfo(
                                 idx,
@@ -878,10 +1141,14 @@ const InfoMenuPage: React.FC = () => {
                                 Number(e.target.value)
                               )
                             }
+=======
+                            onChange={e => updatePersonalInfo(idx, "cantidad", Number(e.target.value))}
+>>>>>>> origin/auth
                             placeholder="Cant."
                             className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           />
                         </div>
+<<<<<<< HEAD
                         <button
                           type="button"
                           onClick={() => removePersonalInfo(idx)}
@@ -899,6 +1166,15 @@ const InfoMenuPage: React.FC = () => {
                               strokeWidth={2}
                               d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                             />
+=======
+                        <button 
+                          type="button" 
+                          onClick={() => removePersonalInfo(idx)} 
+                          className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+>>>>>>> origin/auth
                           </svg>
                         </button>
                       </div>
@@ -910,6 +1186,7 @@ const InfoMenuPage: React.FC = () => {
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 space-y-4">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+<<<<<<< HEAD
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -942,23 +1219,45 @@ const InfoMenuPage: React.FC = () => {
                           strokeWidth={2}
                           d="M12 4v16m8-8H4"
                         />
+=======
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                      Extras
+                    </h3>
+                    <button 
+                      type="button" 
+                      onClick={addExtraInfo} 
+                      className="px-4 py-2 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors font-medium flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+>>>>>>> origin/auth
                       </svg>
                       Agregar
                     </button>
                   </div>
                   <div className="space-y-3">
                     {form.extra.extraInfo.map((e, idx) => (
+<<<<<<< HEAD
                       <div
                         key={idx}
                         className="flex gap-3 items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600"
                       >
+=======
+                      <div key={idx} className="flex gap-3 items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+>>>>>>> origin/auth
                         <div className="flex-1">
                           <input
                             type="text"
                             value={e.tipoExtra}
+<<<<<<< HEAD
                             onChange={(ev) =>
                               updateExtraInfo(idx, "tipoExtra", ev.target.value)
                             }
+=======
+                            onChange={ev => updateExtraInfo(idx, "tipoExtra", ev.target.value)}
+>>>>>>> origin/auth
                             placeholder="Tipo de Extra"
                             className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           />
@@ -968,6 +1267,7 @@ const InfoMenuPage: React.FC = () => {
                             type="number"
                             value={e.cantidad}
                             min={1}
+<<<<<<< HEAD
                             onChange={(ev) =>
                               updateExtraInfo(
                                 idx,
@@ -975,10 +1275,14 @@ const InfoMenuPage: React.FC = () => {
                                 Number(ev.target.value)
                               )
                             }
+=======
+                            onChange={ev => updateExtraInfo(idx, "cantidad", Number(ev.target.value))}
+>>>>>>> origin/auth
                             placeholder="Cant."
                             className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           />
                         </div>
+<<<<<<< HEAD
                         <button
                           type="button"
                           onClick={() => removeExtraInfo(idx)}
@@ -996,6 +1300,15 @@ const InfoMenuPage: React.FC = () => {
                               strokeWidth={2}
                               d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                             />
+=======
+                        <button 
+                          type="button" 
+                          onClick={() => removeExtraInfo(idx)} 
+                          className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+>>>>>>> origin/auth
                           </svg>
                         </button>
                       </div>
@@ -1009,6 +1322,7 @@ const InfoMenuPage: React.FC = () => {
                     type="submit"
                     className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2"
                   >
+<<<<<<< HEAD
                     <svg
                       className="w-5 h-5"
                       fill="none"
@@ -1021,6 +1335,10 @@ const InfoMenuPage: React.FC = () => {
                         strokeWidth={2}
                         d="M5 13l4 4L19 7"
                       />
+=======
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+>>>>>>> origin/auth
                     </svg>
                     {editId ? "Actualizar Menú" : "Crear Menú"}
                   </button>
@@ -1030,6 +1348,7 @@ const InfoMenuPage: React.FC = () => {
                       onClick={resetForm}
                       className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 font-semibold flex items-center justify-center gap-2"
                     >
+<<<<<<< HEAD
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -1042,6 +1361,10 @@ const InfoMenuPage: React.FC = () => {
                           strokeWidth={2}
                           d="M6 18L18 6M6 6l12 12"
                         />
+=======
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+>>>>>>> origin/auth
                       </svg>
                       Cancelar
                     </button>
@@ -1054,6 +1377,7 @@ const InfoMenuPage: React.FC = () => {
           {/* Menus Table */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 border-b border-gray-200 dark:border-gray-600">
+<<<<<<< HEAD
               <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
                 Lista de Menús
               </h2>
@@ -1063,18 +1387,31 @@ const InfoMenuPage: React.FC = () => {
               </p>
             </div>
 
+=======
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">Lista de Menús</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                {menus.length} menú{menus.length !== 1 ? 's' : ''} registrado{menus.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+            
+>>>>>>> origin/auth
             {loading ? (
               <div className="flex items-center justify-center p-12">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+<<<<<<< HEAD
                   <span className="text-gray-600 dark:text-gray-400 font-medium">
                     Cargando menús...
                   </span>
+=======
+                  <span className="text-gray-600 dark:text-gray-400 font-medium">Cargando menús...</span>
+>>>>>>> origin/auth
                 </div>
               </div>
             ) : menus.length === 0 ? (
               <div className="text-center p-12">
                 <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+<<<<<<< HEAD
                   <svg
                     className="w-8 h-8 text-gray-400"
                     fill="none"
@@ -1095,6 +1432,14 @@ const InfoMenuPage: React.FC = () => {
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Comienza creando tu primer menú haciendo clic en New Mnenu
                 </p>
+=======
+                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No hay menús registrados</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Comienza creando tu primer menú haciendo clic en New Mnenu</p>
+>>>>>>> origin/auth
                 <button
                   onClick={() => setShowForm(true)}
                   className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold"
@@ -1107,6 +1452,7 @@ const InfoMenuPage: React.FC = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-50 dark:bg-gray-700">
+<<<<<<< HEAD
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         ID
                       </th>
@@ -1134,19 +1480,35 @@ const InfoMenuPage: React.FC = () => {
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Acciones
                       </th>
+=======
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Imagen</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Título</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">Descripción</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Precio</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden lg:table-cell">Personas</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden lg:table-cell">Tipo</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
+>>>>>>> origin/auth
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                     {menus.map((menu) => (
+<<<<<<< HEAD
                       <tr
                         key={menu.id}
                         className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                       >
+=======
+                      <tr key={menu.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+>>>>>>> origin/auth
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                           #{menu.id}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {menu.imageURL ? (
+<<<<<<< HEAD
                             <img
                               src={menu.imageURL}
                               alt={menu.titulo}
@@ -1166,6 +1528,17 @@ const InfoMenuPage: React.FC = () => {
                                   strokeWidth={2}
                                   d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                                 />
+=======
+                            <img 
+                              src={menu.imageURL} 
+                              alt={menu.titulo} 
+                              className="w-12 h-12 object-cover rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm" 
+                            />
+                          ) : (
+                            <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                              <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+>>>>>>> origin/auth
                               </svg>
                             </div>
                           )}
@@ -1173,6 +1546,7 @@ const InfoMenuPage: React.FC = () => {
                         <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                           <div className="font-medium">{menu.titulo}</div>
                           <div className="text-gray-500 dark:text-gray-400 text-xs mt-1 md:hidden">
+<<<<<<< HEAD
                             {menu.descripcion?.substring(0, 50)}
                             {menu.descripcion?.length > 50 ? "..." : ""}
                           </div>
@@ -1181,11 +1555,19 @@ const InfoMenuPage: React.FC = () => {
                           <div className="truncate">
                             {menu.descripcion || "Sin descripción"}
                           </div>
+=======
+                            {menu.descripcion?.substring(0, 50)}{menu.descripcion?.length > 50 ? '...' : ''}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell max-w-xs">
+                          <div className="truncate">{menu.descripcion || 'Sin descripción'}</div>
+>>>>>>> origin/auth
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600 dark:text-green-400">
                           S/ {menu.precio.toFixed(2)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 hidden lg:table-cell">
+<<<<<<< HEAD
                           {menu.cantPersonas} persona
                           {menu.cantPersonas !== 1 ? "s" : ""}
                         </td>
@@ -1197,10 +1579,21 @@ const InfoMenuPage: React.FC = () => {
                                 : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                             }`}
                           >
+=======
+                          {menu.cantPersonas} persona{menu.cantPersonas !== 1 ? 's' : ''}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 hidden lg:table-cell">
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                            menu.tipoInfoMenu === 'Personalizado' 
+                              ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                              : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                          }`}>
+>>>>>>> origin/auth
                             {menu.tipoInfoMenu}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
+<<<<<<< HEAD
                           <span
                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                               menu.activo
@@ -1209,6 +1602,14 @@ const InfoMenuPage: React.FC = () => {
                             }`}
                           >
                             {menu.activo ? "Activo" : "Inactivo"}
+=======
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            menu.activo 
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                              : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                          }`}>
+                            {menu.activo ? 'Activo' : 'Inactivo'}
+>>>>>>> origin/auth
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
@@ -1216,6 +1617,7 @@ const InfoMenuPage: React.FC = () => {
                             onClick={() => handleEdit(menu)}
                             className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors font-medium"
                           >
+<<<<<<< HEAD
                             <svg
                               className="w-4 h-4"
                               fill="none"
@@ -1228,6 +1630,10 @@ const InfoMenuPage: React.FC = () => {
                                 strokeWidth={2}
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                               />
+=======
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+>>>>>>> origin/auth
                             </svg>
                             Editar
                           </button>
@@ -1235,6 +1641,7 @@ const InfoMenuPage: React.FC = () => {
                             onClick={() => handleDelete(menu.id)}
                             className="inline-flex items-center gap-1 px-3 py-1.5 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-colors font-medium"
                           >
+<<<<<<< HEAD
                             <svg
                               className="w-4 h-4"
                               fill="none"
@@ -1247,6 +1654,10 @@ const InfoMenuPage: React.FC = () => {
                                 strokeWidth={2}
                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                               />
+=======
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+>>>>>>> origin/auth
                             </svg>
                             Eliminar
                           </button>
@@ -1264,4 +1675,8 @@ const InfoMenuPage: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default InfoMenuPage;
+=======
+export default InfoMenuPage;
+>>>>>>> origin/auth

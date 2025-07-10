@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 "use client";
+=======
+"use client"
+>>>>>>> origin/auth
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type Theme = "light" | "dark";
@@ -10,9 +14,13 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+<<<<<<< HEAD
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+=======
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+>>>>>>> origin/auth
   const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
@@ -22,9 +30,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       document.documentElement.classList.toggle("dark", savedTheme === "dark");
     } else {
       // Detectar preferencia del sistema
+<<<<<<< HEAD
       const prefersDark = window.matchMedia(
         "(prefers-color-scheme: dark)"
       ).matches;
+=======
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+>>>>>>> origin/auth
       setThemeState(prefersDark ? "dark" : "light");
       document.documentElement.classList.toggle("dark", prefersDark);
     }
@@ -56,4 +68,8 @@ export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) throw new Error("useTheme must be used within a ThemeProvider");
   return context;
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> origin/auth

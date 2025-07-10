@@ -1,0 +1,16 @@
+.LoginButtom {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  color: #1d1c1c;
+  background-color: #fd8a26;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 7.5em;
+  height: 2.5em;
+}
+.LoginButtom:hover {
+  color: white;
+  border-color: #1d1c1c; /* o cambia el borde */
+  cursor: pointer;
+}

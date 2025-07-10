@@ -23,7 +23,11 @@ const ServiceCountCard: React.FC = () => {
         "http://localhost:8084/api/admin/dashboard/infomenu/cant-predeterminados",
         {
           method: "GET",
+<<<<<<< HEAD
           credentials: "include",
+=======
+          credentials: "include", 
+>>>>>>> origin/auth
         }
       );
 
@@ -58,7 +62,13 @@ const ServiceCountCard: React.FC = () => {
 
   if (error) {
     return (
+<<<<<<< HEAD
       <div className="text-xs text-red-500 text-center">Error: {error}</div>
+=======
+      <div className="text-xs text-red-500 text-center">
+        Error: {error}
+      </div>
+>>>>>>> origin/auth
     );
   }
 
@@ -74,11 +84,15 @@ const ServiceCountCard: React.FC = () => {
 
 const ArrowUpIcon = ({ className = "h-4 w-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20">
+<<<<<<< HEAD
     <path
       fillRule="evenodd"
       d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
       clipRule="evenodd"
     />
+=======
+    <path fillRule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
+>>>>>>> origin/auth
   </svg>
 );
 
@@ -176,6 +190,7 @@ export default function Dashboard() {
         "http://localhost:8084/api/export/usuarios/excel",
         {
           method: "GET",
+<<<<<<< HEAD
           credentials: "include", // incluye las cookies
         }
       );
@@ -203,6 +218,30 @@ export default function Dashboard() {
       alert(
         `❌ Error al exportar: ${err instanceof Error ? err.message : err}`
       );
+=======
+          credentials: "include",
+        }
+      );
+
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "usuarios.xlsx";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+        alert("Archivo de usuarios exportado exitosamente!");
+      } else {
+        const errorText = await res.text();
+        alert(`No se pudo exportar el archivo: ${errorText || res.statusText}`);
+      }
+    } catch (err) {
+      console.error("Error exporting Excel:", err);
+      alert("Error de conexión al exportar el archivo.");
+>>>>>>> origin/auth
     }
   };
 
@@ -257,6 +296,7 @@ export default function Dashboard() {
           <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
             <div className="flex">
               <div className="flex-shrink-0">
+<<<<<<< HEAD
                 <svg
                   className="h-5 w-5 text-red-400"
                   viewBox="0 0 20 20"
@@ -273,6 +313,14 @@ export default function Dashboard() {
                 <p className="text-sm text-red-800 dark:text-red-200">
                   {errorAdmin}
                 </p>
+=======
+                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-800 dark:text-red-200">{errorAdmin}</p>
+>>>>>>> origin/auth
               </div>
             </div>
           </div>
@@ -282,6 +330,7 @@ export default function Dashboard() {
           <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
             <div className="flex">
               <div className="flex-shrink-0">
+<<<<<<< HEAD
                 <svg
                   className="h-5 w-5 text-yellow-400"
                   viewBox="0 0 20 20"
@@ -298,6 +347,14 @@ export default function Dashboard() {
                 <p className="text-sm text-yellow-800 dark:text-yellow-200">
                   {errorUserCounts}
                 </p>
+=======
+                <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-yellow-800 dark:text-yellow-200">{errorUserCounts}</p>
+>>>>>>> origin/auth
               </div>
             </div>
           </div>
@@ -320,9 +377,13 @@ export default function Dashboard() {
                 ) : (
                   <div className="flex items-end space-x-2 justify-center">
                     <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+<<<<<<< HEAD
                       {userCounts.totalUsers !== null
                         ? userCounts.totalUsers.toLocaleString()
                         : "N/A"}
+=======
+                      {userCounts.totalUsers !== null ? userCounts.totalUsers.toLocaleString() : "N/A"}
+>>>>>>> origin/auth
                     </p>
                     <span className="text-sm text-gray-500 mb-1">usuarios</span>
                   </div>
@@ -334,9 +395,13 @@ export default function Dashboard() {
                     <ArrowUpIcon className="h-3 w-3 mr-1" />
                     12%
                   </span>
+<<<<<<< HEAD
                   <span className="text-xs text-gray-500 ml-2">
                     vs mes anterior
                   </span>
+=======
+                  <span className="text-xs text-gray-500 ml-2">vs mes anterior</span>
+>>>>>>> origin/auth
                 </div>
                 <button className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
                   Ver todos
@@ -360,9 +425,13 @@ export default function Dashboard() {
                 ) : (
                   <div className="flex items-end space-x-2 justify-center">
                     <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+<<<<<<< HEAD
                       {userCounts.totalAdmins !== null
                         ? userCounts.totalAdmins.toLocaleString()
                         : "N/A"}
+=======
+                      {userCounts.totalAdmins !== null ? userCounts.totalAdmins.toLocaleString() : "N/A"}
+>>>>>>> origin/auth
                     </p>
                     <span className="text-sm text-gray-500 mb-1">admin</span>
                   </div>
@@ -374,9 +443,13 @@ export default function Dashboard() {
                     <ArrowUpIcon className="h-3 w-3 mr-1" />
                     5%
                   </span>
+<<<<<<< HEAD
                   <span className="text-xs text-gray-500 ml-2">
                     vs mes anterior
                   </span>
+=======
+                  <span className="text-xs text-gray-500 ml-2">vs mes anterior</span>
+>>>>>>> origin/auth
                 </div>
                 <button className="text-xs font-medium text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors">
                   Ver todos
@@ -400,9 +473,13 @@ export default function Dashboard() {
                     <ArrowUpIcon className="h-3 w-3 mr-1" />
                     8%
                   </span>
+<<<<<<< HEAD
                   <span className="text-xs text-gray-500 ml-2">
                     vs mes anterior
                   </span>
+=======
+                  <span className="text-xs text-gray-500 ml-2">vs mes anterior</span>
+>>>>>>> origin/auth
                 </div>
                 <button className="text-xs font-medium text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors">
                   Ver todos
@@ -431,9 +508,13 @@ export default function Dashboard() {
                     <ArrowUpIcon className="h-3 w-3 mr-1" />
                     15%
                   </span>
+<<<<<<< HEAD
                   <span className="text-xs text-gray-500 ml-2">
                     vs mes anterior
                   </span>
+=======
+                  <span className="text-xs text-gray-500 ml-2">vs mes anterior</span>
+>>>>>>> origin/auth
                 </div>
                 <button className="text-xs font-medium text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-300 transition-colors">
                   Ver detalles
@@ -453,6 +534,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
                 onClick={handleExportExcel}
+<<<<<<< HEAD
                 className="flex cursor-pointer items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
               >
                 <svg
@@ -533,6 +615,42 @@ export default function Dashboard() {
                     strokeWidth="2"
                     d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                   />
+=======
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Exportar Usuarios
+              </button>
+              
+              <button
+                onClick={() => router.push("/dashboard/servicios")}
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Nuevo Servicio
+              </button>
+              
+              <button
+                onClick={() => router.push("/dashboard/usuarios")}
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Gestionar Usuarios
+              </button>
+              
+              <button
+                onClick={() => router.push("/dashboard/informes")}
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+>>>>>>> origin/auth
                 </svg>
                 Ver Reportes
               </button>
@@ -603,4 +721,8 @@ export default function Dashboard() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/auth

@@ -1,0 +1,141 @@
+/* LoginModal.module.css */
+
+.ImageArea {
+  display: flex;
+  width: 20em;
+  height: 100%;
+}
+.ImageLogin {
+  object-fit: cover;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+.LoginArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+
+  height: 100%;
+}
+
+/* Area de Formulario de Login*/
+.LoginArea h2 {
+  font-family: "Abel", sans-serif;
+  font-size: 2em;
+}
+.LoginArea form {
+  width: 100%;
+  height: 65%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 15px; /* opcional, para separar los inputs */
+  padding-top: 1em;
+}
+
+.UserField {
+  width: 90%;
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 1em;
+  box-sizing: border-box;
+}
+.PasswordField {
+  width: 90%;
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 1em;
+  box-sizing: border-box;
+}
+.ButtonsArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1em;
+  align-items: center;
+  padding: 2em;
+  height: 90%;
+  width: 100%;
+}
+/* Boton Iniciar Sesión*/
+.LoginButton {
+  font-family: "Abel", sans-serif;
+  width: 100%;
+  padding: 10px 20px; /* define el tamaño interno */
+  color: #ffffff;
+  background-color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+/* Boton  Registrarse*/
+.RegisterButton {
+  width: 100%;
+  padding: 10px 20px;
+  color: #000000;
+  background-color: #ffffff;
+  font-family: "Abel", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.RegisterButton:hover {
+  background-color: #f0f0f0; /* cambia un poquito el color al pasar el mouse */
+  border-color: black; /* o cambia el borde */
+  cursor: pointer; /* asegura que el cursor se vea como manito */
+}
+/* Linea divisora  ----------- o -------------*/
+.Divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.Divider::before,
+.Divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #555;
+}
+
+.Divider::before {
+  left: 0;
+}
+
+.Divider::after {
+  right: 0;
+}
+
+.SocialIconsArea {
+  height: 20%;
+  display: flex;
+  flex-direction: row;
+}

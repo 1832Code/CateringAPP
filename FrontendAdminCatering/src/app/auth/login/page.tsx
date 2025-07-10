@@ -1,17 +1,26 @@
 "use client";
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
+=======
+import { useState } from "react";
+>>>>>>> origin/auth
 import { useRouter } from "next/navigation";
 import { LoginData } from "@/interfaces/LoginData";
 import { useAuth } from "@/context/authcontext";
 
 export default function Login() {
   const router = useRouter();
+<<<<<<< HEAD
   const { login, isAuthenticating, isAuthenticated, roles } = useAuth();
+=======
+  const { login, isAuthenticating } = useAuth();
+>>>>>>> origin/auth
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+<<<<<<< HEAD
   useEffect(() => {
     if (isAuthenticated) {
       // opcional: también puedes validar aquí el rol
@@ -23,6 +32,8 @@ export default function Login() {
     }
   }, [isAuthenticated, roles, router]);
 
+=======
+>>>>>>> origin/auth
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -34,6 +45,7 @@ export default function Login() {
 
       if (!decoded) {
         setError("Error al iniciar sesión. Verifica tus credenciales.");
+<<<<<<< HEAD
         alert("Token no válido o no recibido");
         return;
       }
@@ -41,12 +53,30 @@ export default function Login() {
       if (!decoded.roles?.includes("ROLE_ADMIN")) {
         setError("Acceso denegado. No tienes el rol de administrador.");
         alert("Acceso denegado. Tu rol no es ROLE_ADMIN");
+=======
+        return;
+      }
+
+      const hasAdminRole = decoded.roles?.includes("ROLE_ADMIN");
+
+      if (!hasAdminRole) {
+        setError("Acceso denegado. No tienes el rol de administrador.");
+>>>>>>> origin/auth
         return;
       }
 
       router.push("/dashboard");
+<<<<<<< HEAD
     } catch {
       setError("Error al iniciar sesión. Verifica tus credenciales.");
+=======
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Error desconocido al iniciar sesión.");
+      } else {
+        setError("Error desconocido al iniciar sesión.");
+      }
+>>>>>>> origin/auth
     }
   };
 
@@ -110,6 +140,7 @@ export default function Login() {
             >
               {isAuthenticating ? "Ingresando..." : "Iniciar sesión"}
             </button>
+<<<<<<< HEAD
 
             <button
               type="button"
@@ -118,6 +149,8 @@ export default function Login() {
             >
               Registrarse (Administrador)
             </button>
+=======
+>>>>>>> origin/auth
           </div>
         </form>
         <div className="mt-6 text-xs text-gray-400 text-center">
