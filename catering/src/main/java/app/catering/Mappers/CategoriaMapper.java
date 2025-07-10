@@ -12,6 +12,7 @@ public class CategoriaMapper {
         categoria.setId(dto.getId());
         categoria.setNombre(dto.getNombre());
         categoria.setDescripcion(dto.getDescripcion());
+        categoria.setActivo(dto.getActivo() != null ? dto.getActivo() : true);
 
         return categoria;
     }
@@ -23,6 +24,7 @@ public class CategoriaMapper {
         dto.setId(categoria.getId());
         dto.setNombre(categoria.getNombre());
         dto.setDescripcion(categoria.getDescripcion());
+        dto.setActivo(categoria.getActivo());
         return dto;
     }
 }
