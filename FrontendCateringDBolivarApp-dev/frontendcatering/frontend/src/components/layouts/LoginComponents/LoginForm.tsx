@@ -1,13 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./LoginForm.module.css";
 import img from "../../../assets/images/login image.png";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 type LoginFormProps = {
   onRegisterClick: () => void;
 };
 
 export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const { login, setShowLogin, authError, setAuthError } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [contraseña, setContraseña] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      console.log("Iniciando autenticación...");
+      await login({ email, password: contraseña });
+      // Si llega aquí es que no falló:
+      setShowLogin(false);
+      router.refresh(); // Refresca la página
+    } catch (error: any) {
+      setAuthError(error.message || "Usuario o contraseña incorrectos");
+    }
+  };
   return (
     <>
       <div className={styles.ImageArea}>
@@ -15,16 +38,29 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
       </div>
       <div className={styles.LoginArea}>
         <h2>Iniciar Sesión</h2>
+        {authError && (
+          <p style={{ color: "red", marginBottom: "1rem" }}>{authError}</p>
+        )}
         <form>
           <input
             className={styles.UserField}
             type="text"
-            placeholder="Usuario"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (authError) setAuthError(null);
+            }}
           />
           <input
             className={styles.PasswordField}
             type="password"
             placeholder="Contraseña"
+            value={contraseña}
+            onChange={(e) => {
+              setContraseña(e.target.value);
+              if (authError) setAuthError(null);
+            }}
           />
           <div className={styles.ButtonsArea}>
             <div className={styles.LoginButtonArea}>
@@ -32,6 +68,7 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
                 className={styles.LoginButton}
                 type="submit"
                 value="Iniciar Sesión"
+                onClick={handleLogin}
               />
             </div>
             <div className={styles.Divider}>

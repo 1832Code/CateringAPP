@@ -180,16 +180,21 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
       return;
     }
 
+    // Se crea una constante `dataMapped` del tipo definido por InfoMenu["servicio"]["items"]
+    // Esta estructura se necesita para enviar los ítems seleccionados en el formato correcto
     const dataMapped: InfoMenu["servicio"]["items"] = formBlocks.map(
       (block) => {
+        // Por cada bloque del formulario, se busca el ítem seleccionado (según su ID) dentro de la lista total de ítems
         const selectedItem = items.find((item) => item.id === block.itemId);
+        // Si no se encuentra un ítem correspondiente al ID seleccionado, se lanza un error
         if (!selectedItem) {
           throw new Error("Item no encontrado");
         }
+        // Se retorna un objeto con el ítem encontrado, en el formato esperado por InfoMenu.servicio.items
         return { item: selectedItem };
       }
     );
-
+    //Validación para que tenga un formBlock mínimo
     if (dataMapped.length === 0) {
       alert("Debes seleccionar al menos un ítem.");
       return;
@@ -221,8 +226,17 @@ export const DetailServicio: React.FC<DetailServicioProps> = ({
       </div>
       <div className={styles.ListArea}>
         {formBlocks.map((block, index) => {
+          // Obtener los itemId que ya han sido seleccionados en otros bloques,
+          // excluyendo el bloque actual (para evitar auto-filtrado).
+          const selectedItemIds: number[] = formBlocks
+            .map((b, i) => (i !== index ? b.itemId : undefined)) // Solo toma itemId de bloques distintos al actual
+            .filter((id): id is number => typeof id === "number"); // Filtra los que no sean undefined y asegura que son números
+          // Filtrar los ítems que pertenecen a la categoría seleccionada en este bloque
+          // y que aún no han sido seleccionados en otros bloques (evita duplicados)
           const filteredItems = items.filter(
-            (item) => item.categoria?.id === block.categoriaId
+            (item) =>
+              item.categoria?.id === block.categoriaId && // Coincide con la categoría del bloque actual
+              !selectedItemIds.includes(item.id) // No ha sido seleccionado en otros bloques
           );
 
           return (

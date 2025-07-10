@@ -4,6 +4,7 @@
   width: 100vw;
   height: 94vh;
   overflow: hidden;
+  z-index: -4;
 }
 .sliderBox ul {
   display: flex;

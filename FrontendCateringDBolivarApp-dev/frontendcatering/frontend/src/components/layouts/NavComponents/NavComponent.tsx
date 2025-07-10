@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./NavComponent.module.css";
 import logo from "../../../assets/images/Logo Blanco.png";
-<<<<<<< HEAD
 
 import { LoginButtom } from "../LoginComponents/LoginButtom";
 import Link from "next/link";
@@ -12,28 +11,29 @@ import { AreaForm } from "../LoginComponents/AreaForm";
 import UserDropdown from "@/components/features/UserDropdown";
 import NavBarComponent from "@/components/features/NavBarComponent";
 import { useRouter } from "next/router";
-=======
-import { LoginButtom } from "../LoginComponents/LoginButtom";
-import Link from "next/link";
-import { AreaForm } from "../LoginComponents/AreaForm";
->>>>>>> origin/Andre
 import UserDropdownMobile from "@/components/features/UserDropDownMobile";
 import clsx from "clsx";
 import UserDropdownMenu from "@/components/features/UserDropDownMenu";
+import { useAuth } from "@/context/AuthContext";
+import { useSearchParams } from "next/navigation";
 
-interface NavComponentProps {
-  isCardExpanded: boolean;
-  onCardToggle: () => void;
-}
-export const NavComponent = () => {
-  {
-    /*State to control the show login form */
-  }
-  const [showLogin, setShowLogin] = useState(false);
-  const [isOpen, setIsOpen] = React.useState(false);
+const NavComponent = () => {
+  const { loadingAuth, email, showLogin, setShowLogin } = useAuth();
+
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
+
+  // Para abrir login desde query param
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get("showLogin") === "true") {
+      setShowLogin(true);
+    }
+  }, [searchParams, setShowLogin]);
+
+  // Click fuera del menú móvil
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -53,14 +53,13 @@ export const NavComponent = () => {
     };
   }, [isOpen]);
 
+  // Scroll efecto
   useEffect(() => {
     const handleScroll = () => {
-      const offset = window.scrollY;
-      setScrolled(offset > 50); // Puedes ajustar este valor
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -72,10 +71,11 @@ export const NavComponent = () => {
           className={clsx(styles.NavMainArea, { [styles.Scrolled]: scrolled })}
         >
           <div className={styles.LogoArea}>
-            <img className={styles.logo} src={logo.src} />
+            <img className={styles.logo} src={logo.src} alt="Logo" />
           </div>
 
           <div className={styles.NavAndButtom}>
+            {/* Mobile hamburger */}
             <div
               className={styles.Hamburger}
               onClick={() => setIsOpen(!isOpen)}
@@ -83,6 +83,8 @@ export const NavComponent = () => {
             >
               ☰
             </div>
+
+            {/* Mobile menu */}
             {isOpen && (
               <div className={styles.MobileMenu} ref={menuRef}>
                 <Link href="/">Inicio</Link>
@@ -91,32 +93,40 @@ export const NavComponent = () => {
                 <Link href="/nosotros">Nosotros</Link>
               </div>
             )}
+
+            {/* Desktop menu */}
             <nav className={styles.NavArea}>
               <ul className={styles.NavRowArea}>
                 <li className={styles.NavItem}>
                   <Link href="/">Inicio</Link>
                 </li>
                 <li className={styles.NavItem}>
-                  <Link href="/servicios">Servicios</Link>{" "}
+                  <Link href="/servicios">Menús</Link>
                 </li>
                 <li className={styles.NavItem}>
-                  <Link href="/explorar">Explorar</Link>{" "}
+                  <Link href="/explorar">Explorar</Link>
                 </li>
                 <li className={styles.NavItem}>
-                  <Link href="/nosotros">Nosotros</Link>{" "}
+                  <Link href="/nosotros">Nosotros</Link>
                 </li>
               </ul>
             </nav>
 
+            {/* Login / User menu */}
             <div className={styles.LoginArea}>
-              {/*<LoginButtom onClick={() => setShowLogin(true)} />*/}
-              <UserDropdownMenu></UserDropdownMenu>
+              {loadingAuth ? null : email ? (
+                <UserDropdownMenu />
+              ) : (
+                <LoginButtom onClick={() => setShowLogin(true)} />
+              )}
             </div>
+
+            {showLogin && <AreaForm onClose={() => setShowLogin(false)} />}
           </div>
         </div>
-        {showLogin && <AreaForm onClose={() => setShowLogin(false)} />}
       </div>
     </>
   );
 };
+
 export default NavComponent;

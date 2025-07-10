@@ -2,8 +2,8 @@ package app.catering.Mappers;
 
 import app.catering.DTO.CategoriaDTO;
 import app.catering.DTO.ItemDTO;
-import app.catering.Users.ItemsPackages.Categoria;
-import app.catering.Users.ItemsPackages.Item;
+import app.catering.Entity.ItemsPackages.Categoria;
+import app.catering.Entity.ItemsPackages.Item;
 
 public class ItemMapper {
     public static Item toEntity(ItemDTO dto) {
@@ -16,7 +16,12 @@ public class ItemMapper {
         entity.setPrecio(dto.getPrecio());
         entity.setImageURL(dto.getImageURL());
 
-        if (dto.getCategoria() != null) {
+        // Soporte para idCategoria directo
+        if (dto.getIdCategoria() != null) {
+            Categoria categoria = new Categoria();
+            categoria.setId(dto.getIdCategoria());
+            entity.setCategoria(categoria);
+        } else if (dto.getCategoria() != null) {
             Categoria categoria = new Categoria();
             categoria.setId(dto.getCategoria().getId());
             categoria.setNombre(dto.getCategoria().getNombre());
@@ -41,6 +46,7 @@ public class ItemMapper {
             categoriaDTO.setId(entity.getCategoria().getId());
             categoriaDTO.setNombre(entity.getCategoria().getNombre());
             dto.setCategoria(categoriaDTO);
+            dto.setIdCategoria(entity.getCategoria().getId()); // <-- importante para el frontend
         }
 
         return dto;

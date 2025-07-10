@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectionService } from "./SelectionService/SelectionService";
 import { InformationForm } from "./InformationForm/InformationForm";
 import { ReservDetails } from "./ReservDetails/ReservDetails";
@@ -22,8 +22,10 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   //State to control the Data
   const [pedido, setPedido] = useState<Pedido>({
-    cliente: {
-      nombre: "",
+    usuario: {
+      id: 0,
+      nombres: "",
+      apellidos: "",
       email: "",
       telefono: "",
     },
@@ -32,7 +34,7 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
       direccion: "",
       distrito: "",
       horaInicio: "",
-      cantHoras: 0,
+      cantHoras: "",
       fechaEvento: "",
     },
     infoMenu: {
@@ -83,8 +85,10 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
   //function to handle the submit final
   const resetPedido = () => {
     setPedido({
-      cliente: {
-        nombre: "",
+      usuario: {
+        id: 0,
+        nombres: "",
+        apellidos: "",
         email: "",
         telefono: "",
       },
@@ -93,7 +97,7 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
         direccion: "",
         distrito: "",
         horaInicio: "",
-        cantHoras: 0,
+        cantHoras: "",
         fechaEvento: "",
       },
       infoMenu: {
@@ -121,25 +125,63 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
       estado: "Nuevo",
     });
   };
+
+  useEffect(() => {
+    const fetchUsuario = async () => {
+      try {
+        const res = await fetch("http://localhost:8084/api/usuarios/me", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error("No se pudo obtener el usuario");
+
+        const data = await res.json();
+        console.log(data);
+
+        // Actualiza el estado `pedido.usuario` con los datos reales
+        setPedido((prev) => ({
+          ...prev,
+          usuario: {
+            id: data.id,
+            nombres: data.nombres,
+            apellidos: data.apellidos,
+            email: data.email,
+            telefono: data.telefono,
+          },
+        }));
+      } catch (err) {
+        console.error("Error al obtener el usuario:", err);
+      }
+    };
+
+    fetchUsuario();
+  }, []);
   const handleSubmitFinal = async () => {
     try {
       const payload = {
-        clienteId: 1,
-        datosEvento: pedido.datosEvento,
+        usuarioId: pedido.usuario.id,
+        datosEvento: {
+          ...pedido.datosEvento,
+          cantHoras: Number(pedido.datosEvento.cantHoras),
+        },
         infoMenuId: pedido.infoMenu.id,
         estado: pedido.estado,
       };
-      // POST to send pedido
+
       const response = await fetch("http://localhost:8084/api/pedidos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
+
       console.log("Payload a enviar:", payload);
+
       if (!response.ok) {
-        const errorText = await response.text(); // <-- aquí obtenemos la respuesta como texto
+        const errorText = await response.text();
         throw new Error(
           `Error al enviar el pedido: ${response.status} - ${errorText}`
         );
@@ -148,7 +190,6 @@ export const ReservPredetermined: React.FC<ReservDefaultProps> = ({
       const data = await response.json();
       console.log("Pedido creado con éxito:", data);
 
-      // Opcional: cambiar al paso final (confirmación)
       setStep(4);
       resetPedido();
     } catch (error) {

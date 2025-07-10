@@ -4,6 +4,6 @@ export interface DatosEvento {
   direccion: string;
   horaInicio: string;
   distrito: string;
-  cantHoras: number;
+  cantHoras: string;
   fechaEvento: string;
 }

@@ -1,7 +1,7 @@
 package app.catering.Mappers;
 
 import app.catering.DTO.CategoriaDTO;
-import app.catering.Users.ItemsPackages.Categoria;
+import app.catering.Entity.ItemsPackages.Categoria;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +12,7 @@ public class CategoriaMapper {
         categoria.setId(dto.getId());
         categoria.setNombre(dto.getNombre());
         categoria.setDescripcion(dto.getDescripcion());
+        categoria.setActivo(dto.getActivo());
 
         return categoria;
     }
@@ -23,6 +24,7 @@ public class CategoriaMapper {
         dto.setId(categoria.getId());
         dto.setNombre(categoria.getNombre());
         dto.setDescripcion(categoria.getDescripcion());
+        dto.setActivo(categoria.getActivo());
         return dto;
     }
 }

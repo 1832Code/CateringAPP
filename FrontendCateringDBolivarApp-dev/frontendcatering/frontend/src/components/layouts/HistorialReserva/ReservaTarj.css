@@ -1,0 +1,326 @@
+.reserva-contenedor {
+  padding: 2rem;
+  background-color: #1c1c1c;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #ecf0f1;
+  min-height: 100vh;
+  background-image: linear-gradient(to right, #2a2a2a, #1c1c1c);
+}
+
+.tabs-centro {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  font-family: "Italiana";
+}
+
+.tab {
+  margin: 0 1rem;
+  padding: 0.75rem 2rem;
+  border-radius: 30px;
+  background-color: #333;
+  cursor: pointer;
+  font-size: 3vh;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: #ccc;
+}
+
+.tab:hover {
+  background-color: #444;
+}
+
+.tab.activa {
+  background-color: #000000;
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.reserva-tarjeta {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(145deg, #222, #2e2e2e);
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.5);
+  margin-bottom: 2rem;
+  animation: fadeIn 0.8s ease-in-out;
+  border: 1px solid #3d3d3d;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.reserva-tarjeta:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+}
+
+.reserva-imagen img {
+  width: 250px;
+  height: 100%;
+  object-fit: cover;
+  border-right: 1px solid #444;
+  padding: 2vh;
+}
+
+.reserva-info {
+  padding: 1.5rem;
+  flex: 1;
+  animation: fadeInUp 0.6s ease-in-out;
+}
+
+.reserva-info h2 {
+  margin: 0;
+  font-family: "Italiana";
+  font-weight: 600;
+  font-size: 2rem;
+  color: #ffffff;
+  background: linear-gradient(to right, #d3c9c9, #676768);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.reserva-info p {
+  font-family: "Abel";
+  margin: 0.5rem 0 1rem 0;
+  color: #ccc;
+  font-size: 1.1rem;
+}
+
+.reserva-info button {
+  padding: 0.6rem 1.5rem;
+  background-color: #616364;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: "Abel";
+  font-weight: 500;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.reserva-info button:hover {
+  background-color: #000000;
+  transform: scale(1.05);
+}
+
+.tarjetas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  animation: fadeInUp 0.6s ease-in-out;
+}
+
+.reserva-mini {
+  background: linear-gradient(145deg, #202020, #2b2b2b);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3), 0 6px 18px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+  border: 1px solid #3c3c3c;
+  font-family: "Abel";
+}
+
+.reserva-mini:hover {
+  transform: translateY(-10px) scale(1.02);
+  background: linear-gradient(145deg, #2d2d2d, #1c1c1c);
+  box-shadow: 0 12px 25px rgba(255, 255, 255, 0.05),
+    0 0 12px rgba(52, 152, 219, 0.3);
+}
+
+.reserva-mini h3 {
+  margin-top: 0;
+  font-size: 1.4rem;
+  color: #ffffff;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.reserva-mini p {
+  font-size: 1rem;
+  color: #d1d1d1;
+  margin: 0.5rem 0;
+}
+
+.ver-detalles {
+  color: #000000;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 0.7rem;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.ver-detalles:hover {
+  color: #ecf4fa;
+  text-shadow: 0 0 6px rgba(248, 248, 248, 0.6);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  font-family: "Abel";
+}
+
+.modal {
+  background-color: #2f2f2f;
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 520px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  animation: popIn 0.4s ease;
+  border: 1px solid #555;
+}
+
+.modal h3 {
+  margin-top: 0;
+  color: #ecf0f1;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.5rem;
+}
+
+.modal p {
+  color: #bbb;
+  margin: 0.5rem 0;
+}
+
+.modal button {
+  margin-top: 1rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: bold;
+}
+
+.modal button:hover {
+  background-color: #c0392b;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/*Eliminar y modificar*/
+
+.modal-botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.btn-editar {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-editar:hover {
+  background-color: #2980b9;
+}
+
+.btn-eliminar {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-eliminar:hover {
+  background-color: #c0392b;
+}
+
+/*para modificairf*/
+
+.modal input {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #333;
+}
+
+.modal label {
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+}
+
+/******nuevo*/
+.botones-superiores {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.botones-horizontales {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.botones-horizontales button {
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  min-width: 80px;
+  flex-shrink: 0;
+}

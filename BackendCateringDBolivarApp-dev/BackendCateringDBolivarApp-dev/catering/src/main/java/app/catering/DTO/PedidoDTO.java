@@ -2,10 +2,13 @@ package app.catering.DTO;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Data
 public class PedidoDTO {
     private Long id;
-    private Long clienteId;
+    private Long usuarioId;
 
     // Para pedidos con menú predeterminado
     private Long infoMenuId;
@@ -15,4 +18,11 @@ public class PedidoDTO {
 
     private DatosEventoDTO datosEvento;
     private String estado;
+
+    // NUEVOS CAMPOS para generar el PDF
+    private UsuarioDTO usuario;
+    private List<PedidoDetalleDTO> detalle;
+    private BigDecimal subtotal;
+    private BigDecimal igv;
+    private BigDecimal total;
 }

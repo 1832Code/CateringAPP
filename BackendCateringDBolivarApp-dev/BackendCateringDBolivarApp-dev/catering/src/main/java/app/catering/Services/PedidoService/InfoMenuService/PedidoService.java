@@ -1,39 +1,50 @@
 package app.catering.Services.PedidoService.InfoMenuService;
 
 import app.catering.DTO.PedidoDTO;
+import app.catering.Entity.User.Usuario;
 import app.catering.Mappers.DatosEventoMapper;
 import app.catering.Mappers.InfoMenuMapper;
 import app.catering.Mappers.PedidoMapper;
-import app.catering.Repository.ClienteRepository;
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.InfoMenuRepository;
 import app.catering.Repository.PedidoRepository.PedidoRepository;
-import app.catering.Users.Cliente;
-import app.catering.Users.Pedido.InfoMenu.InfoMenu;
-import app.catering.Users.Pedido.Pedido;
+import app.catering.Entity.Pedido.DatosEvento;
+import app.catering.Entity.Pedido.InfoMenu.InfoMenu;
+import app.catering.Entity.Pedido.Pedido;
+import app.catering.Repository.UsuarioRepository;
+import app.catering.Services.EmailService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
-    private final ClienteRepository clienteRepository;
+    private final UsuarioRepository usuarioRepository;
     private final InfoMenuRepository infoMenuRepository;
     private final DatosEventoMapper datosEventoMapper;
     private final InfoMenuMapper infoMenuMapper;
+    private final EmailService emailService;
+    @Autowired
+    private Validator validator;
 
 
     public PedidoService(PedidoRepository pedidoRepository,
                          PedidoMapper pedidoMapper,
-                         ClienteRepository clienteRepository, InfoMenuRepository infoMenuRepository, DatosEventoMapper datosEventoMapper, InfoMenuMapper infoMenuMapper) {
+                         UsuarioRepository usuarioRepository, InfoMenuRepository infoMenuRepository, DatosEventoMapper datosEventoMapper, InfoMenuMapper infoMenuMapper, EmailService emailService) {
         this.pedidoRepository = pedidoRepository;
         this.pedidoMapper = pedidoMapper;
-        this.clienteRepository = clienteRepository;
+        this.usuarioRepository = usuarioRepository;
         this.infoMenuRepository = infoMenuRepository;
         this.datosEventoMapper = datosEventoMapper;
         this.infoMenuMapper = infoMenuMapper;
+        this.emailService = emailService;
     }
 
     public List<PedidoDTO> findAll() {
@@ -48,18 +59,55 @@ public class PedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
         return pedidoMapper.toDTO(pedido);
     }
+    public List<PedidoDTO> getPedidosByUsuarioId(Long id) {
+        List<Pedido> pedidos = pedidoRepository.findAllByUsuarioId(id);
+        if (pedidos.isEmpty()) {
+            throw new RuntimeException("No se encontraron pedidos para el usuario con ID: " + id);
+        }
+        return pedidos.stream()
+                .map(pedidoMapper::toDTO)
+                .toList();
+    }
+
+    public List<PedidoDTO> getPedidosByEmail(String email) {
+        List<Pedido> pedidos = pedidoRepository.findAllByUsuarioEmail(email);
+        return pedidos.stream()
+                .map(pedidoMapper::toDTO)
+                .toList();
+    }
 
     public PedidoDTO create(PedidoDTO dto) {
+        // Validaciones básicas
+        if (dto == null) throw new IllegalArgumentException("PedidoDTO no puede ser nulo.");
+        if (dto.getUsuarioId() == null) throw new IllegalArgumentException("Usuario ID es obligatorio.");
+        if (dto.getDatosEvento() == null) throw new IllegalArgumentException("Datos del evento son obligatorios.");
+        if (dto.getInfoMenuId() == null && dto.getInfoMenu() == null)
+            throw new IllegalArgumentException("Debe especificar infoMenuId o infoMenu personalizado.");
+        if (dto.getEstado() == null) throw new IllegalArgumentException("Estado del pedido es obligatorio.");
+
+
+
         Pedido pedido = new Pedido();
 
-        // Cliente existente
-        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+        // Usuario existente
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-        pedido.setCliente(cliente);
+        pedido.setUsuario(usuario);
 
-        // Datos del evento
-        pedido.setDatosEvento(datosEventoMapper.toEntity(dto.getDatosEvento()));
+        // Convierte y VALIDA DatosEvento antes de setear
+        DatosEvento datosEvento = datosEventoMapper.toEntity(dto.getDatosEvento());
 
+        // Retorna los errores de las validaciones
+        Set<ConstraintViolation<DatosEvento>> violations = validator.validate(datosEvento);
+
+        if (!violations.isEmpty()) {
+            String errorMsg = violations.stream()
+                    .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                    .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("Errores en DatosEvento: " + errorMsg);
+        }
+
+        pedido.setDatosEvento(datosEvento);
         // InfoMenu
         if (dto.getInfoMenuId() != null) {
             // Modo predeterminado
@@ -91,26 +139,96 @@ public class PedidoService {
         pedido.setEstado(dto.getEstado());
 
         Pedido saved = pedidoRepository.save(pedido);
+        // Enviar correo con PDF de confirmación
+        try {
+            emailService.enviarCorreoConPDF(saved);
+        } catch (Exception e) {
+            // Manejar o registrar el error, pero no interrumpir el flujo si falla el envío
+            System.err.println("Error al enviar correo: " + e.getMessage());
+        }
         return pedidoMapper.toDTO(saved);
-    }
 
-    public PedidoDTO update(Long id, PedidoDTO pedidoDTO) {
+    }
+    // Este update no genera un nuevo pedido
+    public PedidoDTO updatev2(Long id, PedidoDTO pedidoDTO) {
         Pedido existing = pedidoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
 
-        // Mapeo manual
-        existing.setCliente(pedidoMapper.toEntity(pedidoDTO).getCliente());
-        existing.setDatosEvento(pedidoMapper.toEntity(pedidoDTO).getDatosEvento());
-        existing.setInfoMenu(pedidoMapper.toEntity(pedidoDTO).getInfoMenu());
+        // Actualizar usuario si es necesario
+        if (pedidoDTO.getUsuarioId() != null) {
+            Usuario usuario = usuarioRepository.findById(pedidoDTO.getUsuarioId())
+                    .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con ID: " + pedidoDTO.getUsuarioId()));
+            existing.setUsuario(usuario);
+        }
+
+        // Actualizar infoMenu si es necesario
+        if (pedidoDTO.getInfoMenuId() != null) {
+            InfoMenu infoMenu = infoMenuRepository.findById(pedidoDTO.getInfoMenuId())
+                    .orElseThrow(() -> new EntityNotFoundException("InfoMenu no encontrado con ID: " + pedidoDTO.getInfoMenuId()));
+            existing.setInfoMenu(infoMenu);
+        }
+
+        // Actualizar manualmente los campos de DatosEvento sin reemplazar el objeto
+        DatosEvento datosEventoExistente = existing.getDatosEvento();
+        DatosEvento nuevosDatos = datosEventoMapper.toEntity(pedidoDTO.getDatosEvento());
+
+        datosEventoExistente.setFechaEvento(nuevosDatos.getFechaEvento());
+        datosEventoExistente.setHoraInicio(nuevosDatos.getHoraInicio());
+        datosEventoExistente.setCantHorasEvento(nuevosDatos.getCantHorasEvento());
+        datosEventoExistente.setTipoEvento(nuevosDatos.getTipoEvento());
+        datosEventoExistente.setDireccion(nuevosDatos.getDireccion());
+        datosEventoExistente.setDistrito(nuevosDatos.getDistrito());
+
+        // Estado
         existing.setEstado(pedidoDTO.getEstado());
 
         Pedido updated = pedidoRepository.save(existing);
         return pedidoMapper.toDTO(updated);
     }
 
+    //Este update si genera un nuevo pedido
+    public PedidoDTO update(Long id, PedidoDTO pedidoDTO) {
+        Pedido existing = pedidoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
+
+        // Buscar usuario por ID
+        if (pedidoDTO.getUsuarioId() != null) {
+            Usuario usuario = usuarioRepository.findById(pedidoDTO.getUsuarioId())
+                    .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con ID: " + pedidoDTO.getUsuarioId()));
+            existing.setUsuario(usuario);
+        }
+
+        // Buscar infoMenu por ID
+        if (pedidoDTO.getInfoMenuId() != null) {
+            InfoMenu infoMenu = infoMenuRepository.findById(pedidoDTO.getInfoMenuId())
+                    .orElseThrow(() -> new EntityNotFoundException("InfoMenu no encontrado con ID: " + pedidoDTO.getInfoMenuId()));
+            existing.setInfoMenu(infoMenu);
+        }
+
+        // Actualizar datos del evento
+        existing.setDatosEvento(pedidoMapper.toEntity(pedidoDTO).getDatosEvento());
+
+        existing.setEstado(pedidoDTO.getEstado());
+
+        Pedido updated = pedidoRepository.save(existing);
+        return pedidoMapper.toDTO(updated);
+    }
+
+
     public void delete(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con ID: " + id));
         pedidoRepository.delete(pedido);
     }
+
+
+
+
+    public List<PedidoDTO> getPedidosPagadosByEmail(String email) {
+        List<Pedido> pedidos = pedidoRepository.findAllByUsuarioEmailAndEstado(email, "pagada");
+        return pedidos.stream()
+                .map(pedidoMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 }

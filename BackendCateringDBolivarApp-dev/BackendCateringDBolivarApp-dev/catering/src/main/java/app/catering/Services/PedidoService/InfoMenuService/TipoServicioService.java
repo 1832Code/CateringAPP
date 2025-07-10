@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.catering.Repository.PedidoRepository.InfoMenuRepository.TipoServicioRepository;
-import app.catering.Users.Pedido.InfoMenu.TipoServicio;
+import app.catering.Entity.Pedido.InfoMenu.TipoServicio;
 
 @Service
 public class TipoServicioService {
@@ -41,7 +41,7 @@ public class TipoServicioService {
     public TipoServicio update(Long id, TipoServicio newData) {
         return tipoServicioRepository.findById(id).map(ts -> {
             ts.setNombre(newData.getNombre());
-            // No hay campo `config`, se elimina esa línea.
+            ts.setDescripcion(newData.getDescripcion());
             return tipoServicioRepository.save(ts);
         }).orElse(null);
     }

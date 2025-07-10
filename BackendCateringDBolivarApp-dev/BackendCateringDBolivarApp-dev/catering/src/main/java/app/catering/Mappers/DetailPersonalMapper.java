@@ -2,8 +2,8 @@ package app.catering.Mappers;
 
 import app.catering.DTO.DetailPersonalDTO;
 import app.catering.DTO.DetailPersonalInfoDTO;
-import app.catering.Users.Pedido.DetailPersonal.DetailPersonal;
-import app.catering.Users.Pedido.DetailPersonal.DetailPersonalInfo;
+import app.catering.Entity.Pedido.DetailPersonal.DetailPersonal;
+import app.catering.Entity.Pedido.DetailPersonal.DetailPersonalInfo;
 
 import java.util.stream.Collectors;
 

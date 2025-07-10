@@ -1,6 +1,6 @@
 package app.catering.Repository.PedidoRepository.InfoMenuRepository;
 
-import app.catering.Users.Pedido.InfoMenu.DetailServicioInfo;
+import app.catering.Entity.Pedido.InfoMenu.DetailServicioInfo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

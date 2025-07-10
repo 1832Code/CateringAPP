@@ -3,7 +3,7 @@ package app.catering.Services.PedidoService.InfoMenuService;
 import app.catering.DTO.CategoriaDTO;
 import app.catering.Mappers.CategoriaMapper;
 import app.catering.Repository.ItemPackageRepository.CategoriaRepository;
-import app.catering.Users.ItemsPackages.Categoria;
+import app.catering.Entity.ItemsPackages.Categoria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

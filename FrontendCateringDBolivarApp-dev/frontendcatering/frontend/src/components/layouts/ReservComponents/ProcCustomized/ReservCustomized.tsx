@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FirstForm } from "./FirstForm/FirstForm";
 import { useState } from "react";
 import SelectionType from "./SelectionType/SelectionType";
@@ -22,8 +22,10 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
 }) => {
   const [step, setStep] = useState(1);
   const [pedido, setPedido] = useState<Pedido>({
-    cliente: {
-      nombre: "",
+    usuario: {
+      id: 0,
+      nombres: "",
+      apellidos: "",
       email: "",
       telefono: "",
     },
@@ -32,7 +34,7 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
       direccion: "",
       distrito: "",
       horaInicio: "",
-      cantHoras: 0,
+      cantHoras: "",
       fechaEvento: "",
     },
     infoMenu: {
@@ -62,8 +64,10 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
   //Function to reset Pedido
   const resetPedido = () => {
     setPedido({
-      cliente: {
-        nombre: "",
+      usuario: {
+        id: 0,
+        nombres: "",
+        apellidos: "",
         email: "",
         telefono: "",
       },
@@ -72,7 +76,7 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
         direccion: "",
         distrito: "",
         horaInicio: "",
-        cantHoras: 0,
+        cantHoras: "",
         fechaEvento: "",
       },
       infoMenu: {
@@ -158,11 +162,44 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
     setStep(6);
   };
 
+  useEffect(() => {
+    const fetchUsuario = async () => {
+      try {
+        const res = await fetch("http://localhost:8084/api/usuarios/me", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error("No se pudo obtener el usuario");
+
+        const data = await res.json();
+
+        // Actualiza el estado `pedido.usuario` con los datos reales
+        setPedido((prev) => ({
+          ...prev,
+          usuario: {
+            id: data.id,
+            nombres: data.nombres,
+            apellidos: data.apellidos,
+            email: data.email,
+            telefono: data.telefono,
+          },
+        }));
+      } catch (err) {
+        console.error("Error al obtener el usuario:", err);
+      }
+    };
+
+    fetchUsuario();
+  }, []);
   const handleSubmitFinal = async () => {
     try {
       const payload = {
-        clienteId: 1,
-        datosEvento: pedido.datosEvento,
+        usuarioId: pedido.usuario.id,
+        datosEvento: {
+          ...pedido.datosEvento,
+          cantHoras: Number(pedido.datosEvento.cantHoras),
+        },
         infoMenu: pedido.infoMenu,
         estado: pedido.estado,
       };
@@ -172,6 +209,7 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       console.log("Payload a enviar:", payload);
@@ -185,7 +223,7 @@ export const ReservCustomized: React.FC<ReservCustomProps> = ({
       const data = await response.json();
       console.log("Pedido creado con éxito:", data);
 
-      // Opcional: cambiar al paso final (confirmación)
+      // cambiar al paso final (confirmación)
       setStep(7);
       resetPedido();
     } catch (error) {

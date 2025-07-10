@@ -1,7 +1,7 @@
 package app.catering.Mappers;
 
 import app.catering.DTO.InfoMenuDTO;
-import app.catering.Users.Pedido.InfoMenu.InfoMenu;
+import app.catering.Entity.Pedido.InfoMenu.InfoMenu;
 import org.springframework.stereotype.Component;
 
 @Component

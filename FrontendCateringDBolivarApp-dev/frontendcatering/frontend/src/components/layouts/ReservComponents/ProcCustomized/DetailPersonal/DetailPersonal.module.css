@@ -49,7 +49,7 @@
   align-items: center;
   gap: 2vh;
 }
-.FormBlock input {
+.FormBlock select {
   padding: 1vh;
   border: 1px solid rgba(0, 0, 0, 0.5);
   font-family: "Abel";
@@ -105,7 +105,7 @@
   .FormBlock {
     padding: 1vh;
   }
-  .FormBlock input {
+  .FormBlock select {
     padding: 0.5vh;
     font-size: 2.5vh;
     width: 40%;
@@ -126,7 +126,7 @@
     font-size: 3vh;
     padding: 1vh 1vh;
   }
-  .FormBlock input {
+  .FormBlock select {
     font-size: 3vh;
     width: 80%;
   }

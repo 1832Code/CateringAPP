@@ -2,7 +2,7 @@ package app.catering.TDD;
 
 import app.catering.Repository.PedidoRepository.DatosEventoRepository;
 import app.catering.Services.PedidoService.InfoMenuService.DatosEventoService;
-import app.catering.Users.Pedido.DatosEvento;
+import app.catering.Entity.Pedido.DatosEvento;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

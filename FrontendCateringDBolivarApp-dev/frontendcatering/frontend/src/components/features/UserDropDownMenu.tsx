@@ -6,13 +6,29 @@ import ReservarImg from "@/assets/images/ReservaWhite.png";
 import HistorialImg from "@/assets/images/HistorialReservaWhite.png";
 import UserEditImg from "@/assets/images/UserEditWhite.png";
 import imgPerfil from "@/assets/images/PerfilWhite.png";
+import { Usuario } from "../Interfaces/Usuario";
+import { useAuth } from "@/context/AuthContext";
 
+interface UserDropdownMenuProps {
+  user: Usuario;
+}
 export const UserDropdownMenu = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { logout } = useAuth();
+  //Cerrar Sesión
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+      alert("Error al cerrar sesión");
+    }
+  };
 
   const goTo = (path: string) => {
     setIsOpen(false);
@@ -96,6 +112,12 @@ export const UserDropdownMenu = () => {
                 <button onClick={() => goTo("/gestionarusuario")}>
                   <img src={UserEditImg.src} className="icon" alt="Usuario" />
                   <span>Gestionar Usuario</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={handleLogout}>
+                  <img src={UserEditImg.src} className="icon" alt="Usuario" />
+                  <span>Cerrar Sesión</span>
                 </button>
               </li>
             </ul>
